@@ -272,6 +272,7 @@ def query_visualize(request, lesson_id):
         return redirect('dashboard')
     
     result_data = None
+    result_data_json = None
     query = None
     
     if request.method == 'POST':
@@ -285,6 +286,13 @@ def query_visualize(request, lesson_id):
                     request.user.schema_name, 
                     query
                 )
+                
+                # Convert to JSON for JavaScript
+                result_data_json = json.dumps({
+                    'columns': result_data['columns'],
+                    'data': result_data['data']
+                })
+                
                 messages.success(request, 'Query executed successfully')
                 
                 # Update progress
@@ -304,6 +312,7 @@ def query_visualize(request, lesson_id):
         'lesson': lesson,
         'form': form,
         'result_data': result_data,
+        'result_data_json': result_data_json,
         'query': query,
     }
     return render(request, 'learning/query_visualize.html', context)

@@ -47,6 +47,33 @@
                             <div class="text-danger">{{ form.query.errors }}</div>
                         {% endif %}
                     </div>
+                    
+                    <!-- Visualization Options -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Visualization Type</label>
+                            <select class="form-select" id="chart-type" name="chart_type">
+                                <option value="table">Table Only</option>
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="scatter">Scatter Plot</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">X-Axis Column</label>
+                            <select class="form-select" id="x-column" name="x_column">
+                                <option value="">Auto (First Column)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Y-Axis Column</label>
+                            <select class="form-select" id="y-column" name="y_column">
+                                <option value="">Auto (Second Column)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-play-fill"></i> Execute Query
                     </button>
@@ -66,6 +93,17 @@
                 </h5>
             </div>
             <div class="card-body">
+                <!-- Visualization Chart -->
+                <div id="chart-container" class="mb-4" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6><i class="bi bi-bar-chart"></i> Visualization</h6>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleChart()">
+                            <i class="bi bi-eye-slash"></i> Hide Chart
+                        </button>
+                    </div>
+                    <canvas id="dataChart" style="max-height: 400px;"></canvas>
+                </div>
+                
                 <!-- Results Table -->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
@@ -173,4 +211,133 @@ LIMIT 10;</code></pre>
         font-size: 0.9rem;
     }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+// Data from Django template
+{% if result_data_json %}
+const resultData = {{ result_data_json|safe }};
+
+// Populate column dropdowns
+const xColumnSelect = document.getElementById('x-column');
+const yColumnSelect = document.getElementById('y-column');
+
+if (xColumnSelect && yColumnSelect) {
+    resultData.columns.forEach((col, index) => {
+        const xOption = document.createElement('option');
+        xOption.value = index;
+        xOption.textContent = col;
+        xColumnSelect.appendChild(xOption);
+        
+        const yOption = document.createElement('option');
+        yOption.value = index;
+        yOption.textContent = col;
+        yColumnSelect.appendChild(yOption);
+    });
+}
+
+// Chart instance
+let chartInstance = null;
+
+// Create visualization
+function createVisualization() {
+    const chartType = document.getElementById('chart-type').value;
+    
+    if (chartType === 'table') {
+        document.getElementById('chart-container').style.display = 'none';
+        return;
+    }
+    
+    const xColIndex = parseInt(document.getElementById('x-column').value) || 0;
+    const yColIndex = parseInt(document.getElementById('y-column').value) || 1;
+    
+    // Extract data for chart
+    const labels = resultData.data.map(row => row[xColIndex]);
+    const values = resultData.data.map(row => parseFloat(row[yColIndex]) || 0);
+    
+    // Destroy existing chart
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    
+    // Show chart container
+    document.getElementById('chart-container').style.display = 'block';
+    
+    // Create new chart
+    const ctx = document.getElementById('dataChart').getContext('2d');
+    
+    const config = {
+        type: chartType,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: resultData.columns[yColIndex],
+                data: values,
+                backgroundColor: [
+                    'rgba(99, 102, 241, 0.7)',
+                    'rgba(139, 92, 246, 0.7)',
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(245, 158, 11, 0.7)',
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(236, 72, 153, 0.7)',
+                    'rgba(14, 165, 233, 0.7)'
+                ],
+                borderColor: 'rgba(99, 102, 241, 1)',
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: chartType === 'pie',
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: `${resultData.columns[xColIndex]} vs ${resultData.columns[yColIndex]}`
+                }
+            },
+            scales: chartType !== 'pie' ? {
+                y: {
+                    beginAtZero: true
+                }
+            } : {}
+        }
+    };
+    
+    chartInstance = new Chart(ctx, config);
+}
+
+// Toggle chart visibility
+function toggleChart() {
+    const container = document.getElementById('chart-container');
+    if (container.style.display === 'none') {
+        createVisualization();
+    } else {
+        container.style.display = 'none';
+    }
+}
+
+// Event listeners
+document.getElementById('chart-type').addEventListener('change', createVisualization);
+document.getElementById('x-column').addEventListener('change', createVisualization);
+document.getElementById('y-column').addEventListener('change', createVisualization);
+
+// Auto-create chart if not table type
+window.addEventListener('load', function() {
+    const chartType = document.getElementById('chart-type').value;
+    if (chartType !== 'table') {
+        createVisualization();
+    }
+});
+{% endif %}
+</script>
 {% endblock %}

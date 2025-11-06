@@ -180,17 +180,29 @@ decode_dbt:
             return False, str(e)
     
     def run_seeds(self):
-        """Run DBT seeds"""
+        """Run DBT seeds for specific lesson only"""
         try:
             seed_dir = self.workspace_path / 'seeds' / self.lesson['id']
             if not seed_dir.exists():
                 return True, 'No seeds found for this lesson'
             
+            # Get all seed files for this lesson
+            seed_files = list(seed_dir.glob('*.csv'))
+            if not seed_files:
+                return True, 'No seed files found for this lesson'
+            
+            logger.info(f"Found {len(seed_files)} seed files for lesson {self.lesson['id']}")
+            
+            # Run seeds only for this lesson's files
+            # Use --select to target specific seeds by path pattern
             cmd = [
                 'dbt', 'seed',
+                '--select', f"path:seeds/{self.lesson['id']}/*",
                 '--profiles-dir', str(self.workspace_path),
                 '--project-dir', str(self.workspace_path)
             ]
+            
+            logger.info(f"Running seed command: {' '.join(cmd)}")
             
             result = subprocess.run(
                 cmd,
@@ -204,8 +216,15 @@ decode_dbt:
                 timeout=300
             )
             
+            logger.info(f"Seed command completed with return code: {result.returncode}")
+            if result.stdout:
+                logger.info(f"Seed stdout: {result.stdout}")
+            if result.stderr:
+                logger.error(f"Seed stderr: {result.stderr}")
+            
             return result.returncode == 0, result.stdout + result.stderr
         except subprocess.TimeoutExpired:
             return False, "Seed command timed out"
         except Exception as e:
+            logger.error(f"Error running seeds: {str(e)}")
             return False, str(e)
