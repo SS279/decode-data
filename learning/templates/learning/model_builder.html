@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Builder - {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a></li>
+                <li class="breadcrumb-item active">Model Builder</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mb-3">
+                    <i class="bi bi-code-square"></i> Model Builder
+                </h2>
+                <p class="text-muted">Edit, test, and execute your dbt models</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not is_initialized %}
+<!-- Initialization Required -->
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-warning">
+            <h5><i class="bi bi-exclamation-triangle"></i> Workspace Not Initialized</h5>
+            <p>Your dbt workspace needs to be initialized before you can start building models.</p>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="initialize">
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-gear"></i> Initialize Workspace
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Workspace Initialized - Show Builder -->
+<div class="row g-4">
+    <!-- Left Column: Model List and Controls -->
+    <div class="col-md-4">
+        <!-- Seed Data Section -->
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0"><i class="bi bi-database"></i> Load Seed Data</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted">Load CSV seed data into your schema</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="run_seeds">
+                    <button type="submit" class="btn btn-sm btn-outline-primary w-100">
+                        <i class="bi bi-arrow-down-circle"></i> Run Seeds
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Model Files List -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h6 class="mb-0"><i class="bi bi-file-earmark-code"></i> Model Files</h6>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for model in model_files %}
+                <button type="button" 
+                        class="list-group-item list-group-item-action model-file-btn"
+                        data-model-name="{{ model }}"
+                        onclick="loadModel('{{ model }}')">
+                    <i class="bi bi-file-code"></i> {{ model }}.sql
+                </button>
+                {% empty %}
+                <div class="list-group-item text-muted">
+                    <i class="bi bi-info-circle"></i> No models found
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Execute Models Section -->
+        <div class="card mt-3">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0"><i class="bi bi-play-circle"></i> Execute Models</h6>
+            </div>
+            <div class="card-body">
+                <form method="post" id="execute-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="execute_models">
+                    
+                    <div class="mb-3">
+                        <label class="form-label small">Select Models:</label>
+                        {% for model in model_files %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                   name="selected_models" value="{{ model }}" 
+                                   id="model_{{ forloop.counter }}">
+                            <label class="form-check-label small" for="model_{{ forloop.counter }}">
+                                {{ model }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                   name="include_children" id="include_children">
+                            <label class="form-check-label small" for="include_children">
+                                Include child models (+)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                   name="full_refresh" id="full_refresh">
+                            <label class="form-check-label small" for="full_refresh">
+                                Full refresh
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-lightning-fill"></i> Execute Selected
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Code Editor -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h6 class="mb-0" id="editor-title">
+                    <i class="bi bi-pencil-square"></i> Select a model to edit
+                </h6>
+                <button id="save-model-btn" class="btn btn-sm btn-light" style="display: none;">
+                    <i class="bi bi-save"></i> Save
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <form method="post" id="save-model-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save_model">
+                    <input type="hidden" name="model_name" id="current-model-name">
+                    <textarea name="model_sql" id="model-editor" 
+                              class="form-control font-monospace" 
+                              rows="20" 
+                              style="border: none; resize: vertical; font-size: 14px;"
+                              placeholder="-- Select a model file from the left to start editing"></textarea>
+                </form>
+            </div>
+            <div class="card-footer text-muted small">
+                <i class="bi bi-info-circle"></i> Edit your SQL and click Save before executing
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-lightbulb"></i> Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="small mb-0">
+                    <li>Select a model file from the list to edit its SQL</li>
+                    <li>Save your changes before executing models</li>
+                    <li>Load seed data first if your models depend on raw tables</li>
+                    <li>Check the messages above for execution results</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Load model content when file is clicked
+function loadModel(modelName) {
+    const editor = document.getElementById('model-editor');
+    const editorTitle = document.getElementById('editor-title');
+    const saveBtn = document.getElementById('save-model-btn');
+    const currentModelName = document.getElementById('current-model-name');
+    
+    // Update UI
+    editorTitle.innerHTML = `<i class="bi bi-pencil-square"></i> Editing: ${modelName}.sql`;
+    currentModelName.value = modelName;
+    saveBtn.style.display = 'block';
+    
+    // Load model content via AJAX
+    fetch('{% url "api_get_model_content" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: `model_name=${modelName}&lesson_id={{ lesson.id }}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            editor.value = data.sql;
+            editor.focus();
+        } else {
+            alert('Error loading model: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to load model');
+    });
+    
+    // Highlight active model in list
+    document.querySelectorAll('.model-file-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+}
+
+// Save model when button clicked
+document.getElementById('save-model-btn')?.addEventListener('click', function() {
+    document.getElementById('save-model-form').submit();
+});
+
+// Confirm before executing models
+document.getElementById('execute-form')?.addEventListener('submit', function(e) {
+    const checkedBoxes = document.querySelectorAll('input[name="selected_models"]:checked');
+    if (checkedBoxes.length === 0) {
+        e.preventDefault();
+        alert('Please select at least one model to execute');
+        return false;
+    }
+    
+    const modelNames = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+    if (!confirm(`Execute the following models: ${modelNames}?`)) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+{% endblock %}

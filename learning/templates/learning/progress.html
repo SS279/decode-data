@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Progress - {{ lesson.title }}{% endblock %}
+
+{% load string_filters %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a></li>
+                <li class="breadcrumb-item active">Progress</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="mb-3">
+                    <i class="bi bi-bar-chart-line"></i> Your Progress
+                </h2>
+                <p class="text-muted">Track your learning journey for {{ lesson.title }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Overall Progress Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Overall Progress</h5>
+                <div class="mb-3">
+                    <h1 class="display-3 text-primary">{{ progress.lesson_progress }}%</h1>
+                </div>
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-primary" role="progressbar" 
+                         style="width: {{ progress.lesson_progress }}%"
+                         aria-valuenow="{{ progress.lesson_progress }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                        {{ progress.lesson_progress }}%
+                    </div>
+                </div>
+                {% if progress.lesson_progress == 100 %}
+                <div class="mt-3">
+                    <span class="badge bg-success p-2">
+                        <i class="bi bi-trophy-fill"></i> Lesson Completed!
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Activity Statistics</h5>
+                <div class="row text-center mt-3">
+                    <div class="col-4">
+                        <h3 class="text-info">{{ progress.models_executed|length }}</h3>
+                        <p class="small text-muted">Models Executed</p>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-success">{{ progress.queries_run }}</h3>
+                        <p class="small text-muted">Queries Run</p>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-warning">{{ progress.completed_steps|length }}</h3>
+                        <p class="small text-muted">Steps Completed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Steps Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-check-circle"></i> Completed Steps
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if progress.completed_steps %}
+                <ul class="list-group list-group-flush">
+                    {% for step in progress.completed_steps %}
+                    <li class="list-group-item">
+                        <i class="bi bi-check-circle-fill text-success"></i> 
+                        {{ step|title|replace:"_: " }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-0">
+                    <i class="bi bi-info-circle"></i> No steps completed yet
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Executed Models Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-play-circle"></i> Executed Models
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if progress.models_executed %}
+                <ul class="list-group list-group-flush">
+                    {% for model in progress.models_executed %}
+                    <li class="list-group-item">
+                        <i class="bi bi-file-earmark-code text-primary"></i> 
+                        {{ model }}.sql
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted mb-0">
+                    <i class="bi bi-info-circle"></i> No models executed yet
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Updated Card -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock"></i> Last Updated
+                        </h5>
+                        <p class="text-muted mb-0">{{ progress.last_updated|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-primary">
+                            <i class="bi bi-arrow-left"></i> Back to Lesson
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

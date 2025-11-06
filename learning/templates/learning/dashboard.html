@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Decode Data{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="mb-0">Welcome, {{ user.username }}! 👋</h1>
+                <p class="text-muted mt-2">Continue your dbt learning journey</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for lesson in lessons %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ lesson.title }}</h5>
+                <p class="card-text text-muted">{{ lesson.description }}</p>
+                
+                <!-- Progress Bar -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Progress</span>
+                        <span class="fw-bold">{{ lesson.progress }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ lesson.progress }}%"
+                             aria-valuenow="{{ lesson.progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    {% if lesson.progress == 0 %}
+                        <a href="{% url 'lesson_detail' lesson.id %}" 
+                           class="btn btn-primary">
+                            <i class="bi bi-play-fill"></i> Start Lesson
+                        </a>
+                    {% elif lesson.progress == 100 %}
+                        <a href="{% url 'lesson_detail' lesson.id %}" 
+                           class="btn btn-success">
+                            <i class="bi bi-check-circle-fill"></i> Review Lesson
+                        </a>
+                    {% else %}
+                        <a href="{% url 'lesson_detail' lesson.id %}" 
+                           class="btn btn-primary">
+                            <i class="bi bi-arrow-right-circle"></i> Continue Learning
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Overall Statistics -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-graph-up"></i> Your Learning Statistics
+                </h5>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="stat-box">
+                            <h3 class="text-primary">{{ lessons|length }}</h3>
+                            <p class="text-muted mb-0">Total Lessons</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-box">
+                            <h3 class="text-success">
+                                {% for lesson in lessons %}
+                                    {% if lesson.progress == 100 %}1{% endif %}
+                                {% endfor %}
+                            </h3>
+                            <p class="text-muted mb-0">Completed</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-box">
+                            <h3 class="text-info">
+                                {% for lesson in lessons %}
+                                    {% if lesson.progress > 0 and lesson.progress < 100 %}1{% endif %}
+                                {% endfor %}
+                            </h3>
+                            <p class="text-muted mb-0">In Progress</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-box {
+        padding: 1rem;
+    }
+    .stat-box h3 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}

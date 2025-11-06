@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - Decode Data{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active">{{ lesson.title }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ lesson.title }}</h1>
+                <p class="lead text-muted">{{ lesson.description }}</p>
+                
+                <!-- Progress Bar -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Your Progress</span>
+                        <span class="fw-bold">{{ progress.lesson_progress }}%</span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ progress.lesson_progress }}%"
+                             aria-valuenow="{{ progress.lesson_progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ progress.lesson_progress }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Model Builder Card -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-code-square text-primary"></i> Model Builder
+                </h5>
+                <p class="card-text">
+                    Create and edit dbt models, execute transformations, and build your data pipeline.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> Edit SQL models</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Run dbt commands</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Load seed data</li>
+                </ul>
+                <a href="{% url 'model_builder' lesson.id %}" class="btn btn-primary">
+                    <i class="bi bi-hammer"></i> Open Builder
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Query Visualizer Card -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-graph-up text-info"></i> Query & Visualize
+                </h5>
+                <p class="card-text">
+                    Write SQL queries against your MotherDuck schema and visualize the results.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> Execute SQL queries</li>
+                    <li><i class="bi bi-check-circle text-success"></i> View results</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Explore your data</li>
+                </ul>
+                <a href="{% url 'query_visualize' lesson.id %}" class="btn btn-info text-white">
+                    <i class="bi bi-play-circle"></i> Run Queries
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Tracker Card -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-bar-chart-line text-success"></i> Progress Tracker
+                </h5>
+                <p class="card-text">
+                    Track your learning progress, see completed steps, and monitor your achievements.
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> View progress</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Track milestones</li>
+                    <li><i class="bi bi-check-circle text-success"></i> See statistics</li>
+                </ul>
+                <a href="{% url 'progress_dashboard' lesson.id %}" class="btn btn-success">
+                    <i class="bi bi-clipboard-check"></i> View Progress
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Info Card -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-info-circle text-warning"></i> Lesson Information
+                </h5>
+                <p class="card-text">Key details about this lesson:</p>
+                <ul class="list-unstyled">
+                    <li><strong>Lesson ID:</strong> {{ lesson.id }}</li>
+                    <li><strong>Models Directory:</strong> <code>{{ lesson.model_dir }}</code></li>
+                    <li><strong>Your Schema:</strong> <code>{{ user.schema_name }}</code></li>
+                </ul>
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-lightbulb"></i> 
+                    <small>Start with the Model Builder to initialize your workspace!</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

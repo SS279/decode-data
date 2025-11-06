@@ -1,0 +1,20 @@
+# === Django Core ===
+Django>=4.2,<5.0
+gunicorn>=21.0.0
+whitenoise>=6.5.0
+psycopg2-binary>=2.9
+dj-database-url>=2.1.0
+python-dotenv==1.0.1
+
+# === dbt & DuckDB / MotherDuck Integration ===
+dbt-core==1.8.6
+dbt-duckdb==1.8.2
+duckdb>=1.0.0
+motherduck
+
+# === Data Processing ===
+pandas==2.2.2
+numpy==1.26.4
+
+# === Optional: Groq SDK ===
+groq
