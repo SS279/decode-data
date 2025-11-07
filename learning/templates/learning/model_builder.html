@@ -181,6 +181,46 @@
         </div>
     </div>
 </div>
+
+<!-- dbt Execution Logs Display -->
+{% if execution_logs or seed_logs %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-dark">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-terminal"></i> dbt Execution Logs
+                </h5>
+            </div>
+            <div class="card-body bg-light">
+                <!-- Seed Logs -->
+                {% if seed_logs %}
+                <div class="mb-4">
+                    <h6 class="text-primary">
+                        <i class="bi bi-database"></i> Seed Execution Output
+                    </h6>
+                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ seed_logs }}</code></pre>
+                </div>
+                {% endif %}
+                
+                <!-- Model Execution Logs -->
+                {% if execution_logs %}
+                {% for log in execution_logs %}
+                <div class="mb-4">
+                    <h6 class="{% if log.success %}text-success{% else %}text-danger{% endif %}">
+                        <i class="bi bi-{% if log.success %}check-circle-fill{% else %}x-circle-fill{% endif %}"></i> 
+                        Model: {{ log.model }}
+                    </h6>
+                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ log.output }}</code></pre>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endif %}
 {% endblock %}
 

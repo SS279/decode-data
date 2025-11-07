@@ -166,6 +166,10 @@ def model_builder(request, lesson_id):
         messages.error(request, f'Error initializing workspace: {str(e)}')
         return redirect('lesson_detail', lesson_id=lesson_id)
     
+    # Variables for logs
+    execution_logs = None
+    seed_logs = None
+    
     # Handle POST actions
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -215,12 +219,20 @@ def model_builder(request, lesson_id):
                 )
                 
                 if success:
-                    # Show detailed results for each model
+                    # Collect all logs
+                    execution_logs = []
                     for result in results:
                         if result['success']:
                             messages.success(request, f"✅ Model '{result['model']}' executed successfully")
                         else:
                             messages.error(request, f"❌ Model '{result['model']}' failed")
+                        
+                        # Store logs for display
+                        execution_logs.append({
+                            'model': result['model'],
+                            'output': result['output'],
+                            'success': result['success']
+                        })
                     
                     # Update progress
                     progress, _ = LearnerProgress.objects.get_or_create(
@@ -236,10 +248,14 @@ def model_builder(request, lesson_id):
             success, message = dbt_manager.run_seeds()
             if success:
                 messages.success(request, 'Seeds loaded successfully')
+                seed_logs = message  # Store the output
             else:
                 messages.error(request, f'Error loading seeds: {message}')
+                seed_logs = message
         
-        return redirect('model_builder', lesson_id=lesson_id)
+        # Don't redirect if we have logs to show
+        if not execution_logs and not seed_logs:
+            return redirect('model_builder', lesson_id=lesson_id)
     
     # GET request - show the builder
     model_files = dbt_manager.get_model_files()
@@ -257,6 +273,8 @@ def model_builder(request, lesson_id):
         'model_files': model_files,
         'is_initialized': is_initialized,
         'progress': progress,
+        'execution_logs': execution_logs,
+        'seed_logs': seed_logs,
     }
     return render(request, 'learning/model_builder.html', context)
 
