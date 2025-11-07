@@ -16,5 +16,11 @@ motherduck
 pandas==2.2.2
 numpy==1.26.4
 
+# === Render ===
+gunicorn
+dj-database-url
+psycopg2-binary
+whitenoise
+
 # === Optional: Groq SDK ===
 groq
