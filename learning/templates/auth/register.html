@@ -1,66 +1,557 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Register - Decode Data{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Override body background */
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    /* Hide navbar and footer */
+    .navbar, footer {
+        display: none;
+    }
+
+    /* Center content */
+    main {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .register-wrapper {
+        width: 100%;
+        max-width: 520px;
+    }
+
+    /* Glass morphism card */
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                    0 0 100px rgba(102, 126, 234, 0.2);
+        padding: 3rem 2.5rem;
+        animation: slideUp 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Logo section */
+    .register-logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .logo-icon {
+        width: 200px;            /* same size as login */
+        height: 200px;
+        margin: 0 auto 0.25rem;  /* reduced gap below image */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: float 3s ease-in-out infinite;
+        position: relative;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    /* Image styling - larger and clean */
+    .logo-icon img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    }
+
+    .register-logo h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    .register-logo p {
+        color: #718096;
+        font-size: 1.05rem;
+        font-weight: 500;
+    }
+
+    /* Form styling */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-label i {
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        border: 2px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: #f7fafc;
+        font-weight: 500;
+    }
+
+    .form-control:hover {
+        border-color: #cbd5e0;
+        background: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .form-control::placeholder {
+        color: #a0aec0;
+        font-weight: 400;
+    }
+
+    /* Help text */
+    .form-text {
+        color: #718096;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-text i {
+        color: #667eea;
+    }
+
+    /* Error messages */
+    .text-danger {
+        color: #e53e3e !important;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Submit button */
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 14px;
+        padding: 1.1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: white;
+        width: 100%;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-register::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-register:hover::before {
+        left: 100%;
+    }
+
+    .btn-register:active {
+        transform: translateY(-1px);
+    }
+
+    /* Login link */
+    .login-section {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .login-section p {
+        color: #718096;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    .login-section a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        background: rgba(102, 126, 234, 0.1);
+    }
+
+    .login-section a:hover {
+        gap: 0.75rem;
+        background: rgba(102, 126, 234, 0.15);
+        color: #764ba2;
+    }
+
+    /* Alert styling */
+    .alert {
+        border-radius: 14px;
+        border: none;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        animation: slideDown 0.4s ease-out;
+        font-weight: 500;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Background decorations */
+    .bg-decoration {
+        position: fixed;
+        border-radius: 50%;
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .bg-circle-1 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, #667eea 0%, transparent 70%);
+        top: -200px;
+        right: -200px;
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    .bg-circle-2 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, #764ba2 0%, transparent 70%);
+        bottom: -150px;
+        left: -150px;
+        animation: pulse 6s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.15; }
+        50% { transform: scale(1.1); opacity: 0.25; }
+    }
+
+    /* Password strength indicator */
+    .password-strength {
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+    }
+
+    .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .password-strength-bar.weak {
+        width: 33%;
+        background: #fc8181;
+    }
+
+    .password-strength-bar.medium {
+        width: 66%;
+        background: #f6ad55;
+    }
+
+    .password-strength-bar.strong {
+        width: 100%;
+        background: #48bb78;
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+        .register-card {
+            padding: 2.5rem 1.75rem;
+        }
+
+        .register-logo h1 {
+            font-size: 2rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
+        }
+
+        .btn-register {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+        }
+    }
+
+    /* Loading state */
+    .btn-register:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .btn-register.loading::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 0.6s linear infinite;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-lg">
-            <div class="card-body p-5">
-                <div class="text-center mb-4">
-                    <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
-                    <h2 class="mt-3">Create Account</h2>
-                    <p class="text-muted">Start your dbt learning journey</p>
-                </div>
+<!-- Background decorations -->
+<div class="bg-decoration bg-circle-1"></div>
+<div class="bg-decoration bg-circle-2"></div>
 
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                            <div class="text-danger small mt-1">{{ form.email.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
-                        {{ form.password1 }}
-                        {% if form.password1.errors %}
-                            <div class="text-danger small mt-1">{{ form.password1.errors }}</div>
-                        {% endif %}
-                        <div class="form-text">Minimum 8 characters</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
-                        {{ form.password2 }}
-                        {% if form.password2.errors %}
-                            <div class="text-danger small mt-1">{{ form.password2.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
-                        <i class="bi bi-check-circle"></i> Create Account
-                    </button>
-                </form>
-
-                <div class="text-center">
-                    <p class="text-muted">Already have an account? 
-                        <a href="{% url 'login' %}" class="text-decoration-none">Sign in here</a>
-                    </p>
-                </div>
+<div class="register-wrapper">
+    <div class="register-card">
+        <!-- Logo & Branding -->
+        <div class="register-logo">
+            <div class="logo-icon">
+                <img src="{% static 'images/dd_mascot_1.png' %}" 
+                    alt="Decode Data Logo">
             </div>
+            <h1>Start Learning</h1>
+            <p>Create your free account to begin</p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    <i class="bi bi-{% if message.tags == 'error' or message.tags == 'danger' %}exclamation-circle{% else %}check-circle{% endif %} me-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Register Form -->
+        <form method="post" id="registerForm">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="form-label">
+                    <i class="bi bi-person-circle"></i>
+                    Username
+                </label>
+                {{ form.username }}
+                {% if form.username.help_text %}
+                    <div class="form-text">
+                        <i class="bi bi-info-circle"></i>
+                        {{ form.username.help_text }}
+                    </div>
+                {% endif %}
+                {% if form.username.errors %}
+                    <div class="text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="form-label">
+                    <i class="bi bi-envelope-fill"></i>
+                    Email Address
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}" class="form-label">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    Password
+                </label>
+                {{ form.password1 }}
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+                {% if form.password1.help_text %}
+                    <div class="form-text">
+                        <i class="bi bi-info-circle"></i>
+                        Minimum 8 characters required
+                    </div>
+                {% endif %}
+                {% if form.password1.errors %}
+                    <div class="text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}" class="form-label">
+                    <i class="bi bi-shield-check"></i>
+                    Confirm Password
+                </label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-register" id="submitBtn">
+                <i class="bi bi-check-circle me-2"></i>
+                Create Account
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="login-section">
+            <p>Already have an account?</p>
+            <a href="{% url 'login' %}">
+                Sign in here
+                <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add loading state to button on submit
+    document.getElementById('registerForm').addEventListener('submit', function() {
+        const btn = document.getElementById('submitBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+    });
+
+    // Password strength indicator
+    const password1 = document.getElementById('{{ form.password1.id_for_label }}');
+    const strengthBar = document.getElementById('strengthBar');
+
+    if (password1 && strengthBar) {
+        password1.addEventListener('input', function() {
+            const value = this.value;
+            const strength = calculatePasswordStrength(value);
+            
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength < 30) {
+                strengthBar.classList.add('weak');
+            } else if (strength < 70) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        });
+    }
+
+    function calculatePasswordStrength(password) {
+        let strength = 0;
+        
+        if (password.length >= 8) strength += 25;
+        if (password.length >= 12) strength += 25;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 20;
+        if (/\d/.test(password)) strength += 15;
+        if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+        
+        return Math.min(strength, 100);
+    }
+
+    // Add floating animation on focus
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.form-group').style.transform = 'translateY(-2px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.closest('.form-group').style.transform = 'translateY(0)';
+        });
+    });
+</script>
 {% endblock %}
