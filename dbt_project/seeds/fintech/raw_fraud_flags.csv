@@ -1,0 +1,7 @@
+flag_id,transaction_id,flag_type,severity,flagged_at,reviewed,notes
+FLAG001,TXN003,unusual_amount,medium,2024-01-15 11:15:00,TRUE,Amount deviation from customer average
+FLAG002,TXN009,payment_decline,low,2024-01-15 17:12:00,TRUE,Payment method rejected
+FLAG003,TXN014,multiple_attempts,medium,2024-01-16 12:47:00,FALSE,3 failed attempts in 10 minutes
+FLAG004,TXN024,geo_anomaly,high,2024-01-17 11:42:00,FALSE,Transaction from unusual location
+FLAG005,TXN031,payment_decline,low,2024-01-18 09:27:00,TRUE,Insufficient funds
+FLAG006,TXN045,velocity_check,high,2024-01-19 12:37:00,FALSE,5 transactions in 15 minutes

@@ -28,6 +28,16 @@ LESSONS = [
         },
     },
     {
+        "id": "fintech",
+        "title": "💳 Fintech: Digital Payments",
+        "description": "Build payment analytics pipeline - GMV, merchant segments, fraud detection.",
+        "model_dir": "models/fintech",
+        "validation": {
+            "sql": "SELECT COUNT(*) AS models_built FROM information_schema.tables WHERE table_schema=current_schema()",
+            "expected_min": 5
+        },
+    },
+    {
         "id": "cafe_chain",
         "title": "☕ Café Chain Analytics",
         "description": "Analyze coffee shop sales, customer loyalty, and business performance metrics.",

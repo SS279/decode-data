@@ -1,0 +1,11 @@
+merchant_id,merchant_name,industry,country,signup_date,tier,monthly_fee,status
+MERCH001,TechGadget Store,Electronics,US,2023-06-15,premium,299.00,active
+MERCH002,FashionHub,Retail,US,2023-08-22,standard,99.00,active
+MERCH003,MapleLeaf Crafts,Handicrafts,CA,2023-09-10,standard,99.00,active
+MERCH004,London Digital Services,SaaS,UK,2023-07-05,enterprise,999.00,active
+MERCH005,HealthPlus Clinic,Healthcare,US,2023-10-18,premium,299.00,active
+MERCH006,Gourmet Delights,Food & Beverage,US,2023-05-30,premium,299.00,active
+MERCH007,Enterprise Solutions Co,B2B Services,US,2023-04-12,enterprise,999.00,active
+MERCH008,Sydney Surf Shop,Sports & Recreation,AU,2023-11-08,standard,99.00,active
+MERCH009,Singapore Finance Hub,Financial Services,SG,2023-03-25,enterprise,999.00,active
+MERCH010,Global Consulting LLC,Professional Services,US,2023-02-14,enterprise,999.00,active

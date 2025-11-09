@@ -1,133 +1,949 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ lesson.title }} - Decode Data{% endblock %}
 
+{% block extra_css %}
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    /* Hero Section with Animated Gradient */
+    .lesson-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+        margin: -2rem -15px 3rem;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .lesson-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.3;
+    }
+
+    .lesson-hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .lesson-hero h1 {
+        color: white;
+        font-size: 3rem;
+        font-weight: 900;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 1rem;
+        animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .lesson-hero p {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        animation: slideUp 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Glass Morphism Progress Bar */
+    .glass-progress {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 50px;
+        padding: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .glass-progress .progress {
+        height: 35px;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+    }
+
+    .glass-progress .progress-bar {
+        background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        animation: progressGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes progressGlow {
+        0%, 100% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+        50% { box-shadow: 0 4px 25px rgba(16, 185, 129, 0.6); }
+    }
+
+    /* Modern Cards */
+    .modern-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .modern-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .modern-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+    }
+
+    .modern-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* Icon Headers */
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .card-header-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        border-radius: 20px 20px 0 0;
+        font-weight: 700;
+        font-size: 1.3rem;
+        border: none;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Feature Pills */
+    .feature-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        margin: 0.5rem;
+        font-weight: 600;
+        color: #667eea;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .feature-pill:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: scale(1.05);
+        border-color: #764ba2;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .feature-pill i {
+        font-size: 1.2rem;
+    }
+
+    /* Activity Cards - Enhanced */
+    .activity-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid #f1f5f9;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .activity-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .activity-card:hover::before {
+        opacity: 1;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 25px 60px rgba(102, 126, 234, 0.25);
+        border-color: #667eea;
+    }
+
+    .activity-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .activity-icon-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .activity-icon-info {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+    }
+
+    .activity-icon-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .activity-card h5 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #1e293b;
+    }
+
+    .activity-card p {
+        color: #64748b;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .activity-card .btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 16px;
+        text-transform: none;
+        letter-spacing: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Accordion - Modern Style */
+    .accordion-modern .accordion-item {
+        border: none;
+        background: white;
+        border-radius: 16px !important;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .accordion-modern .accordion-item:hover {
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    }
+
+    .accordion-modern .accordion-button {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        color: #1e293b;
+        padding: 1.5rem 2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .accordion-modern .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .accordion-modern .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23667eea'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        transform: scale(1.3);
+    }
+
+    .accordion-modern .accordion-button:not(.collapsed)::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+
+    .accordion-modern .accordion-body {
+        padding: 2rem;
+        background: white;
+        color: #475569;
+        line-height: 1.8;
+    }
+
+    /* Badge Styles */
+    .badge-modern {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-view {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        color: white;
+    }
+
+    .badge-table {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    /* Checklist Items */
+    .checklist-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .checklist-item:hover {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
+        transform: translateX(8px);
+    }
+
+    .checklist-item i {
+        font-size: 1.5rem;
+        color: #10b981;
+    }
+
+    /* Data Flow Visual */
+    .data-flow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    .flow-stage {
+        flex: 1;
+        min-width: 200px;
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .flow-stage:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .flow-stage::after {
+        content: '→';
+        position: absolute;
+        right: -1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: #667eea;
+        font-weight: 700;
+    }
+
+    .flow-stage:last-child::after {
+        display: none;
+    }
+
+    .flow-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .flow-title {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .flow-desc {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Breadcrumb Enhancement */
+    .breadcrumb {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .breadcrumb-item a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #764ba2;
+        transform: translateX(3px);
+        display: inline-block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .lesson-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .lesson-hero p {
+            font-size: 1.1rem;
+        }
+
+        .flow-stage::after {
+            content: '↓';
+            right: 50%;
+            top: auto;
+            bottom: -2rem;
+            transform: translateX(50%);
+        }
+
+        .data-flow {
+            flex-direction: column;
+        }
+    }
+
+    /* Animation delays for staggered effect */
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+
+    /* Glow effect on hover */
+    .glow-on-hover:hover {
+        animation: glow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3),
+                        0 0 30px rgba(118, 75, 162, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5),
+                        0 0 40px rgba(118, 75, 162, 0.3);
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li class="breadcrumb-item active">{{ lesson.title }}</li>
-            </ol>
-        </nav>
-    </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="card-title">{{ lesson.title }}</h1>
-                <p class="lead text-muted">{{ lesson.description }}</p>
-                
-                <!-- Progress Bar -->
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span class="text-muted">Your Progress</span>
-                        <span class="fw-bold">{{ progress.lesson_progress }}%</span>
-                    </div>
-                    <div class="progress" style="height: 20px;">
-                        <div class="progress-bar" role="progressbar" 
-                             style="width: {{ progress.lesson_progress }}%"
-                             aria-valuenow="{{ progress.lesson_progress }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="100">
-                            {{ progress.lesson_progress }}%
-                        </div>
-                    </div>
+<!-- Hero Section -->
+<div class="lesson-hero">
+    <div class="container lesson-hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>{{ lesson.title }}</h1>
+                <p>{{ lesson.description }}</p>
+            </div>
+            <!-- <div class="col-lg-4 text-lg-end">
+                <div style="font-size: 5rem; opacity: 0.3; animation: float 4s ease-in-out infinite;">
+                    💳
+                </div>
+            </div> -->
+        </div>
+        
+        <!-- Glass Progress Bar -->
+        <div class="glass-progress">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                     role="progressbar" 
+                     style="width: {{ progress.lesson_progress }}%;" 
+                     aria-valuenow="{{ progress.lesson_progress }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                    {{ progress.lesson_progress }}% Complete
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row g-4">
-    <!-- Model Builder Card -->
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="bi bi-code-square text-primary"></i> Model Builder
-                </h5>
-                <p class="card-text">
-                    Create and edit dbt models, execute transformations, and build your data pipeline.
-                </p>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle text-success"></i> Edit SQL models</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Run dbt commands</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Load seed data</li>
-                </ul>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}"><i class="bi bi-house-door"></i> Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+        </ol>
+    </nav>
+
+    {% if lesson.id == 'fintech' %}
+    <!-- Business Context Card -->
+    <div class="modern-card animate-delay-1">
+        <div class="card-icon">
+            <i class="bi bi-building"></i>
+        </div>
+        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 1rem;">
+            💼 Your Mission: PayFlow Analytics
+        </h2>
+        <div class="alert" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: none; border-radius: 16px; padding: 1.5rem;">
+            <strong style="color: #1e40af;">Your Role:</strong> 
+            <span style="color: #1e3a8a;">Data Analyst at PayFlow Analytics - a digital payment processor like Stripe or Square</span>
+        </div>
+        
+        <p style="font-size: 1.1rem; color: #475569; line-height: 1.8; margin-bottom: 2rem;">
+            PayFlow processes millions of payment transactions daily for merchants worldwide. Leadership needs your analytical skills to transform raw data into actionable insights!
+        </p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="feature-pill">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Track Revenue Performance
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-pill">
+                    <i class="bi bi-check-circle"></i>
+                    Monitor Success Rates
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-pill">
+                    <i class="bi bi-people"></i>
+                    Assess Merchant Health
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-pill">
+                    <i class="bi bi-shield-check"></i>
+                    Manage Risk & Fraud
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Objectives Card -->
+    <div class="modern-card animate-delay-2">
+        <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <i class="bi bi-trophy"></i>
+        </div>
+        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
+            🎯 What You'll Master
+        </h2>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <h4 style="color: #667eea; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-database"></i> Data Engineering
+                </h4>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Build staging models to clean raw data</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Create fact tables for metrics</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Design dimension tables for segmentation</span>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <h4 style="color: #667eea; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-gear"></i> dbt Skills
+                </h4>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Use <code>ref()</code> for model dependencies</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Configure materializations (views vs tables)</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Write SQL with Jinja templating</span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4 style="color: #06b6d4; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-graph-up"></i> Business Analytics
+                </h4>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Calculate fintech KPIs (GMV, revenue)</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Segment merchants and customers</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Build fraud detection reports</span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4 style="color: #06b6d4; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="bi bi-code-square"></i> SQL Mastery
+                </h4>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Write clean, documented SQL</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Use CTEs for readability</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Master CASE statements & aggregations</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Architecture Card -->
+    <div class="modern-card animate-delay-3">
+        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <i class="bi bi-diagram-3"></i>
+        </div>
+        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
+            📊 Data Architecture
+        </h2>
+
+        <div class="data-flow">
+            <div class="flow-stage">
+                <div class="flow-icon">📥</div>
+                <div class="flow-title">Raw Seeds</div>
+                <div class="flow-desc">CSV files with transaction data</div>
+                <small style="color: #94a3b8;">raw_transactions, raw_merchants</small>
+            </div>
+
+            <div class="flow-stage">
+                <div class="flow-icon">🧹</div>
+                <div class="flow-title">Staging Layer</div>
+                <div class="flow-desc">Clean & standardize (Views)</div>
+                <small style="color: #94a3b8;">stg_transactions, stg_merchants</small>
+            </div>
+
+            <div class="flow-stage">
+                <div class="flow-icon">📈</div>
+                <div class="flow-title">Analytics Layer</div>
+                <div class="flow-desc">Business metrics (Tables)</div>
+                <small style="color: #94a3b8;">fct_daily_revenue, dim_segments</small>
+            </div>
+        </div>
+
+        <div class="alert" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none; border-radius: 16px; padding: 1.5rem; margin-top: 2rem;">
+            <strong style="color: #92400e;">💡 Key Concept:</strong> 
+            <span style="color: #78350f;">We use a layered approach - raw data flows through staging (cleaning) into analytics (business insights).</span>
+        </div>
+    </div>
+
+    <!-- Models You'll Build -->
+    <div class="modern-card">
+        <div class="card-icon" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+            <i class="bi bi-file-earmark-code"></i>
+        </div>
+        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
+            🔨 5 SQL Models You'll Build
+        </h2>
+
+        <div class="accordion accordion-modern" id="modelsAccordion">
+            <!-- Model 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#model1">
+                        <strong>1. stg_transactions</strong> 
+                        <span class="badge-modern badge-view ms-2">View</span>
+                    </button>
+                </h2>
+                <div id="model1" class="accordion-collapse collapse show" data-bs-parent="#modelsAccordion">
+                    <div class="accordion-body">
+                        <strong style="color: #667eea;">Purpose:</strong> Clean and prepare transaction data<br>
+                        <strong style="color: #667eea;">Skills Learned:</strong> Data type casting, derived columns, filtering
+                        <ul style="margin-top: 1rem; margin-bottom: 0;">
+                            <li>Parse timestamps correctly</li>
+                            <li>Calculate net amounts (after processing fees)</li>
+                            <li>Add success/failure boolean flags</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model2">
+                        <strong>2. stg_merchants</strong> 
+                        <span class="badge-modern badge-view ms-2">View</span>
+                    </button>
+                </h2>
+                <div id="model2" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
+                    <div class="accordion-body">
+                        <strong style="color: #667eea;">Purpose:</strong> Prepare merchant dimensional data<br>
+                        <strong style="color: #667eea;">Skills Learned:</strong> Date calculations, categorization
+                        <ul style="margin-top: 1rem; margin-bottom: 0;">
+                            <li>Calculate merchant tenure in days</li>
+                            <li>Categorize by value segment (High/Medium/Standard)</li>
+                            <li>Add business-friendly status flags</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model3">
+                        <strong>3. fct_daily_revenue</strong> 
+                        <span class="badge-modern badge-table ms-2">Table</span>
+                    </button>
+                </h2>
+                <div id="model3" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
+                    <div class="accordion-body">
+                        <strong style="color: #667eea;">Purpose:</strong> Daily revenue and transaction metrics<br>
+                        <strong style="color: #667eea;">Skills Learned:</strong> Aggregations, GROUP BY, using ref()
+                        <ul style="margin-top: 1rem; margin-bottom: 0;">
+                            <li>Calculate GMV (Gross Merchandise Volume)</li>
+                            <li>Track platform revenue from processing fees</li>
+                            <li>Compute success rates by merchant and day</li>
+                            <li>Analyze payment method distribution</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model4">
+                        <strong>4. dim_merchant_segments</strong> 
+                        <span class="badge-modern badge-table ms-2">Table</span>
+                    </button>
+                </h2>
+                <div id="model4" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
+                    <div class="accordion-body">
+                        <strong style="color: #667eea;">Purpose:</strong> Merchant categorization and segmentation<br>
+                        <strong style="color: #667eea;">Skills Learned:</strong> Window functions, segmentation logic
+                        <ul style="margin-top: 1rem; margin-bottom: 0;">
+                            <li>Segment by volume category (High/Medium/Low)</li>
+                            <li>Categorize by customer base size</li>
+                            <li>Identify key accounts for special attention</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model5">
+                        <strong>5. fct_fraud_analysis</strong> 
+                        <span class="badge-modern badge-table ms-2">Table</span>
+                    </button>
+                </h2>
+                <div id="model5" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
+                    <div class="accordion-body">
+                        <strong style="color: #667eea;">Purpose:</strong> Fraud detection and risk management<br>
+                        <strong style="color: #667eea;">Skills Learned:</strong> LEFT JOINs, risk scoring
+                        <ul style="margin-top: 1rem; margin-bottom: 0;">
+                            <li>Join transactions with fraud detection flags</li>
+                            <li>Calculate risk scores (1=Low, 2=Medium, 3=High)</li>
+                            <li>Categorize threats by risk type</li>
+                            <li>Prioritize flagged items for security review</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Criteria -->
+    <div class="modern-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 3px solid #fbbf24;">
+        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <i class="bi bi-trophy-fill"></i>
+        </div>
+        <h2 style="color: #92400e; font-weight: 800; margin-bottom: 2rem;">
+            ✅ Success Checklist
+        </h2>
+        
+        <p style="font-size: 1.1rem; color: #78350f; margin-bottom: 2rem;">
+            You'll know you've mastered this lesson when:
+        </p>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>All 5 models execute successfully</span>
+                    </div>
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>You can query fact and dimension tables</span>
+                    </div>
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>You understand data lineage flow</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>You can calculate GMV and revenue</span>
+                    </div>
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>You know when to use views vs tables</span>
+                    </div>
+                    <div class="checklist-item" style="background: transparent;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>You can identify key accounts & risks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Activity Cards -->
+    <h2 style="color: #1e293b; font-weight: 800; margin: 3rem 0 2rem; text-align: center;">
+        🚀 Start Your Learning Journey
+    </h2>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="activity-card glow-on-hover">
+                <div class="activity-icon activity-icon-primary">
+                    <i class="bi bi-hammer"></i>
+                </div>
+                <h5>Model Builder</h5>
+                <p>Edit SQL models, load seed data, and execute dbt transformations in your browser.</p>
                 <a href="{% url 'model_builder' lesson.id %}" class="btn btn-primary">
-                    <i class="bi bi-hammer"></i> Open Builder
+                    <i class="bi bi-play-fill"></i> Open Builder
                 </a>
             </div>
         </div>
-    </div>
 
-    <!-- Query Visualizer Card -->
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="bi bi-graph-up text-info"></i> Query & Visualize
-                </h5>
-                <p class="card-text">
-                    Write SQL queries against your MotherDuck schema and visualize the results.
-                </p>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle text-success"></i> Execute SQL queries</li>
-                    <li><i class="bi bi-check-circle text-success"></i> View results</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Explore your data</li>
-                </ul>
-                <a href="{% url 'query_visualize' lesson.id %}" class="btn btn-info text-white">
-                    <i class="bi bi-play-circle"></i> Run Queries
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Progress Tracker Card -->
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="bi bi-bar-chart-line text-success"></i> Progress Tracker
-                </h5>
-                <p class="card-text">
-                    Track your learning progress, see completed steps, and monitor your achievements.
-                </p>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle text-success"></i> View progress</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Track milestones</li>
-                    <li><i class="bi bi-check-circle text-success"></i> See statistics</li>
-                </ul>
-                <a href="{% url 'progress_dashboard' lesson.id %}" class="btn btn-success">
-                    <i class="bi bi-clipboard-check"></i> View Progress
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Lesson Info Card -->
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="bi bi-info-circle text-warning"></i> Lesson Information
-                </h5>
-                <p class="card-text">Key details about this lesson:</p>
-                <ul class="list-unstyled">
-                    <li><strong>Lesson ID:</strong> {{ lesson.id }}</li>
-                    <li><strong>Models Directory:</strong> <code>{{ lesson.model_dir }}</code></li>
-                    <li><strong>Your Schema:</strong> <code>{{ user.schema_name }}</code></li>
-                </ul>
-                <div class="alert alert-info mb-0">
-                    <i class="bi bi-lightbulb"></i> 
-                    <small>Start with the Model Builder to initialize your workspace!</small>
+        <div class="col-md-4">
+            <div class="activity-card glow-on-hover">
+                <div class="activity-icon activity-icon-info">
+                    <i class="bi bi-graph-up"></i>
                 </div>
+                <h5>Query & Visualize</h5>
+                <p>Write SQL queries against your schema and explore the transformed data results.</p>
+                <a href="{% url 'query_visualize' lesson.id %}" class="btn btn-info">
+                    <i class="bi bi-search"></i> Run Queries
+                </a>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="activity-card glow-on-hover">
+                <div class="activity-icon activity-icon-success">
+                    <i class="bi bi-bar-chart-line"></i>
+                </div>
+                <h5>Progress Tracker</h5>
+                <p>Monitor your learning progress, track milestones, and celebrate achievements.</p>
+                <a href="{% url 'progress_dashboard' lesson.id %}" class="btn btn-success">
+                    <i class="bi bi-trophy"></i> View Progress
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mb-5">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-lg" style="border-radius: 16px; padding: 1rem 3rem; border-width: 2px;">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
 </div>
 {% endblock %}
