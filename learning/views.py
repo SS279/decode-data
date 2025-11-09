@@ -49,6 +49,15 @@ LESSONS = [
     }
 ]
 
+# ========== HOME VIEWS ==========
+
+def home(request):
+    """Landing page view"""
+    # Redirect to dashboard if already logged in
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
+    return render(request, 'home.html')
 
 # ========== AUTHENTICATION VIEWS ==========
 

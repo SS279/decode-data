@@ -1,0 +1,1264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decode Data - Master Data & Analytics Engineering</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --python-gradient: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
+            --dark-bg: #1a202c;
+            --light-bg: #f7fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .nav-link {
+            color: #4a5568 !important;
+            font-weight: 600;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-login {
+            border: 2px solid #667eea;
+            color: #667eea;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-signup {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: white;
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: 2px solid white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .hero-stats {
+            margin-top: 4rem;
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Tech Stack Badge */
+        .tech-stack {
+            margin-top: 3rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .tech-badge.available {
+            background: white;
+            color: #667eea;
+        }
+
+        .tech-badge.coming-soon {
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .tech-badge.coming-soon::after {
+            content: 'Coming Soon';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #10b981;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* Learning Paths Section */
+        .paths-section {
+            padding: 100px 0;
+            background: var(--light-bg);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .path-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 100%;
+            transition: all 0.4s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .path-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .path-card.available {
+            border-color: #667eea;
+        }
+
+        .path-card.available:hover {
+            border-color: #764ba2;
+        }
+
+        .path-card.coming-soon {
+            opacity: 0.85;
+        }
+
+        .path-header {
+            padding: 3rem 2.5rem 2rem;
+            position: relative;
+        }
+
+        .path-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .path-badge.available-badge {
+            background: #10b981;
+            color: white;
+        }
+
+        .path-badge.coming-badge {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .path-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .path-icon.dbt-icon {
+            background: var(--primary-gradient);
+        }
+
+        .path-icon.python-icon {
+            background: var(--python-gradient);
+        }
+
+        .path-icon.sql-icon {
+            background: linear-gradient(135deg, #0066cc 0%, #003366 100%);
+        }
+
+        .path-icon.dataeng-icon {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+
+        .path-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .path-description {
+            color: #718096;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .path-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .path-features li {
+            padding: 0.75rem 0;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .path-features i {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+
+        .path-footer {
+            padding: 0 2.5rem 2.5rem;
+        }
+
+        .btn-path {
+            width: 100%;
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 12px;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-path-available {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-path-available:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-path-coming {
+            background: #e2e8f0;
+            color: #718096;
+            cursor: not-allowed;
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .feature-card {
+            background: var(--light-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            background: white;
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-gradient);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .feature-description {
+            color: #718096;
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+            color: white;
+        }
+
+        .step-card {
+            position: relative;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .step-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #667eea;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 2.5rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .step-content {
+            margin-top: 1.5rem;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--primary-gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-title {
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: #a0aec0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .tech-stack {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/dd_mascot_1.png' %}" alt="Decode Data Logo">
+                Decode Data
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#learning-paths">Learning Paths</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a href="{% url 'register' %}" class="btn btn-signup">Start Learning Free</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 hero-content animate-fade-in">
+                    <h1 class="hero-title">Master Data & Analytics Engineering</h1>
+                    <p class="hero-subtitle">
+                        Learn dbt, Python, SQL, and modern data tools through hands-on practice. 
+                        Build real-world skills with interactive lessons, live coding environments, 
+                        and AI-powered guidance.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="{% url 'register' %}" class="btn btn-hero-primary">
+                            <i class="bi bi-rocket-takeoff me-2"></i>
+                            Start Learning Free
+                        </a>
+                        <a href="#learning-paths" class="btn btn-hero-secondary">
+                            <i class="bi bi-compass me-2"></i>
+                            Explore Learning Paths
+                        </a>
+                    </div>
+                    
+                    <!-- Tech Stack Badges -->
+                    <div class="tech-stack">
+                        <span style="color: white; font-weight: 700; opacity: 0.9;">Learn:</span>
+                        <div class="tech-badge available">
+                            <img src="{% static 'images/dbt_logo.svg' %}" 
+                                alt="dbt Logo" 
+                                style="width: 20px; height: 20px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+                            dbt-core
+                        </div>
+                        <div class="tech-badge coming-soon">
+                            <img src="{% static 'images/python_logo.svg' %}" 
+                                alt="Python Logo" 
+                                style="width: 20px; height: 20px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+                            Python
+                        </div>
+                        <div class="tech-badge coming-soon">
+                            📊 SQL
+                        </div>
+                        <!-- <div class="tech-badge coming-soon">
+                            ⚡ Spark
+                        </div>
+                        <div class="tech-badge coming-soon">
+                            ☁️ Airflow
+                        </div> -->
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Hands-On Practice</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">AI Assistance</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">Real</span>
+                            <span class="stat-label">Database Practice</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 mt-5 mt-lg-0">
+                    <!-- Hero Visual -->
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px);">
+                        <div style="background: white; border-radius: 18px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <!-- dbt Code Example -->
+                            <div style="background: #1a202c; color: #10b981; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem; margin-bottom: 1rem;">
+                                <div style="color: #a0aec0;">-- dbt Model</div>
+                                <div>&#123;&#123; config(materialized='table') &#123;&#123;</div>
+                                <div style="margin-top: 0.5rem;">SELECT</div>
+                                <div style="margin-left: 1rem;">customer_id,</div>
+                                <div style="margin-left: 1rem;">COUNT(*) as orders</div>
+                                <div>FROM &#123;&#123; ref('orders') &#123;&#123;</div>
+                            </div>
+                            <!-- Python Code Example -->
+                            <div style="background: #1a202c; color: #3776ab; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem;">
+                                <div style="color: #a0aec0;"># Python ETL</div>
+                                <div style="margin-top: 0.5rem; color: #ffd43b;">import pandas as pd</div>
+                                <div style="margin-top: 0.5rem;">df = pd.read_csv(<span style="color: #10b981;">'data.csv'</span>)</div>
+                            </div>
+                            <div style="margin-top: 1rem; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Interactive Learning Environment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Paths Section -->
+    <section id="learning-paths" class="paths-section">
+        <div class="container">
+            <h2 class="section-title">Choose Your Learning Path</h2>
+            <p class="section-subtitle">
+                Master the essential skills for modern data & analytics engineering. 
+                Start with dbt today, with Python and more tools coming soon.
+            </p>
+            
+            <div class="row g-4">
+                <!-- dbt Path - AVAILABLE -->
+                <div class="col-lg-6">
+                    <div class="path-card available">
+                        <div class="path-header">
+                            <span class="path-badge available-badge">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Available Now
+                            </span>
+                            <div class="path-icon dbt-icon">
+                                <img src="{% static 'images/dbt_logo.svg' %}" 
+                                    alt="dbt Logo" 
+                                    style="width: 32px; height: 32px; object-fit: contain;">
+                            </div>
+                            <h3 class="path-title">dbt (data build tool)</h3>
+                            <p class="path-description">
+                                Master data transformation and analytics engineering with dbt. 
+                                Learn to build reliable, tested data pipelines with SQL and Jinja.
+                            </p>
+                        </div>
+                        <div style="padding: 0 2.5rem;">
+                            <ul class="path-features">
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>3 hands-on lessons with real databases</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Interactive SQL model builder</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>MotherDuck (DuckDB) integration</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>AI assistant for instant help</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Progress tracking & achievements</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="path-footer">
+                            <a href="{% url 'register' %}" class="btn btn-path btn-path-available">
+                                <i class="bi bi-play-circle-fill me-2"></i>
+                                Start dbt Learning
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Path - COMING SOON -->
+                <div class="col-lg-6">
+                    <div class="path-card coming-soon">
+                        <div class="path-header">
+                            <span class="path-badge coming-badge">
+                                <i class="bi bi-clock-fill me-1"></i>
+                                Coming Soon
+                            </span>
+                            <div class="path-icon python-icon">
+                                <img src="{% static 'images/python_logo.svg' %}" 
+                                    alt="Python Logo" 
+                                    style="width: 40px; height: 40px; object-fit: contain;">
+                            </div>
+                            <h3 class="path-title">Python for Data Engineering</h3>
+                            <p class="path-description">
+                                Build ETL pipelines, work with APIs, process data at scale, and automate 
+                                workflows with Python. From pandas to Apache Spark.
+                            </p>
+                        </div>
+                        <div style="padding: 0 2.5rem;">
+                            <ul class="path-features">
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Python fundamentals for data engineering</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Pandas, NumPy, and data manipulation</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>ETL pipeline development</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>API integration and web scraping</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Testing and best practices</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="path-footer">
+                            <button class="btn btn-path btn-path-coming" disabled>
+                                <i class="bi bi-hourglass-split me-2"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SQL Path - COMING SOON -->
+                <div class="col-lg-6">
+                    <div class="path-card coming-soon">
+                        <div class="path-header">
+                            <span class="path-badge coming-badge">
+                                <i class="bi bi-clock-fill me-1"></i>
+                                Coming Soon
+                            </span>
+                            <div class="path-icon sql-icon">
+                                📊
+                            </div>
+                            <h3 class="path-title">Advanced SQL & Analytics</h3>
+                            <p class="path-description">
+                                Master SQL from basics to advanced analytics. Learn window functions, 
+                                CTEs, query optimization, and analytical SQL techniques.
+                            </p>
+                        </div>
+                        <div style="padding: 0 2.5rem;">
+                            <ul class="path-features">
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>SQL fundamentals to advanced</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Window functions and analytics</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Query optimization techniques</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Complex joins and subqueries</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Real-world business problems</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="path-footer">
+                            <button class="btn btn-path btn-path-coming" disabled>
+                                <i class="bi bi-hourglass-split me-2"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Engineering Ecosystem - COMING SOON -->
+                <!-- <div class="col-lg-6">
+                    <div class="path-card coming-soon">
+                        <div class="path-header">
+                            <span class="path-badge coming-badge">
+                                <i class="bi bi-clock-fill me-1"></i>
+                                Coming Soon
+                            </span>
+                            <div class="path-icon dataeng-icon">
+                                ⚡
+                            </div>
+                            <h3 class="path-title">Data Engineering Tools</h3>
+                            <p class="path-description">
+                                Learn the modern data stack: Airflow, Spark, Kafka, Docker, and cloud 
+                                platforms. Build production-ready data infrastructure.
+                            </p>
+                        </div>
+                        <div style="padding: 0 2.5rem;">
+                            <ul class="path-features">
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Apache Airflow orchestration</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Apache Spark for big data</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Stream processing with Kafka</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Docker and containerization</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Cloud platforms (AWS, GCP, Azure)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="path-footer">
+                            <button class="btn btn-path btn-path-coming" disabled>
+                                <i class="bi bi-hourglass-split me-2"></i>
+                                Coming 2025
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Notification -->
+            <!-- <div class="text-center mt-5">
+                <div class="alert alert-info d-inline-block" style="background: rgba(102, 126, 234, 0.1); border: 2px solid #667eea; border-radius: 15px;">
+                    <i class="bi bi-bell-fill me-2"></i>
+                    <strong>Want early access?</strong> Sign up now and be the first to know when new learning paths launch!
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Platform Features</h2>
+            <p class="section-subtitle">
+                Everything you need to master data & analytics engineering in one place
+            </p>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <h3 class="feature-title">Interactive Code Editor</h3>
+                        <p class="feature-description">
+                            Write and execute code directly in your browser. No setup required, 
+                            just start coding and see results instantly.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <h3 class="feature-title">AI-Powered Assistant</h3>
+                        <p class="feature-description">
+                            Get instant help with an AI assistant that understands your code, 
+                            explains concepts, and guides you through challenges.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-database"></i>
+                        </div>
+                        <h3 class="feature-title">Real Database Practice</h3>
+                        <p class="feature-description">
+                            Work with actual databases, not simulations. Practice on real 
+                            data infrastructure to build practical skills.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h3 class="feature-title">Progress Tracking</h3>
+                        <p class="feature-description">
+                            Monitor your learning journey with detailed metrics, completed 
+                            lessons, and skill assessments.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <h3 class="feature-title">Isolated Sandboxes</h3>
+                        <p class="feature-description">
+                            Each learner gets their own isolated environment. Practice safely 
+                            without affecting others or worrying about mistakes.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+                        <h3 class="feature-title">Instant Feedback</h3>
+                        <p class="feature-description">
+                            Execute code and queries with immediate results. Learn from 
+                            mistakes and iterate quickly with real-time feedback.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">How It Works</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">
+                Start your data engineering journey in just 4 simple steps
+            </p>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Create Your Free Account</h3>
+                            <p class="step-description">
+                                Sign up in seconds - no credit card required. Get instant access to 
+                                all available lessons and platform features.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Choose Your Learning Path</h3>
+                            <p class="step-description">
+                                Select from our curated learning paths. Start with dbt today, 
+                                with Python and more tools coming soon.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Learn by Doing</h3>
+                            <p class="step-description">
+                                Write code, execute models, and work with real databases. 
+                                100% hands-on practice with immediate feedback.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Get AI Guidance Anytime</h3>
+                            <p class="step-description">
+                                Stuck on something? Ask our AI assistant for help. Get explanations, 
+                                code reviews, and debugging assistance 24/7.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Level Up Your Skills?</h2>
+                <p class="cta-subtitle">
+                    Join the next generation of data and analytics engineers. 
+                    Start with dbt today, completely free!
+                </p>
+                <a href="{% url 'register' %}" class="btn btn-hero-primary">
+                    <i class="bi bi-rocket-takeoff me-2"></i>
+                    Start Learning Free
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="footer-brand">
+                        <i class="bi bi-database me-2"></i>
+                        Decode Data
+                    </div>
+                    <p class="footer-description">
+                        Your platform for mastering data & analytics engineering. Learn dbt, Python, 
+                        SQL, and modern data tools through hands-on practice.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Platform</h5>
+                    <ul class="footer-links">
+                        <li><a href="#learning-paths">Learning Paths</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <!-- <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'register' %}">Sign Up</a></li> -->
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Learn</h5>
+                    <ul class="footer-links">
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#learning-paths">dbt Course</a></li>
+                        <li><a href="#learning-paths">Python (Soon)</a></li>
+                        <li><a href="#learning-paths">SQL (Soon)</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                    <h5 class="footer-title">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h5 class="footer-title">Connect</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-twitter me-2"></i>Twitter</a></li>
+                        <li><a href="https://www.linkedin.com/company/109532295/admin/dashboard/"><i class="bi bi-linkedin me-2"></i>LinkedIn</a></li>
+                        <li><a href="https://github.com/SS279"><i class="bi bi-github me-2"></i>GitHub</a></li>
+                        <li><a href="#"><i class="bi bi-youtube me-2"></i>YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Decode Data. All rights reserved. Empowering the next generation of data engineers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Smooth Scroll & Navbar Effects -->
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
