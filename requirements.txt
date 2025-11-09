@@ -23,4 +23,4 @@ psycopg2-binary
 whitenoise
 
 # === Groq SDK ===
-ggroq>=0.4.0
+groq>=0.4.0
