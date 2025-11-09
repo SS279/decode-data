@@ -11,6 +11,7 @@ from .models import User, LearnerProgress, ModelEdit
 from .forms import LoginForm, RegisterForm, SQLQueryForm
 from .dbt_manager import DBTManager
 from .storage import MotherDuckStorage
+from .ai_views import ai_assistant, ai_chat, analyze_model, generate_test
 
 logger = logging.getLogger(__name__)
 

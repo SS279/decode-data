@@ -22,5 +22,5 @@ dj-database-url
 psycopg2-binary
 whitenoise
 
-# === Optional: Groq SDK ===
-groq
+# === Groq SDK ===
+ggroq>=0.4.0

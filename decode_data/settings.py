@@ -166,3 +166,6 @@ LOGGING = {
 # MotherDuck Configuration
 MOTHERDUCK_TOKEN = os.environ.get('MOTHERDUCK_TOKEN', '')
 MOTHERDUCK_SHARE = os.environ.get('MOTHERDUCK_SHARE', 'decode_dbt')
+
+# Groq AI Configuration
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')

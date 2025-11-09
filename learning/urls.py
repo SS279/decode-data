@@ -21,4 +21,10 @@ urlpatterns = [
     # API Endpoints
     path('api/get-model-content/', views.api_get_model_content, name='api_get_model_content'),
     path('api/validate-lesson/', views.api_validate_lesson, name='api_validate_lesson'),
+
+    # AI Assistant
+    path('ai-assistant/', views.ai_assistant, name='ai_assistant'),
+    path('api/ai/chat/', views.ai_chat, name='ai_chat'),
+    path('api/ai/analyze/', views.analyze_model, name='analyze_model'),
+    path('api/ai/generate-tests/', views.generate_test, name='generate_test')
 ]
