@@ -1,0 +1,3 @@
+rate_plan,off_peak_rate,peak_rate,description
+Standard,0.12,0.12,Flat rate all hours
+Time-of-Use,0.08,0.20,Lower off-peak higher peak rates

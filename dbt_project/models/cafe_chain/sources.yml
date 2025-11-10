@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: cafe_chain
+    description: Coffee shop sales and operations data
+    
+    tables:
+      - name: raw_sales
+        description: Point-of-sale transaction records
+        columns:
+          - name: sale_id
+            description: Unique sale identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: total_amount
+            description: Total sale amount
+            tests:
+              - not_null
+      
+      - name: raw_products
+        description: Product catalog with pricing
+        columns:
+          - name: product_id
+            description: Unique product identifier
+            tests:
+              - unique
+              - not_null
+      
+      - name: raw_stores
+        description: Store location and details
+        columns:
+          - name: store_id
+            description: Unique store identifier
+            tests:
+              - unique
+              - not_null

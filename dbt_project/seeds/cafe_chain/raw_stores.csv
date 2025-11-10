@@ -1,0 +1,4 @@
+store_id,store_name,city,state,opened_date,store_size_sqft,monthly_rent
+101,Downtown Cafe,Seattle,WA,2023-01-15,1200,3500
+102,University District,Seattle,WA,2023-03-20,1500,4000
+103,Capitol Hill,Seattle,WA,2023-06-10,1000,3000

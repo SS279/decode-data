@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: energy_smart
+    description: Smart meter IoT sensor data and household information
+    
+    tables:
+      - name: raw_meter_readings
+        description: Hourly energy consumption readings from smart meters
+        columns:
+          - name: reading_id
+            description: Unique reading identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: kwh_consumed
+            description: Kilowatt-hours consumed in the hour
+            tests:
+              - not_null
+      
+      - name: raw_households
+        description: Household details and characteristics
+        columns:
+          - name: household_id
+            description: Unique household identifier
+            tests:
+              - unique
+              - not_null
+      
+      - name: raw_rate_plans
+        description: Electricity rate plans and pricing
+        columns:
+          - name: rate_plan
+            description: Rate plan name
+            tests:
+              - unique
+              - not_null

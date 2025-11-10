@@ -1,0 +1,4 @@
+household_id,address,city,state,rate_plan,sq_footage,occupants
+H001,123 Oak St,London,98101,Standard,1200,2
+H002,456 Pine Ave,London,98102,Time-of-Use,1800,4
+H003,789 Elm Blvd,London,98103,Standard,950,1

@@ -1,0 +1,6 @@
+product_id,product_name,category,cost_price,selling_price
+1001,Espresso,Coffee,1.50,4.50
+1002,Cappuccino,Coffee,1.80,5.75
+1003,Latte,Coffee,2.00,6.25
+1004,Croissant,Pastry,1.20,3.50
+1005,Sandwich,Food,2.50,7.00

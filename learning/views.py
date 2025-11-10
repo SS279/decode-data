@@ -20,17 +20,17 @@ LESSONS = [
     {
         "id": "hello_dbt",
         "title": "🧱 Hello dbt",
-        "description": "From Raw to Refined - Introductory hands-on dbt exercise",
+        "description": "Learn dbt fundamentals with simple customer and order data",
         "model_dir": "models/hello_dbt",
         "validation": {
             "sql": "SELECT COUNT(*) AS models_built FROM information_schema.tables WHERE table_schema=current_schema()",
-            "expected_min": 2
+            "expected_min": 3
         },
     },
     {
         "id": "fintech",
         "title": "💳 Fintech: Digital Payments",
-        "description": "Build payment analytics pipeline - GMV, merchant segments, fraud detection.",
+        "description": "Build payment analytics pipeline - GMV, merchant segments, fraud detection",
         "model_dir": "models/fintech",
         "validation": {
             "sql": "SELECT COUNT(*) AS models_built FROM information_schema.tables WHERE table_schema=current_schema()",
@@ -40,21 +40,21 @@ LESSONS = [
     {
         "id": "cafe_chain",
         "title": "☕ Café Chain Analytics",
-        "description": "Analyze coffee shop sales, customer loyalty, and business performance metrics.",
+        "description": "Analyze coffee shop sales, product performance, and store metrics",
         "model_dir": "models/cafe_chain",
         "validation": {
             "sql": "SELECT COUNT(*) AS models_built FROM information_schema.tables WHERE table_schema=current_schema()",
-            "expected_min": 2
+            "expected_min": 5
         },
     },
     {
         "id": "energy_smart",
-        "title": "⚡ Energy Startup: Smart Meter Data",
-        "description": "Model IoT sensor readings and calculate energy consumption KPIs.",
+        "title": "⚡ Energy Smart: IoT Data",
+        "description": "Process smart meter readings and optimize energy consumption",
         "model_dir": "models/energy_smart",
         "validation": {
             "sql": "SELECT COUNT(*) AS models_built FROM information_schema.tables WHERE table_schema=current_schema()",
-            "expected_min": 2
+            "expected_min": 5
         },
     }
 ]
@@ -138,9 +138,17 @@ def dashboard(request):
         lesson_copy['progress'] = progress.lesson_progress if progress else 0
         lessons_with_progress.append(lesson_copy)
     
+    # --- Calculate statistics ---
+    total_lessons = len(lessons_with_progress)
+    completed = sum(1 for l in lessons_with_progress if l['progress'] == 100)
+    in_progress = sum(1 for l in lessons_with_progress if 0 < l['progress'] < 100)
+
     context = {
         'lessons': lessons_with_progress,
         'user': user,
+        'total': total_lessons,
+        'completed': completed,
+        'in_progress': in_progress
     }
     return render(request, 'learning/dashboard.html', context)
 

@@ -33,6 +33,13 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .navbar-brand img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 0.5rem;
+        }
+
         .card {
             border: none;
             border-radius: 12px;
@@ -98,16 +105,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'dashboard' %}">
-                🦆 Decode Data
+                <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo">
+                Decode Data
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ai_assistant' %}">
                             🤖 DBot

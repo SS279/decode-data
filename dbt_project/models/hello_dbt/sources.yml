@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: hello_dbt
+    description: Simple e-commerce data for learning dbt fundamentals
+    
+    tables:
+      - name: raw_customers
+        description: Customer profile information
+        columns:
+          - name: customer_id
+            description: Unique customer identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: email
+            description: Customer email address
+            tests:
+              - unique
+      
+      - name: raw_orders
+        description: Order transaction records
+        columns:
+          - name: order_id
+            description: Unique order identifier
+            tests:
+              - unique
+              - not_null
+          
+          - name: customer_id
+            description: Foreign key to customer
+          
+          - name: amount
+            description: Order amount in USD

@@ -4,20 +4,19 @@
 {% block title %}{{ lesson.title }} - Decode Data{% endblock %}
 
 {% block extra_css %}
-
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    /* Hero Section with Animated Gradient */
+    /* Compact Hero Section */
     .lesson-hero {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
         background-size: 200% 200%;
         animation: gradientShift 15s ease infinite;
-        padding: 4rem 0;
+        padding: 2rem 0 1.5rem;
         position: relative;
         overflow: hidden;
-        margin: -2rem -15px 3rem;
+        margin: -2rem -15px 2rem;
     }
 
     @keyframes gradientShift {
@@ -26,403 +25,165 @@
         100% { background-position: 0% 50%; }
     }
 
-    .lesson-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        opacity: 0.3;
-    }
-
-    .lesson-hero-content {
-        position: relative;
-        z-index: 1;
-    }
-
     .lesson-hero h1 {
         color: white;
-        font-size: 3rem;
-        font-weight: 900;
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        margin-bottom: 1rem;
-        animation: slideDown 0.8s ease-out;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
     }
 
     .lesson-hero p {
         color: rgba(255, 255, 255, 0.95);
-        font-size: 1.3rem;
-        margin-bottom: 2rem;
-        animation: slideUp 0.8s ease-out 0.2s both;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
     }
 
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Glass Morphism Progress Bar */
-    .glass-progress {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 50px;
-        padding: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-
+    /* Compact Progress Bar */
     .glass-progress .progress {
-        height: 35px;
+        height: 24px;
         border-radius: 50px;
         background: rgba(255, 255, 255, 0.2);
-        overflow: hidden;
     }
 
     .glass-progress .progress-bar {
         background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
-        font-size: 1rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
         border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        animation: progressGlow 2s ease-in-out infinite;
     }
 
-    @keyframes progressGlow {
-        0%, 100% { box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-        50% { box-shadow: 0 4px 25px rgba(16, 185, 129, 0.6); }
-    }
-
-    /* Modern Cards */
+    /* Compact Modern Cards */
     .modern-card {
         background: white;
-        border-radius: 24px;
-        padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
         border: 1px solid rgba(102, 126, 234, 0.1);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .modern-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        transform: scaleX(0);
-        transition: transform 0.4s ease;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
     }
 
     .modern-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
     }
 
-    .modern-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    /* Icon Headers */
+    /* Smaller Icons */
     .card-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 16px;
-        display: flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-        animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .card-header-modern {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1.5rem 2rem;
-        border-radius: 20px 20px 0 0;
+    /* Compact Typography */
+    .modern-card h2 {
+        font-size: 1.25rem;
         font-weight: 700;
-        font-size: 1.3rem;
-        border: none;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        margin-bottom: 0.75rem;
+        color: #1e293b;
     }
 
-    /* Feature Pills */
+    .modern-card p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .modern-card .alert {
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Compact Feature Pills */
     .feature-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.35rem;
         background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
-        padding: 0.75rem 1.5rem;
+        padding: 0.4rem 0.85rem;
         border-radius: 50px;
-        margin: 0.5rem;
+        margin: 0.25rem;
         font-weight: 600;
+        font-size: 0.8rem;
         color: #667eea;
         transition: all 0.3s ease;
-        border: 2px solid transparent;
     }
 
     .feature-pill:hover {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         transform: scale(1.05);
-        border-color: #764ba2;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
 
     .feature-pill i {
-        font-size: 1.2rem;
+        font-size: 0.95rem;
     }
 
-    /* Activity Cards - Enhanced */
-    .activity-card {
-        background: white;
-        border-radius: 24px;
-        padding: 2.5rem;
-        text-align: center;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 2px solid #f1f5f9;
-        position: relative;
-        overflow: hidden;
-        height: 100%;
-    }
-
-    .activity-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .activity-card:hover::before {
-        opacity: 1;
-    }
-
-    .activity-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        box-shadow: 0 25px 60px rgba(102, 126, 234, 0.25);
-        border-color: #667eea;
-    }
-
-    .activity-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .activity-icon-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-    }
-
-    .activity-icon-info {
-        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-        color: white;
-        box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
-    }
-
-    .activity-icon-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
-    }
-
-    .activity-card h5 {
-        font-size: 1.3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: #1e293b;
-    }
-
-    .activity-card p {
-        color: #64748b;
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-    }
-
-    .activity-card .btn {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1.1rem;
-        font-weight: 700;
-        border-radius: 16px;
-        text-transform: none;
-        letter-spacing: 0;
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Accordion - Modern Style */
-    .accordion-modern .accordion-item {
-        border: none;
-        background: white;
-        border-radius: 16px !important;
-        margin-bottom: 1rem;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .accordion-modern .accordion-item:hover {
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-    }
-
-    .accordion-modern .accordion-button {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        color: #1e293b;
-        padding: 1.5rem 2rem;
-        font-weight: 700;
-        font-size: 1.1rem;
-        border: none;
-        border-radius: 16px;
-        transition: all 0.3s ease;
-    }
-
-    .accordion-modern .accordion-button:not(.collapsed) {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    .accordion-modern .accordion-button::after {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23667eea'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-        transform: scale(1.3);
-    }
-
-    .accordion-modern .accordion-button:not(.collapsed)::after {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-    }
-
-    .accordion-modern .accordion-body {
-        padding: 2rem;
-        background: white;
-        color: #475569;
-        line-height: 1.8;
-    }
-
-    /* Badge Styles */
-    .badge-modern {
-        padding: 0.5rem 1rem;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-
-    .badge-view {
-        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-        color: white;
-    }
-
-    .badge-table {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
-    }
-
-    /* Checklist Items */
+    /* Compact Checklist */
     .checklist-item {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        padding: 1rem;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
         background: #f8fafc;
-        border-radius: 12px;
-        margin-bottom: 0.75rem;
-        transition: all 0.3s ease;
+        border-radius: 8px;
+        margin-bottom: 0.4rem;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
     }
 
     .checklist-item:hover {
         background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 100%);
-        transform: translateX(8px);
+        transform: translateX(4px);
     }
 
     .checklist-item i {
-        font-size: 1.5rem;
+        font-size: 1rem;
         color: #10b981;
     }
 
-    /* Data Flow Visual */
+    /* Compact Section Headers */
+    .modern-card h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+    }
+
+    /* Compact Data Flow */
     .data-flow {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        margin: 2rem 0;
+        gap: 0.75rem;
+        margin: 1.25rem 0;
         flex-wrap: wrap;
     }
 
     .flow-stage {
         flex: 1;
-        min-width: 200px;
+        min-width: 160px;
         background: white;
-        border-radius: 20px;
-        padding: 2rem;
+        border-radius: 12px;
+        padding: 1rem;
         text-align: center;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         position: relative;
-        transition: all 0.3s ease;
-    }
-
-    .flow-stage:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
     }
 
     .flow-stage::after {
         content: '→';
         position: absolute;
-        right: -1.5rem;
+        right: -1rem;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 2rem;
+        font-size: 1.5rem;
         color: #667eea;
-        font-weight: 700;
     }
 
     .flow-stage:last-child::after {
@@ -430,117 +191,152 @@
     }
 
     .flow-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
     }
 
     .flow-title {
         font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
     }
 
     .flow-desc {
-        font-size: 0.9rem;
+        font-size: 0.75rem;
         color: #64748b;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
     }
 
-    /* Breadcrumb Enhancement */
+    /* Compact Activity Cards */
+    .activity-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid #f1f5f9;
+        height: 100%;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+        border-color: #667eea;
+    }
+
+    .activity-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 0.75rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .activity-icon-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .activity-icon-info {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        color: white;
+    }
+
+    .activity-icon-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .activity-card h5 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+    }
+
+    .activity-card p {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+    }
+
+    .activity-card .btn {
+        width: 100%;
+        padding: 0.6rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+    /* Compact Accordion */
+    .accordion-modern .accordion-item {
+        border: none;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .accordion-modern .accordion-button {
+        background: #f8fafc;
+        padding: 0.85rem 1.25rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 12px;
+    }
+
+    .accordion-modern .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .accordion-modern .accordion-body {
+        padding: 1rem 1.25rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    /* Compact Badges */
+    .badge-modern {
+        padding: 0.3rem 0.75rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+
+    /* Compact Breadcrumb */
     .breadcrumb {
         background: white;
-        padding: 1rem 1.5rem;
-        border-radius: 16px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
     }
 
-    .breadcrumb-item a {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }
-
-    .breadcrumb-item a:hover {
-        color: #764ba2;
-        transform: translateX(3px);
-        display: inline-block;
-    }
-
-    /* Responsive Design */
+    /* Responsive */
     @media (max-width: 768px) {
-        .lesson-hero h1 {
-            font-size: 2rem;
-        }
-        
-        .lesson-hero p {
-            font-size: 1.1rem;
-        }
-
-        .flow-stage::after {
-            content: '↓';
-            right: 50%;
-            top: auto;
-            bottom: -2rem;
-            transform: translateX(50%);
-        }
-
-        .data-flow {
-            flex-direction: column;
-        }
-    }
-
-    /* Animation delays for staggered effect */
-    .animate-delay-1 { animation-delay: 0.1s; }
-    .animate-delay-2 { animation-delay: 0.2s; }
-    .animate-delay-3 { animation-delay: 0.3s; }
-
-    /* Glow effect on hover */
-    .glow-on-hover:hover {
-        animation: glow 1.5s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-        0%, 100% {
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3),
-                        0 0 30px rgba(118, 75, 162, 0.2);
-        }
-        50% {
-            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5),
-                        0 0 40px rgba(118, 75, 162, 0.3);
-        }
+        .lesson-hero h1 { font-size: 1.5rem; }
+        .lesson-hero p { font-size: 0.85rem; }
+        .flow-stage::after { content: '↓'; right: 50%; top: auto; bottom: -1.5rem; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Compact Hero -->
 <div class="lesson-hero">
-    <div class="container lesson-hero-content">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1>{{ lesson.title }}</h1>
-                <p>{{ lesson.description }}</p>
-            </div>
-            <!-- <div class="col-lg-4 text-lg-end">
-                <div style="font-size: 5rem; opacity: 0.3; animation: float 4s ease-in-out infinite;">
-                    💳
-                </div>
-            </div> -->
-        </div>
+    <div class="container">
+        <h1>{{ lesson.title }}</h1>
+        <p>{{ lesson.description }}</p>
         
-        <!-- Glass Progress Bar -->
         <div class="glass-progress">
             <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                     role="progressbar" 
-                     style="width: {{ progress.lesson_progress }}%;" 
-                     aria-valuenow="{{ progress.lesson_progress }}" 
-                     aria-valuemin="0" 
-                     aria-valuemax="100">
-                    {{ progress.lesson_progress }}% Complete
+                <div class="progress-bar" style="width: {{ progress.lesson_progress }}%;">
+                    {{ progress.lesson_progress }}%
                 </div>
             </div>
         </div>
@@ -552,396 +348,351 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'dashboard' %}"><i class="bi bi-house-door"></i> Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+            <li class="breadcrumb-item active">{{ lesson.title }}</li>
         </ol>
     </nav>
 
     {% if lesson.id == 'fintech' %}
-    <!-- Business Context Card -->
-    <div class="modern-card animate-delay-1">
-        <div class="card-icon">
-            <i class="bi bi-building"></i>
-        </div>
-        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 1rem;">
-            💼 Your Mission: PayFlow Analytics
-        </h2>
-        <div class="alert" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: none; border-radius: 16px; padding: 1.5rem;">
+    <!-- Compact Business Context -->
+    <div class="modern-card">
+        <div class="card-icon">🏢</div>
+        <h2>💼 Your Mission: PayFlow Analytics</h2>
+        <div class="alert" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: none; border-radius: 12px;">
             <strong style="color: #1e40af;">Your Role:</strong> 
-            <span style="color: #1e3a8a;">Data Analyst at PayFlow Analytics - a digital payment processor like Stripe or Square</span>
+            <span style="color: #1e3a8a;">Data Analyst at PayFlow Analytics</span>
         </div>
         
-        <p style="font-size: 1.1rem; color: #475569; line-height: 1.8; margin-bottom: 2rem;">
-            PayFlow processes millions of payment transactions daily for merchants worldwide. Leadership needs your analytical skills to transform raw data into actionable insights!
-        </p>
+        <p>Transform raw payment transaction data into actionable business intelligence for merchant analytics and fraud detection.</p>
 
-        <div class="row g-3">
-            <div class="col-md-6">
-                <div class="feature-pill">
-                    <i class="bi bi-graph-up-arrow"></i>
-                    Track Revenue Performance
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="feature-pill">
-                    <i class="bi bi-check-circle"></i>
-                    Monitor Success Rates
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="feature-pill">
-                    <i class="bi bi-people"></i>
-                    Assess Merchant Health
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="feature-pill">
-                    <i class="bi bi-shield-check"></i>
-                    Manage Risk & Fraud
-                </div>
-            </div>
+        <div class="row g-2">
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-graph-up-arrow"></i> Revenue</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-check-circle"></i> Success Rates</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-people"></i> Merchants</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-shield-check"></i> Fraud Detection</div></div>
         </div>
     </div>
 
-    <!-- Learning Objectives Card -->
-    <div class="modern-card animate-delay-2">
-        <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-            <i class="bi bi-trophy"></i>
-        </div>
-        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
-            🎯 What You'll Master
-        </h2>
+    <!-- Compact Learning Objectives -->
+    <div class="modern-card">
+        <div class="card-icon">🎯</div>
+        <h2>What You'll Master</h2>
         
-        <div class="row g-4">
+        <div class="row g-3">
             <div class="col-md-6">
-                <h4 style="color: #667eea; font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-database"></i> Data Engineering
-                </h4>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Build staging models to clean raw data</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Create fact tables for metrics</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Design dimension tables for segmentation</span>
-                </div>
+                <h4 style="color: #667eea;"><i class="bi bi-database"></i> Data Engineering</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Build staging models</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Create fact tables</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Design dimensions</div>
             </div>
             
             <div class="col-md-6">
-                <h4 style="color: #667eea; font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-gear"></i> dbt Skills
-                </h4>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Use <code>ref()</code> for model dependencies</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Configure materializations (views vs tables)</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Write SQL with Jinja templating</span>
-                </div>
+                <h4 style="color: #667eea;"><i class="bi bi-gear"></i> dbt Skills</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Use ref() & source()</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Views vs tables</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Jinja templating</div>
             </div>
 
             <div class="col-md-6">
-                <h4 style="color: #06b6d4; font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-graph-up"></i> Business Analytics
-                </h4>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Calculate fintech KPIs (GMV, revenue)</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Segment merchants and customers</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Build fraud detection reports</span>
-                </div>
+                <h4 style="color: #06b6d4;"><i class="bi bi-graph-up"></i> Analytics</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Calculate KPIs</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Segment customers</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Detect fraud patterns</div>
             </div>
 
             <div class="col-md-6">
-                <h4 style="color: #06b6d4; font-weight: 700; margin-bottom: 1rem;">
-                    <i class="bi bi-code-square"></i> SQL Mastery
-                </h4>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Write clean, documented SQL</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Use CTEs for readability</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>Master CASE statements & aggregations</span>
-                </div>
+                <h4 style="color: #06b6d4;"><i class="bi bi-code-square"></i> SQL</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> CTEs & aggregations</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> CASE statements</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> GROUP BY mastery</div>
             </div>
         </div>
     </div>
 
-    <!-- Data Architecture Card -->
-    <div class="modern-card animate-delay-3">
-        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-            <i class="bi bi-diagram-3"></i>
-        </div>
-        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
-            📊 Data Architecture
-        </h2>
+    <!-- Compact Data Architecture -->
+    <div class="modern-card">
+        <div class="card-icon">📊</div>
+        <h2>Data Architecture</h2>
 
         <div class="data-flow">
             <div class="flow-stage">
                 <div class="flow-icon">📥</div>
                 <div class="flow-title">Raw Seeds</div>
-                <div class="flow-desc">CSV files with transaction data</div>
-                <small style="color: #94a3b8;">raw_transactions, raw_merchants</small>
+                <div class="flow-desc">CSV transaction data</div>
             </div>
 
             <div class="flow-stage">
                 <div class="flow-icon">🧹</div>
-                <div class="flow-title">Staging Layer</div>
-                <div class="flow-desc">Clean & standardize (Views)</div>
-                <small style="color: #94a3b8;">stg_transactions, stg_merchants</small>
+                <div class="flow-title">Staging</div>
+                <div class="flow-desc">Clean & standardize</div>
             </div>
 
             <div class="flow-stage">
                 <div class="flow-icon">📈</div>
-                <div class="flow-title">Analytics Layer</div>
-                <div class="flow-desc">Business metrics (Tables)</div>
-                <small style="color: #94a3b8;">fct_daily_revenue, dim_segments</small>
+                <div class="flow-title">Analytics</div>
+                <div class="flow-desc">Business metrics</div>
             </div>
         </div>
 
-        <div class="alert" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none; border-radius: 16px; padding: 1.5rem; margin-top: 2rem;">
-            <strong style="color: #92400e;">💡 Key Concept:</strong> 
-            <span style="color: #78350f;">We use a layered approach - raw data flows through staging (cleaning) into analytics (business insights).</span>
+        <div class="alert" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none; border-radius: 12px; padding: 0.75rem; font-size: 0.85rem;">
+            <strong>💡 Key Concept:</strong> Layered approach - raw → staging → analytics
         </div>
     </div>
 
-    <!-- Models You'll Build -->
+    <!-- Compact Models -->
     <div class="modern-card">
-        <div class="card-icon" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
-            <i class="bi bi-file-earmark-code"></i>
-        </div>
-        <h2 style="color: #1e293b; font-weight: 800; margin-bottom: 2rem;">
-            🔨 5 SQL Models You'll Build
-        </h2>
+        <div class="card-icon">🔨</div>
+        <h2>5 SQL Models You'll Build</h2>
 
         <div class="accordion accordion-modern" id="modelsAccordion">
-            <!-- Model 1 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#model1">
-                        <strong>1. stg_transactions</strong> 
-                        <span class="badge-modern badge-view ms-2">View</span>
+                        <strong>1. stg_transactions</strong> <span class="badge-modern bg-info ms-2">View</span>
                     </button>
                 </h2>
                 <div id="model1" class="accordion-collapse collapse show" data-bs-parent="#modelsAccordion">
                     <div class="accordion-body">
-                        <strong style="color: #667eea;">Purpose:</strong> Clean and prepare transaction data<br>
-                        <strong style="color: #667eea;">Skills Learned:</strong> Data type casting, derived columns, filtering
-                        <ul style="margin-top: 1rem; margin-bottom: 0;">
-                            <li>Parse timestamps correctly</li>
-                            <li>Calculate net amounts (after processing fees)</li>
-                            <li>Add success/failure boolean flags</li>
-                        </ul>
+                        <strong>Purpose:</strong> Clean transaction data<br>
+                        <strong>Skills:</strong> Type casting, derived columns, filtering
                     </div>
                 </div>
             </div>
 
-            <!-- Model 2 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model2">
-                        <strong>2. stg_merchants</strong> 
-                        <span class="badge-modern badge-view ms-2">View</span>
+                        <strong>2. stg_merchants</strong> <span class="badge-modern bg-info ms-2">View</span>
                     </button>
                 </h2>
                 <div id="model2" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
                     <div class="accordion-body">
-                        <strong style="color: #667eea;">Purpose:</strong> Prepare merchant dimensional data<br>
-                        <strong style="color: #667eea;">Skills Learned:</strong> Date calculations, categorization
-                        <ul style="margin-top: 1rem; margin-bottom: 0;">
-                            <li>Calculate merchant tenure in days</li>
-                            <li>Categorize by value segment (High/Medium/Standard)</li>
-                            <li>Add business-friendly status flags</li>
-                        </ul>
+                        <strong>Purpose:</strong> Prepare merchant data<br>
+                        <strong>Skills:</strong> Date calculations, categorization
                     </div>
                 </div>
             </div>
 
-            <!-- Model 3 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model3">
-                        <strong>3. fct_daily_revenue</strong> 
-                        <span class="badge-modern badge-table ms-2">Table</span>
+                        <strong>3. fct_daily_revenue</strong> <span class="badge-modern bg-success ms-2">Table</span>
                     </button>
                 </h2>
                 <div id="model3" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
                     <div class="accordion-body">
-                        <strong style="color: #667eea;">Purpose:</strong> Daily revenue and transaction metrics<br>
-                        <strong style="color: #667eea;">Skills Learned:</strong> Aggregations, GROUP BY, using ref()
-                        <ul style="margin-top: 1rem; margin-bottom: 0;">
-                            <li>Calculate GMV (Gross Merchandise Volume)</li>
-                            <li>Track platform revenue from processing fees</li>
-                            <li>Compute success rates by merchant and day</li>
-                            <li>Analyze payment method distribution</li>
-                        </ul>
+                        <strong>Purpose:</strong> Daily revenue metrics<br>
+                        <strong>Skills:</strong> Aggregations, GROUP BY, ref()
                     </div>
                 </div>
             </div>
 
-            <!-- Model 4 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model4">
-                        <strong>4. dim_merchant_segments</strong> 
-                        <span class="badge-modern badge-table ms-2">Table</span>
+                        <strong>4. dim_merchant_segments</strong> <span class="badge-modern bg-success ms-2">Table</span>
                     </button>
                 </h2>
                 <div id="model4" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
                     <div class="accordion-body">
-                        <strong style="color: #667eea;">Purpose:</strong> Merchant categorization and segmentation<br>
-                        <strong style="color: #667eea;">Skills Learned:</strong> Window functions, segmentation logic
-                        <ul style="margin-top: 1rem; margin-bottom: 0;">
-                            <li>Segment by volume category (High/Medium/Low)</li>
-                            <li>Categorize by customer base size</li>
-                            <li>Identify key accounts for special attention</li>
-                        </ul>
+                        <strong>Purpose:</strong> Merchant segmentation<br>
+                        <strong>Skills:</strong> Window functions, segmentation
                     </div>
                 </div>
             </div>
 
-            <!-- Model 5 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#model5">
-                        <strong>5. fct_fraud_analysis</strong> 
-                        <span class="badge-modern badge-table ms-2">Table</span>
+                        <strong>5. fct_fraud_analysis</strong> <span class="badge-modern bg-success ms-2">Table</span>
                     </button>
                 </h2>
                 <div id="model5" class="accordion-collapse collapse" data-bs-parent="#modelsAccordion">
                     <div class="accordion-body">
-                        <strong style="color: #667eea;">Purpose:</strong> Fraud detection and risk management<br>
-                        <strong style="color: #667eea;">Skills Learned:</strong> LEFT JOINs, risk scoring
-                        <ul style="margin-top: 1rem; margin-bottom: 0;">
-                            <li>Join transactions with fraud detection flags</li>
-                            <li>Calculate risk scores (1=Low, 2=Medium, 3=High)</li>
-                            <li>Categorize threats by risk type</li>
-                            <li>Prioritize flagged items for security review</li>
-                        </ul>
+                        <strong>Purpose:</strong> Fraud detection & risk<br>
+                        <strong>Skills:</strong> LEFT JOINs, risk scoring
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Success Criteria -->
-    <div class="modern-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 3px solid #fbbf24;">
-        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-            <i class="bi bi-trophy-fill"></i>
-        </div>
-        <h2 style="color: #92400e; font-weight: 800; margin-bottom: 2rem;">
-            ✅ Success Checklist
-        </h2>
+    <!-- Compact Success Criteria -->
+    <div class="modern-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #fbbf24;">
+        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">🏆</div>
+        <h2 style="color: #92400e;">Success Checklist</h2>
         
-        <p style="font-size: 1.1rem; color: #78350f; margin-bottom: 2rem;">
-            You'll know you've mastered this lesson when:
-        </p>
+        <div class="row g-2">
+            <div class="col-md-6">
+                <div style="background: white; padding: 0.75rem; border-radius: 10px;">
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> All 5 models execute</div>
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> Query fact tables</div>
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> Understand lineage</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="background: white; padding: 0.75rem; border-radius: 10px;">
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> Calculate GMV</div>
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> Views vs tables</div>
+                    <div class="checklist-item" style="background: transparent;"><i class="bi bi-check-circle-fill"></i> Identify risks</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {% elif lesson.id == 'hello_dbt' %}
+    <!-- Hello dbt Lesson Content -->
+    <div class="modern-card">
+        <div class="card-icon">🏪</div>
+        <h2>🧱 Your Mission: E-Commerce Data Analyst</h2>
+        <div class="alert" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: none; border-radius: 12px;">
+            <strong style="color: #1e40af;">Your Role:</strong> 
+            <span style="color: #1e3a8a;">Junior Data Analyst at an online retail company</span>
+        </div>
+        
+        <p>Learn dbt fundamentals by analyzing customer orders. Build your first models to understand who your customers are and how they shop!</p>
+
+        <div class="row g-2">
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-people"></i> Customer Analysis</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-cart"></i> Order Tracking</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-graph-up"></i> Revenue Metrics</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-award"></i> Segmentation</div></div>
+        </div>
+    </div>
+
+    <div class="modern-card">
+        <div class="card-icon">🎯</div>
+        <h2>What You'll Master</h2>
         <div class="row g-3">
             <div class="col-md-6">
-                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>All 5 models execute successfully</span>
-                    </div>
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>You can query fact and dimension tables</span>
-                    </div>
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>You understand data lineage flow</span>
-                    </div>
-                </div>
+                <h4 style="color: #667eea;"><i class="bi bi-database"></i> dbt Fundamentals</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Create staging models</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Use ref() function</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Build fact tables</div>
             </div>
             <div class="col-md-6">
-                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>You can calculate GMV and revenue</span>
-                    </div>
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>You know when to use views vs tables</span>
-                    </div>
-                    <div class="checklist-item" style="background: transparent;">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span>You can identify key accounts & risks</span>
-                    </div>
-                </div>
+                <h4 style="color: #667eea;"><i class="bi bi-code-square"></i> SQL Skills</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> JOIN two tables</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Aggregate with GROUP BY</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Use CASE statements</div>
             </div>
         </div>
     </div>
+
+    {% elif lesson.id == 'cafe_chain' %}
+    <!-- Café Chain Lesson Content -->
+    <div class="modern-card">
+        <div class="card-icon">☕</div>
+        <h2>☕ Your Mission: Coffee Shop Analytics Manager</h2>
+        <div class="alert" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none; border-radius: 12px;">
+            <strong style="color: #92400e;">Your Role:</strong> 
+            <span style="color: #78350f;">Analytics Manager for a regional coffee shop chain</span>
+        </div>
+        
+        <p>Analyze sales data across multiple stores to identify best-selling products, optimize inventory, and maximize profitability!</p>
+
+        <div class="row g-2">
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-shop"></i> Store Performance</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-cup-hot"></i> Product Analysis</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-clock"></i> Time Patterns</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-currency-dollar"></i> Profit Margins</div></div>
+        </div>
+    </div>
+
+    <div class="modern-card">
+        <div class="card-icon">🎯</div>
+        <h2>What You'll Master</h2>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 style="color: #667eea;"><i class="bi bi-graph-up"></i> Retail Analytics</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Daily sales tracking</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Product performance</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Store comparisons</div>
+            </div>
+            <div class="col-md-6">
+                <h4 style="color: #667eea;"><i class="bi bi-calculator"></i> Business Metrics</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Profit calculations</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Time-of-day patterns</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Ranking products</div>
+            </div>
+        </div>
+    </div>
+
+    {% elif lesson.id == 'energy_smart' %}
+    <!-- Energy Smart Lesson Content -->
+    <div class="modern-card">
+        <div class="card-icon">⚡</div>
+        <h2>⚡ Your Mission: Smart Home Energy Analyst</h2>
+        <div class="alert" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border: none; border-radius: 12px;">
+            <strong style="color: #065f46;">Your Role:</strong> 
+            <span style="color: #064e3b;">Data Analyst at an IoT energy monitoring startup</span>
+        </div>
+        
+        <p>Process smart meter sensor data to identify consumption patterns, detect anomalies, and help households optimize their energy usage and costs!</p>
+
+        <div class="row g-2">
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-lightning-charge"></i> Usage Patterns</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-clock-history"></i> Time-Series</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-piggy-bank"></i> Cost Optimization</div></div>
+            <div class="col-6"><div class="feature-pill"><i class="bi bi-exclamation-triangle"></i> Anomaly Detection</div></div>
+        </div>
+    </div>
+
+    <div class="modern-card">
+        <div class="card-icon">🎯</div>
+        <h2>What You'll Master</h2>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 style="color: #667eea;"><i class="bi bi-cpu"></i> IoT Analytics</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Process sensor data</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Time-series analysis</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Detect anomalies</div>
+            </div>
+            <div class="col-md-6">
+                <h4 style="color: #667eea;"><i class="bi bi-speedometer"></i> Advanced Metrics</h4>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Dynamic cost calc</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Peak analysis</div>
+                <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Efficiency ratings</div>
+            </div>
+        </div>
+    </div>
+
     {% endif %}
 
-    <!-- Activity Cards -->
-    <h2 style="color: #1e293b; font-weight: 800; margin: 3rem 0 2rem; text-align: center;">
-        🚀 Start Your Learning Journey
-    </h2>
+    <!-- Compact Activity Cards -->
+    <h2 style="text-align: center; margin: 2rem 0 1.5rem; font-size: 1.5rem; font-weight: 700;">🚀 Start Learning</h2>
 
-    <div class="row g-4 mb-5">
+    <div class="row g-3 mb-4">
         <div class="col-md-4">
-            <div class="activity-card glow-on-hover">
-                <div class="activity-icon activity-icon-primary">
-                    <i class="bi bi-hammer"></i>
-                </div>
+            <div class="activity-card">
+                <div class="activity-icon activity-icon-primary"><i class="bi bi-hammer"></i></div>
                 <h5>Model Builder</h5>
-                <p>Edit SQL models, load seed data, and execute dbt transformations in your browser.</p>
-                <a href="{% url 'model_builder' lesson.id %}" class="btn btn-primary">
-                    <i class="bi bi-play-fill"></i> Open Builder
-                </a>
+                <p>Edit SQL models and execute dbt transformations</p>
+                <a href="{% url 'model_builder' lesson.id %}" class="btn btn-primary"><i class="bi bi-play-fill"></i> Open Builder</a>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="activity-card glow-on-hover">
-                <div class="activity-icon activity-icon-info">
-                    <i class="bi bi-graph-up"></i>
-                </div>
+            <div class="activity-card">
+                <div class="activity-icon activity-icon-info"><i class="bi bi-graph-up"></i></div>
                 <h5>Query & Visualize</h5>
-                <p>Write SQL queries against your schema and explore the transformed data results.</p>
-                <a href="{% url 'query_visualize' lesson.id %}" class="btn btn-info">
-                    <i class="bi bi-search"></i> Run Queries
-                </a>
+                <p>Write SQL queries and explore results</p>
+                <a href="{% url 'query_visualize' lesson.id %}" class="btn btn-info"><i class="bi bi-search"></i> Run Queries</a>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="activity-card glow-on-hover">
-                <div class="activity-icon activity-icon-success">
-                    <i class="bi bi-bar-chart-line"></i>
-                </div>
+            <div class="activity-card">
+                <div class="activity-icon activity-icon-success"><i class="bi bi-bar-chart-line"></i></div>
                 <h5>Progress Tracker</h5>
-                <p>Monitor your learning progress, track milestones, and celebrate achievements.</p>
-                <a href="{% url 'progress_dashboard' lesson.id %}" class="btn btn-success">
-                    <i class="bi bi-trophy"></i> View Progress
-                </a>
+                <p>Monitor your learning achievements</p>
+                <a href="{% url 'progress_dashboard' lesson.id %}" class="btn btn-success"><i class="bi bi-trophy"></i> View Progress</a>
             </div>
         </div>
     </div>
 
     <!-- Back Button -->
-    <div class="text-center mb-5">
-        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-lg" style="border-radius: 16px; padding: 1rem 3rem; border-width: 2px;">
+    <div class="text-center mb-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary" style="border-radius: 10px; padding: 0.6rem 2rem;">
             <i class="bi bi-arrow-left"></i> Back to Dashboard
         </a>
     </div>
