@@ -4,548 +4,629 @@
 {% block title %}Login - Decode Data{% endblock %}
 
 {% block extra_css %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
 <style>
-    /* Override body background for login page */
-    body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --light-bg: #f7fafc;
+        --text-dark: #2d3748;
+        --primary-color: #667eea;
     }
 
-    /* Hide navbar and footer for cleaner login page */
-    .navbar, footer {
+    /* Reset body styles from base.html */
+    body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Hide default navbar from base.html */
+    .navbar.navbar-dark {
         display: none;
     }
 
-    /* Center content vertically */
-    main {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 1rem;
+    /* Remove padding from main */
+    main.container-fluid {
+        padding: 0 !important;
     }
 
-    /* Login container */
-    .login-wrapper {
-        width: 100%;
-        max-width: 480px;
-    }
-
-    /* Glass morphism card */
-    .login-card {
+    /* Custom Navigation */
+    /* .auth-navbar {
         background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-                    0 0 100px rgba(102, 126, 234, 0.2);
-        padding: 3rem 2.5rem;
-        animation: slideUp 0.6s ease-out;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    } */
+
+    .nav-link:hover {
+        color: #667eea !important;
+        transform: translateY(-2px);
     }
 
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* Main Login Section */
+    .login-section {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 3rem 0;
     }
 
-    /* Logo section */
-    .login-logo {
-        text-align: center;
+    .login-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .login-content {
+        display: flex;
+        gap: 4rem;
+        align-items: center;
+    }
+
+    /* Left Side - Branding */
+    .login-branding {
+        flex: 1;
+        padding: 2rem;
+    }
+
+    .brand-title {
+        font-size: 3rem;
+        font-weight: 900;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin-bottom: 1.5rem;
+        line-height: 1.2;
     }
 
-    /* Updated logo icon - NO BACKGROUND, just floating image */
-    .logo-icon {
-        width: 200px;
-        height: 200px;
-        margin: 0 auto 0.25rem;
+    .brand-subtitle {
+        font-size: 1.3rem;
+        color: #4a5568;
+        margin-bottom: 3rem;
+        line-height: 1.7;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .feature-list li {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        color: #4a5568;
+    }
+
+    .feature-list i {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-gradient);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        animation: float 3s ease-in-out infinite;
-        position: relative;
-        /* Removed background gradient */
-        /* Removed box-shadow */
-        /* Removed border-radius */
+        color: white;
+        font-size: 1.2rem;
+        flex-shrink: 0;
     }
 
-    /* Removed the ::before pseudo-element (glow effect) */
-
-    /* Floating animation - KEPT */
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
+    /* Right Side - Login Form */
+    .login-form-wrapper {
+        flex: 1;
+        max-width: 500px;
     }
 
-    /* Image styling - larger and clean */
-    .logo-icon img {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-        /* Optional: add subtle drop shadow to image itself */
-        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    .login-card {
+        background: white;
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(102, 126, 234, 0.1);
     }
 
-    .login-logo h1 {
-        font-size: 2.25rem;
+    .form-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .form-title {
+        font-size: 2rem;
         font-weight: 800;
-        color: #2d3748;
+        color: var(--text-dark);
         margin-bottom: 0.5rem;
-        letter-spacing: -0.5px;
     }
 
-    .login-logo p {
+    .form-subtitle {
         color: #718096;
-        font-size: 1.05rem;
-        font-weight: 500;
+        font-size: 1rem;
     }
 
-    /* Form styling */
+    /* Form Styling */
     .form-group {
-        margin-bottom: 1.75rem;
+        margin-bottom: 1.5rem;
     }
 
     .form-label {
         font-weight: 600;
         color: #4a5568;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.5rem;
         font-size: 0.95rem;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f7fafc;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-field {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #718096;
+        cursor: pointer;
+    }
+
+    /* Remember & Forgot */
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .remember-me {
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
-    .form-label i {
-        color: #667eea;
-        font-size: 1.1rem;
+    .remember-me input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
     }
 
-    .input-wrapper {
-        position: relative;
+    .forgot-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
-    .form-control {
-        border: 2px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 1rem 1.25rem;
-        font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: #f7fafc;
-        font-weight: 500;
+    .forgot-link:hover {
+        color: #764ba2;
+        text-decoration: underline;
     }
 
-    .form-control:hover {
-        border-color: #cbd5e0;
-        background: #fff;
-    }
-
-    .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        background: #ffffff;
-        transform: translateY(-2px);
-    }
-
-    .form-control::placeholder {
-        color: #a0aec0;
-        font-weight: 400;
-    }
-
-    /* Submit button */
-    .btn-signin {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Submit Button */
+    .btn-login {
+        width: 100%;
+        padding: 1rem;
+        background: var(--primary-gradient);
+        color: white;
         border: none;
-        border-radius: 14px;
-        padding: 1.1rem 2rem;
+        border-radius: 12px;
         font-size: 1.1rem;
         font-weight: 700;
-        color: white;
-        width: 100%;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-top: 1rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-signin::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.5s;
-    }
-
-    .btn-signin:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
-    }
-
-    .btn-signin:hover::before {
-        left: 100%;
-    }
-
-    .btn-signin:active {
-        transform: translateY(-1px);
-    }
-
-    /* Features grid */
-    .features-grid {
-        margin-top: 2.5rem;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-
-    .feature-badge {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
-        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-        border-radius: 12px;
+        cursor: pointer;
         transition: all 0.3s ease;
-        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     }
 
-    .feature-badge:hover {
-        background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
-        transform: translateX(5px);
-        border-color: #cbd5e0;
-    }
-
-    .feature-icon {
-        width: 44px;
-        height: 44px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 11px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.3rem;
-        flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    }
-
-    .feature-text {
-        font-size: 0.9rem;
-        color: #4a5568;
-        font-weight: 600;
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
     }
 
     /* Divider */
     .divider {
         display: flex;
         align-items: center;
-        text-align: center;
         margin: 2rem 0;
-        color: #a0aec0;
-        font-size: 0.9rem;
-        font-weight: 500;
     }
 
     .divider::before,
     .divider::after {
         content: '';
         flex: 1;
-        border-bottom: 2px solid #e2e8f0;
+        height: 1px;
+        background: #e2e8f0;
     }
 
     .divider span {
-        padding: 0 1.5rem;
+        padding: 0 1rem;
+        color: #718096;
+        font-size: 0.9rem;
     }
 
-    /* Register section */
-    .register-section {
+    /* Social Login */
+    .social-login {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-social {
+        flex: 1;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #4a5568;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-social:hover {
+        background: #f7fafc;
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    /* Sign Up Link */
+    .signup-link {
         text-align: center;
         margin-top: 2rem;
         padding-top: 2rem;
-        border-top: 2px solid #e2e8f0;
+        border-top: 1px solid #e2e8f0;
     }
 
-    .register-section p {
+    .signup-link p {
         color: #718096;
-        margin-bottom: 1rem;
-        font-weight: 500;
+        margin-bottom: 0.5rem;
     }
 
-    .register-section a {
-        color: #667eea;
+    .signup-link a {
+        color: var(--primary-color);
         text-decoration: none;
         font-weight: 700;
-        font-size: 1.05rem;
         transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        border-radius: 10px;
-        background: rgba(102, 126, 234, 0.1);
     }
 
-    .register-section a:hover {
-        gap: 0.75rem;
-        background: rgba(102, 126, 234, 0.15);
+    .signup-link a:hover {
         color: #764ba2;
+        text-decoration: underline;
     }
 
-    /* Alert styling */
+    /* Alert Messages */
     .alert {
-        border-radius: 14px;
+        border-radius: 12px;
         border: none;
-        padding: 1.25rem;
-        margin-bottom: 2rem;
-        animation: slideDown 0.4s ease-out;
-        font-weight: 500;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        padding: 1rem;
+        margin-bottom: 1.5rem;
     }
 
     .alert-danger {
-        background: linear-gradient(135deg, #fed7d7 0%, #fecaca 100%);
+        background: #fed7d7;
         color: #c53030;
         border-left: 4px solid #c53030;
     }
 
-    .alert-success {
-        background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-        color: #276749;
-        border-left: 4px solid #276749;
+    /* Stats Section */
+    .stats-section {
+        margin-top: 3rem;
+        display: flex;
+        gap: 2rem;
+        justify-content: space-around;
     }
 
-    /* Floating background elements */
-    .bg-decoration {
-        position: fixed;
-        border-radius: 50%;
-        opacity: 0.15;
-        pointer-events: none;
-        z-index: -1;
+    .stat-item {
+        text-align: center;
     }
 
-    .bg-circle-1 {
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, #667eea 0%, transparent 70%);
-        top: -200px;
-        right: -200px;
-        animation: pulse 8s ease-in-out infinite;
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 900;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
-    .bg-circle-2 {
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, #764ba2 0%, transparent 70%);
-        bottom: -150px;
-        left: -150px;
-        animation: pulse 6s ease-in-out infinite;
-        animation-delay: 1s;
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 0.15; }
-        50% { transform: scale(1.1); opacity: 0.25; }
+    .stat-label {
+        color: #718096;
+        font-size: 0.9rem;
     }
 
     /* Responsive */
+    @media (max-width: 968px) {
+        .login-content {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .login-branding {
+            text-align: center;
+        }
+
+        .brand-title {
+            font-size: 2.5rem;
+        }
+
+        .stats-section {
+            justify-content: center;
+        }
+    }
+
     @media (max-width: 576px) {
         .login-card {
-            padding: 2.5rem 1.75rem;
+            padding: 2rem;
         }
 
-        .login-logo h1 {
+        .social-login {
+            flex-direction: column;
+        }
+
+        .brand-title {
             font-size: 2rem;
         }
-
-        .logo-icon {
-            width: 120px;        /* Smaller on mobile */
-            height: 120px;
-        }
-
-        .features-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .btn-signin {
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
-        }
     }
 
-    /* Loading state for button */
-    .btn-signin:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+    /* Ensure navbar shows all items */
+    .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
     }
 
-    .btn-signin.loading::after {
-        content: '';
-        width: 16px;
-        height: 16px;
-        border: 2px solid #ffffff;
-        border-radius: 50%;
-        border-top-color: transparent;
-        animation: spin 0.6s linear infinite;
-        display: inline-block;
-        margin-left: 10px;
+    /* Ensure nav items are visible */
+    .navbar-nav {
+        display: flex !important;
+        align-items: center;
     }
 
-    @keyframes spin {
-        to { transform: rotate(360deg); }
+    .navbar-collapse {
+        justify-content: flex-end;
+    }
+
+    /* Nav link hover effects */
+    .nav-link {
+        color: #4a5568 !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #667eea !important;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive - ensure it works on all screens */
+    @media (min-width: 992px) {
+        .navbar-expand-lg .navbar-collapse {
+            display: flex !important;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Background decorations -->
-<div class="bg-decoration bg-circle-1"></div>
-<div class="bg-decoration bg-circle-2"></div>
-
-<div class="login-wrapper">
-    <div class="login-card">
-        <!-- Logo & Branding -->
-        <div class="login-logo">
-            <div class="logo-icon">
-                <img src="{% static 'images/dd_mascot_1.png' %}" 
-                     alt="Decode Data Logo">
-            </div>
-            <h1>Welcome Back</h1>
-            <p>Continue your dbt learning journey</p>
-        </div>
-
-        <!-- Error/Success Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">
-                    <i class="bi bi-{% if message.tags == 'error' or message.tags == 'danger' %}exclamation-circle{% else %}check-circle{% endif %} me-2"></i>
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <!-- Login Form -->
-        <form method="post" id="loginForm">
-            {% csrf_token %}
-            
-            <!-- Username -->
-            <div class="form-group">
-                <label for="{{ form.username.id_for_label }}" class="form-label">
-                    <i class="bi bi-person-circle"></i>
-                    Username
-                </label>
-                <div class="input-wrapper">
-                    {{ form.username }}
-                </div>
-                {% if form.username.errors %}
-                    <div class="text-danger small mt-2">
-                        <i class="bi bi-exclamation-triangle"></i>
-                        {{ form.username.errors }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- Password -->
-            <div class="form-group">
-                <label for="{{ form.password.id_for_label }}" class="form-label">
-                    <i class="bi bi-shield-lock-fill"></i>
-                    Password
-                </label>
-                <div class="input-wrapper">
-                    {{ form.password }}
-                </div>
-                {% if form.password.errors %}
-                    <div class="text-danger small mt-2">
-                        <i class="bi bi-exclamation-triangle"></i>
-                        {{ form.password.errors }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-signin" id="submitBtn">
-                <i class="bi bi-box-arrow-in-right me-2"></i>
-                Sign In
-            </button>
-        </form>
-
-        <!-- Platform Features -->
-        <!-- <div class="features-grid">
-            <div class="feature-badge">
-                <div class="feature-icon">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                </div>
-                <div class="feature-text">Interactive Lessons</div>
-            </div>
-            <div class="feature-badge">
-                <div class="feature-icon">
-                    <i class="bi bi-code-square"></i>
-                </div>
-                <div class="feature-text">Hands-on dbt</div>
-            </div>
-            <div class="feature-badge">
-                <div class="feature-icon">
-                    <i class="bi bi-graph-up-arrow"></i>
-                </div>
-                <div class="feature-text">Track Progress</div>
-            </div>
-            <div class="feature-badge">
-                <div class="feature-icon">
-                    <i class="bi bi-award-fill"></i>
-                </div>
-                <div class="feature-text">Build Skills</div>
-            </div>
-        </div> -->
-
-        <!-- Register Link -->
-        <div class="register-section">
-            <p>Don't have an account yet?</p>
-            <a href="{% url 'register' %}">
-                Create your free account
-                <i class="bi bi-arrow-right"></i>
-            </a>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease;">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+            <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            Decode Data
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#learning-paths" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Learning Paths</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#features" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#how-it-works" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'projects' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blogs' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Blogs</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a href="{% url 'login' %}" class="btn" style="border: 2px solid #667eea; color: #667eea; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">Login</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a href="{% url 'register' %}" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; transition: all 0.3s ease;">Get Started Free</a>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
+</nav>
+
+<!-- Login Section -->
+<section class="login-section">
+    <div class="login-container">
+        <div class="login-content">
+            <!-- Left Side - Branding -->
+            <div class="login-branding">
+                <h1 class="brand-title">Welcome Back to Your Learning Journey</h1>
+                <p class="brand-subtitle">Continue mastering data engineering with hands-on dbt projects</p>
+                
+                <ul class="feature-list">
+                    <li>
+                        <i class="bi bi-check-lg"></i>
+                        <span>Pick up right where you left off</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-graph-up"></i>
+                        <span>Track your progress and achievements</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-code-square"></i>
+                        <span>Access all your saved projects</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-lightning-charge"></i>
+                        <span>New lessons added weekly</span>
+                    </li>
+                </ul>
+
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Active Learners</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Hands-on Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Completion Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Login Form -->
+            <div class="login-form-wrapper">
+                <div class="login-card">
+                    <div class="form-header">
+                        <h2 class="form-title">Sign In</h2>
+                        <p class="form-subtitle">Enter your credentials to access your account</p>
+                    </div>
+
+                    <!-- Error Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Login Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <small class="text-danger">{{ form.username.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            <div class="password-field">
+                                {{ form.password }}
+                                <button type="button" class="password-toggle" onclick="togglePassword()">
+                                    <i class="bi bi-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            {% if form.password.errors %}
+                                <small class="text-danger">{{ form.password.errors }}</small>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" name="remember">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-login">
+                            Sign In to Dashboard
+                        </button>
+                    </form>
+
+                    <!-- <div class="divider">
+                        <span>OR</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button class="btn-social">
+                            <i class="bi bi-google"></i>
+                            Google
+                        </button>
+                        <button class="btn-social">
+                            <i class="bi bi-github"></i>
+                            GitHub
+                        </button>
+                    </div> -->
+
+                    <div class="signup-link">
+                        <p>Don't have an account?</p>
+                        <a href="{% url 'register' %}">Create your free account →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hide footer from base.html -->
+<style>
+    footer {
+        display: none;
+    }
+</style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Add loading state to button on submit
-    document.getElementById('loginForm').addEventListener('submit', function() {
-        const btn = document.getElementById('submitBtn');
-        btn.classList.add('loading');
-        btn.disabled = true;
-    });
-
-    // Add floating animation on focus
-    document.querySelectorAll('.form-control').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.closest('.form-group').style.transform = 'translateY(-2px)';
-        });
+    function togglePassword() {
+        const passwordField = document.getElementById('{{ form.password.id_for_label }}');
+        const toggleIcon = document.getElementById('toggleIcon');
         
-        input.addEventListener('blur', function() {
-            this.closest('.form-group').style.transform = 'translateY(0)';
-        });
-    });
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.className = 'bi bi-eye-slash';
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.className = 'bi bi-eye';
+        }
+    }
 </script>
 {% endblock %}
