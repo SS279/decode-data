@@ -449,7 +449,12 @@ def api_validate_lesson(request):
         return JsonResponse(result)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
-    
+
+# ========== PROJECT VIEWS ==========
+
+def projects_view(request):
+    return render(request, 'additional/projects.html')
+
 # ========== BLOG VIEWS ==========
 
 def blogs_view(request):

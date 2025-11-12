@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_fullwidth.html' %}
 {% load static %}
 
 {% block title %}Blogs - Data Engineering Insights{% endblock %}
@@ -515,6 +515,44 @@
 {% endblock %}
 
 {% block content %}
+<!-- Navigation (Same as Home Page) -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease;">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+            <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            Decode Data
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#learning-paths" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Learning Paths</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#features" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#how-it-works" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'projects' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'blogs' %}" style="color: #667eea !important; font-weight: 600; padding: 0.5rem 1rem !important;">Blogs</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a href="{% url 'login' %}" class="btn" style="border: 2px solid #667eea; color: #667eea; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">Login</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a href="{% url 'register' %}" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; transition: all 0.3s ease;">Start Learning Free</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <!-- Hero Section -->
 <section class="blog-hero">
     <!-- Back to Home Button (Top Right) -->

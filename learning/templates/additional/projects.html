@@ -1,0 +1,655 @@
+{% extends 'base_fullwidth.html' %}
+{% load static %}
+
+{% block title %}Projects - dbt Learning Projects{% endblock %}
+
+{% block extra_css %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --dark-bg: #1a202c;
+        --light-bg: #f7fafc;
+        --text-dark: #2d3748;
+        --primary-color: #667eea;
+    }
+
+    /* Hero Section */
+    .projects-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  /* ← UPDATED TO PURPLE-VIOLET */
+        padding: 120px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .projects-hero::before {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        top: -100px;
+        right: -100px;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.7;
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        animation: fadeInUp 0.8s ease-out 0.2s;
+        animation-fill-mode: both;
+    }
+
+    /* Project Stats */
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem 2.5rem;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: white;
+    }
+
+    .stat-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Projects Grid */
+    .projects-section {
+        padding: 100px 0;
+        background: var(--light-bg);
+    }
+
+    .section-title {
+        font-size: 2.8rem;
+        font-weight: 900;
+        text-align: center;
+        margin-bottom: 1rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #718096;
+        margin-bottom: 4rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+    }
+
+    .project-card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        height: 100%;
+        transition: all 0.4s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+    }
+
+    .project-header {
+        background: var(--primary-gradient);
+        padding: 2rem;
+        position: relative;
+    }
+
+    .project-icon {
+        font-size: 3rem;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .project-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        backdrop-filter: blur(10px);
+    }
+
+    .project-body {
+        padding: 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-title {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .project-description {
+        color: #718096;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        flex-grow: 1;
+    }
+
+    .project-details {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+
+    .project-details li {
+        padding: 0.5rem 0;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .project-details i {
+        color: #10b981;
+        font-size: 1.1rem;
+    }
+
+    .difficulty-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .difficulty-beginner {
+        background: #10b981;
+        color: white;
+    }
+
+    .difficulty-intermediate {
+        background: #f59e0b;
+        color: white;
+    }
+
+    .difficulty-advanced {
+        background: #ef4444;
+        color: white;
+    }
+
+    .project-footer {
+        padding: 1.5rem 2rem;
+        background: var(--light-bg);
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .tech-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tech-tag {
+        background: white;
+        border: 1px solid #e2e8f0;
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        color: #4a5568;
+        font-weight: 600;
+    }
+
+    .start-btn {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .start-btn:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Learning Path Section */
+    .path-section {
+        padding: 80px 0;
+        background: white;
+    }
+
+    .path-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .path-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .path-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 35px;
+        top: 70px;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--primary-color) 0%, transparent 100%);
+    }
+
+    .step-number {
+        width: 70px;
+        height: 70px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .step-content {
+        margin-left: 2rem;
+        flex-grow: 1;
+        background: var(--light-bg);
+        padding: 1.5rem;
+        border-radius: 15px;
+    }
+
+    .step-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .step-description {
+        color: #718096;
+        line-height: 1.7;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        padding: 80px 0;
+        background: var(--primary-gradient);
+        text-align: center;
+    }
+
+    .cta-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .cta-text {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .cta-btn-primary {
+        background: white;
+        color: var(--primary-color);
+    }
+
+    .cta-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title { font-size: 2.5rem; }
+        .path-step { flex-direction: column; text-align: center; }
+        .step-content { margin-left: 0; margin-top: 1rem; }
+        .path-step:not(:last-child)::after { display: none; }
+    }
+    /* Navigation hover effects */
+    .nav-link:hover {
+        color: #667eea !important;
+        transform: translateY(-2px);
+    }
+
+    /* Smooth scroll behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Button hover effects */
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation (Same as Home Page) -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease;">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+            <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            Decode Data
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#learning-paths" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Learning Paths</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#features" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}#how-it-works" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'projects' %}" style="color: #667eea !important; font-weight: 600; padding: 0.5rem 1rem !important;">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blogs' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Blogs</a>
+                </li>
+                <li class="nav-item ms-3">
+                    <a href="{% url 'login' %}" class="btn" style="border: 2px solid #667eea; color: #667eea; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">Login</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a href="{% url 'register' %}" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; transition: all 0.3s ease;">Start Learning Free</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="projects-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Hands-On dbt Projects</h1>
+            <p class="hero-subtitle">
+                Real-world data transformation projects designed to take you from beginner to expert. 
+                Build actual data models used in production environments.
+            </p>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value">10+</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Models</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Practical</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="projects-section">
+    <div class="container">
+        <h2 class="section-title">Featured dbt Projects</h2>
+        <p class="section-subtitle">
+            Each project simulates real business scenarios with production-ready code patterns
+        </p>
+
+        <div class="row g-4">
+            <!-- Project 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-badge">Core</span>
+                        <div class="project-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <span class="difficulty-badge difficulty-beginner">Beginner</span>
+                        <h3 class="project-title">Hello dbt</h3>
+                        <p class="project-description">
+                            Your first dbt project! Learn the fundamentals by building customer and order analytics models.
+                        </p>
+                        <ul class="project-details">
+                            <li><i class="bi bi-check-circle-fill"></i> Basic transformations</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Sources & staging</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Documentation</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tech-tags">
+                            <span class="tech-tag">SQL</span>
+                            <span class="tech-tag">Jinja</span>
+                        </div>
+                        <a href="{% url 'dashboard' %}" class="start-btn">
+                            Start <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-badge">Business</span>
+                        <div class="project-icon">
+                            <i class="bi bi-credit-card"></i>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <h3 class="project-title">PayFlow Analytics</h3>
+                        <p class="project-description">
+                            Build a complete payment processing analytics platform similar to Stripe or Square.
+                        </p>
+                        <ul class="project-details">
+                            <li><i class="bi bi-check-circle-fill"></i> Transaction metrics</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Fraud detection</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Merchant analytics</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tech-tags">
+                            <span class="tech-tag">Fintech</span>
+                            <span class="tech-tag">Metrics</span>
+                        </div>
+                        <a href="{% url 'dashboard' %}" class="start-btn">
+                            Start <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-badge">Industry</span>
+                        <div class="project-icon">
+                            <i class="bi bi-shop"></i>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <h3 class="project-title">Retail Analytics</h3>
+                        <p class="project-description">
+                            Create a comprehensive retail analytics solution with inventory, sales, and customer insights.
+                        </p>
+                        <ul class="project-details">
+                            <li><i class="bi bi-check-circle-fill"></i> Sales forecasting</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Inventory optimization</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Customer segmentation</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tech-tags">
+                            <span class="tech-tag">Retail</span>
+                            <span class="tech-tag">KPIs</span>
+                        </div>
+                        <a href="{% url 'dashboard' %}" class="start-btn">
+                            Start <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More projects... -->
+        </div>
+    </div>
+</section>
+
+<!-- Learning Path -->
+<section class="path-section">
+    <div class="container">
+        <h2 class="section-title">Your Learning Journey</h2>
+        <p class="section-subtitle">
+            Progressive difficulty to build your expertise step by step
+        </p>
+
+        <div class="path-container">
+            <div class="path-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4 class="step-title">Foundation Projects</h4>
+                    <p class="step-description">
+                        Start with Hello dbt to understand core concepts, then progress to basic transformations.
+                    </p>
+                </div>
+            </div>
+
+            <div class="path-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4 class="step-title">Business Analytics</h4>
+                    <p class="step-description">
+                        Apply your skills to real business scenarios like payment processing and retail analytics.
+                    </p>
+                </div>
+            </div>
+
+            <div class="path-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4 class="step-title">Advanced Techniques</h4>
+                    <p class="step-description">
+                        Master complex patterns including incremental models, macros, and performance optimization.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">Ready to Build Real Data Models?</h2>
+        <p class="cta-text">Start with our beginner-friendly projects and work your way up</p>
+        <div class="cta-buttons">
+            <a href="{% url 'register' %}" class="cta-btn cta-btn-primary">
+                Get Started Free <i class="fas fa-rocket ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
