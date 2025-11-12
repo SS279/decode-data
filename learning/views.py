@@ -449,3 +449,13 @@ def api_validate_lesson(request):
         return JsonResponse(result)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
+    
+# ========== BLOG VIEWS ==========
+
+def blogs_view(request):
+    """Landing page view"""
+    # Redirect to dashboard if already logged in
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    
+    return render(request, 'additional/blogs.html')
