@@ -511,6 +511,57 @@
         }
     }
     }
+
+    /* Footer */
+    .footer {
+        background: var(--dark-bg);
+        color: white;
+        padding: 60px 0 30px;
+    }
+
+    .footer-brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .footer-description {
+        color: #a0aec0;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-title {
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+        color: #a0aec0;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        color: #667eea;
+        padding-left: 5px;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 3rem;
+        padding-top: 2rem;
+        text-align: center;
+        color: #a0aec0;
 </style>
 {% endblock %}
 
@@ -902,6 +953,64 @@
         </a>
     </div>
 </section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="footer-brand">
+                    <i class="bi bi-database me-2"></i>
+                    Decode Data
+                </div>
+                <p class="footer-description">
+                    Your platform for mastering data & analytics engineering. Learn dbt, Python, 
+                    SQL, and modern data tools through hands-on practice.
+                </p>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                <h5 class="footer-title">Platform</h5>
+                <ul class="footer-links">
+                    <li><a href="#learning-paths">Learning Paths</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <!-- <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Sign Up</a></li> -->
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                <h5 class="footer-title">Learn</h5>
+                <ul class="footer-links">
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#learning-paths">dbt Course</a></li>
+                    <li><a href="#learning-paths">Python (Soon)</a></li>
+                    <li><a href="#learning-paths">SQL (Soon)</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                <h5 class="footer-title">Company</h5>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <h5 class="footer-title">Connect</h5>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="bi bi-twitter me-2"></i>Twitter</a></li>
+                    <li><a href="https://www.linkedin.com/company/109532295/admin/dashboard/"><i class="bi bi-linkedin me-2"></i>LinkedIn</a></li>
+                    <li><a href="https://github.com/SS279"><i class="bi bi-github me-2"></i>GitHub</a></li>
+                    <li><a href="#"><i class="bi bi-youtube me-2"></i>YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Decode Data. All rights reserved. Empowering the next generation of data engineers</p>
+        </div>
+    </div>
+</footer>
+
 {% endblock %}
 
 {% block extra_js %}
