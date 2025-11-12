@@ -774,11 +774,11 @@
                             <!-- dbt Code Example -->
                             <div style="background: #1a202c; color: #10b981; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem; margin-bottom: 1rem;">
                                 <div style="color: #a0aec0;">-- dbt Model</div>
-                                <div>&#123;&#123; config(materialized='table') &#123;&#123;</div>
+                                <div>&#123;&#123; config(materialized='table') &#125;&#125;</div>
                                 <div style="margin-top: 0.5rem;">SELECT</div>
                                 <div style="margin-left: 1rem;">customer_id,</div>
                                 <div style="margin-left: 1rem;">COUNT(*) as orders</div>
-                                <div>FROM &#123;&#123; ref('orders') &#123;&#123;</div>
+                                <div>FROM &#123;&#123; ref('orders') &#125;&#125;</div>
                             </div>
                             <!-- Python Code Example -->
                             <div style="background: #1a202c; color: #3776ab; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem;">
