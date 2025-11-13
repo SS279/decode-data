@@ -11,10 +11,10 @@
   /* ===== Color Palette - "Data Nexus" ===== */
 
   /* Primary Background Colors */
-  --color-deep-space: #0A0E27;
-  --color-dark-navy: #141B2D;
-  --color-slate: #1E293B;
-  --color-slate-light: #2D3B54;
+  --color-deep-space: #1a2332;
+  --color-dark-navy: #242d3e;
+  --color-slate: #2e3a4d;
+  --color-slate-light: #3a4759;
 
   /* Brand Gradient Colors */
   --color-electric-blue: #0066FF;
@@ -55,18 +55,18 @@
   --gradient-overlay: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
 
   /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.7);
-  --glass-bg-light: rgba(45, 59, 84, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-bg: rgba(46, 58, 77, 0.75);
+  --glass-bg-light: rgba(58, 71, 89, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
 
   /* Shadows & Elevation */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4);
-  --shadow-neon: 0 0 20px rgba(0, 212, 255, 0.5);
-  --shadow-glow: 0 0 30px rgba(178, 75, 243, 0.6);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+  --shadow-neon: 0 0 20px rgba(0, 212, 255, 0.4);
+  --shadow-glow: 0 0 30px rgba(178, 75, 243, 0.5);
 
   /* Typography */
   --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -182,7 +182,7 @@ body {
 }
 
 .glass-nav {
-  background: rgba(10, 14, 39, 0.85);
+  background: rgba(26, 35, 50, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--glass-border);
@@ -508,7 +508,7 @@ body {
    ========================================================================== */
 
 .code-block-modern {
-  background: rgba(10, 14, 39, 0.95);
+  background: rgba(26, 35, 50, 0.9);
   border: 1px solid var(--glass-border);
   border-left: 3px solid var(--color-electric-blue);
   border-radius: var(--radius-lg);
