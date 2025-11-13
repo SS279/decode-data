@@ -21,16 +21,50 @@
             --danger-color: #ef4444;
             --warning-color: #f59e0b;
             --info-color: #06b6d4;
+
+            /* Light mode colors */
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --navbar-bg: var(--primary-color);
+            --footer-bg: #ffffff;
+            --footer-border: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #a78bfa;
+            --success-color: #34d399;
+            --danger-color: #f87171;
+            --warning-color: #fbbf24;
+            --info-color: #22d3ee;
+
+            /* Dark mode colors */
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #334155;
+            --navbar-bg: #1e293b;
+            --footer-bg: #1e293b;
+            --footer-border: #334155;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .navbar {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: var(--navbar-bg) !important;
         }
 
         .navbar-brand img {
@@ -41,7 +75,8 @@
         }
 
         .card {
-            border: none;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
@@ -50,6 +85,14 @@
         .card:hover.hover-shadow {
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
             transform: translateY(-2px);
+        }
+
+        [data-theme="dark"] .card {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .card:hover.hover-shadow {
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.25);
         }
 
         .btn {
@@ -71,20 +114,24 @@
         }
 
         .form-control, .form-select {
-            border: 2px solid #e2e8f0;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 0.75rem;
             transition: all 0.2s ease;
         }
 
         .form-control:focus, .form-select:focus {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .progress {
             border-radius: 10px;
-            background-color: #e2e8f0;
+            background-color: var(--border-color);
         }
 
         .progress-bar {
@@ -92,8 +139,34 @@
         }
 
         footer {
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
+            color: var(--text-secondary);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        [data-theme="dark"] .navbar {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
     </style>
     
@@ -120,6 +193,11 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             👤 {{ user.username }}
@@ -164,6 +242,34 @@
     
     <!-- Custom JS -->
     <script>
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Load saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // Theme toggle click handler
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+        }
+
+        function updateThemeIcon(theme) {
+            if (themeIcon) {
+                themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+            }
+        }
+
         // Auto-hide alerts after 5 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');

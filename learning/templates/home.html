@@ -21,6 +21,30 @@
             --python-gradient: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
             --dark-bg: #1a202c;
             --light-bg: #f7fafc;
+
+            /* Light mode colors */
+            --body-bg: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --section-bg: #f7fafc;
+        }
+
+        [data-theme="dark"] {
+            --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            --secondary-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            --success-gradient: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+
+            /* Dark mode colors */
+            --body-bg: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --navbar-bg: rgba(15, 23, 42, 0.95);
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --section-bg: #1e293b;
         }
 
         * {
@@ -31,13 +55,15 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #2d3748;
+            color: var(--text-primary);
+            background-color: var(--body-bg);
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Navbar */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--navbar-bg);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
@@ -65,7 +91,7 @@
         }
 
         .nav-link {
-            color: #4a5568 !important;
+            color: var(--text-secondary) !important;
             font-weight: 600;
             padding: 0.5rem 1rem !important;
             transition: all 0.3s ease;
@@ -74,6 +100,26 @@
         .nav-link:hover {
             color: #667eea !important;
             transform: translateY(-2px);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border-color);
+            transform: scale(1.05);
         }
 
         .btn-login {
@@ -260,7 +306,7 @@
         /* Learning Paths Section */
         .paths-section {
             padding: 100px 0;
-            background: var(--light-bg);
+            background: var(--section-bg);
         }
 
         .section-title {
@@ -276,7 +322,7 @@
         .section-subtitle {
             text-align: center;
             font-size: 1.2rem;
-            color: #718096;
+            color: var(--text-secondary);
             margin-bottom: 4rem;
             max-width: 700px;
             margin-left: auto;
@@ -284,7 +330,7 @@
         }
 
         .path-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 24px;
             overflow: hidden;
             height: 100%;
@@ -292,6 +338,10 @@
             border: 3px solid transparent;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
+        }
+
+        [data-theme="dark"] .path-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .path-card:hover {
@@ -368,11 +418,11 @@
             font-size: 2rem;
             font-weight: 900;
             margin-bottom: 1rem;
-            color: #2d3748;
+            color: var(--text-primary);
         }
 
         .path-description {
-            color: #718096;
+            color: var(--text-secondary);
             line-height: 1.7;
             margin-bottom: 2rem;
         }
@@ -385,7 +435,7 @@
 
         .path-features li {
             padding: 0.75rem 0;
-            color: #4a5568;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -430,11 +480,11 @@
         /* Features Grid */
         .features-section {
             padding: 100px 0;
-            background: white;
+            background: var(--body-bg);
         }
 
         .feature-card {
-            background: var(--light-bg);
+            background: var(--section-bg);
             border-radius: 20px;
             padding: 2.5rem;
             height: 100%;
@@ -443,10 +493,14 @@
         }
 
         .feature-card:hover {
-            background: white;
+            background: var(--card-bg);
             border-color: #667eea;
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        [data-theme="dark"] .feature-card:hover {
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.25);
         }
 
         .feature-icon {
@@ -467,11 +521,11 @@
             font-size: 1.4rem;
             font-weight: 800;
             margin-bottom: 1rem;
-            color: #2d3748;
+            color: var(--text-primary);
         }
 
         .feature-description {
-            color: #718096;
+            color: var(--text-secondary);
             line-height: 1.7;
         }
 
@@ -575,6 +629,10 @@
             padding: 60px 0 30px;
         }
 
+        [data-theme="dark"] .footer {
+            background: #0a0f1e;
+        }
+
         .footer-brand {
             font-size: 1.5rem;
             font-weight: 800;
@@ -610,6 +668,10 @@
         .footer-links a:hover {
             color: #667eea;
             padding-left: 5px;
+        }
+
+        [data-theme="dark"] .footer-links a:hover {
+            color: #a78bfa;
         }
 
         .footer-bottom {
@@ -695,6 +757,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                            <span id="themeIcon">🌙</span>
+                        </button>
                     </li>
                     <li class="nav-item ms-3">
                         <a href="{% url 'login' %}" class="btn btn-login">Login</a>
@@ -1242,6 +1309,34 @@
     
     <!-- Smooth Scroll & Navbar Effects -->
     <script>
+        // Theme Management
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Load saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // Theme toggle click handler
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+        }
+
+        function updateThemeIcon(theme) {
+            if (themeIcon) {
+                themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+            }
+        }
+
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
