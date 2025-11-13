@@ -4,22 +4,18 @@
 {% block title %}Login - Decode Data{% endblock %}
 
 {% block extra_css %}
+<!-- Theme CSS -->
+<link rel="stylesheet" href="{% static 'css/theme.css' %}">
+
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --light-bg: #f7fafc;
-        --text-dark: #2d3748;
-        --primary-color: #667eea;
-    }
-
     /* Reset body styles from base.html */
     body {
-        background: white !important;
+        background: var(--color-deep-space) !important;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -35,19 +31,8 @@
     }
 
     /* Custom Navigation */
-    /* .auth-navbar {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        padding: 1rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        transition: all 0.3s ease;
-    } */
-
     .nav-link:hover {
-        color: #667eea !important;
+        color: var(--color-bright-cyan) !important;
         transform: translateY(-2px);
     }
 
@@ -56,8 +41,26 @@
         min-height: calc(100vh - 80px);
         display: flex;
         align-items: center;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, var(--color-deep-space) 0%, var(--color-dark-navy) 100%);
         padding: 3rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+        animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.8; }
     }
 
     .login-container {
@@ -65,6 +68,8 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 1rem;
+        position: relative;
+        z-index: 1;
     }
 
     .login-content {
@@ -82,7 +87,7 @@
     .brand-title {
         font-size: 3rem;
         font-weight: 900;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 1.5rem;
@@ -91,7 +96,7 @@
 
     .brand-subtitle {
         font-size: 1.3rem;
-        color: #4a5568;
+        color: var(--color-text-secondary);
         margin-bottom: 3rem;
         line-height: 1.7;
     }
@@ -107,13 +112,13 @@
         gap: 1rem;
         margin-bottom: 1.5rem;
         font-size: 1.1rem;
-        color: #4a5568;
+        color: var(--color-text-secondary);
     }
 
     .feature-list i {
         width: 40px;
         height: 40px;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -121,6 +126,7 @@
         color: white;
         font-size: 1.2rem;
         flex-shrink: 0;
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
     }
 
     /* Right Side - Login Form */
@@ -130,11 +136,19 @@
     }
 
     .login-card {
-        background: white;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-radius: 24px;
         padding: 3rem;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(102, 126, 234, 0.1);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--glass-border);
+        transition: all var(--transition-base);
+    }
+
+    .login-card:hover {
+        border-color: rgba(0, 212, 255, 0.3);
+        box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 102, 255, 0.2);
     }
 
     .form-header {
@@ -145,12 +159,12 @@
     .form-title {
         font-size: 2rem;
         font-weight: 800;
-        color: var(--text-dark);
+        color: var(--color-text-primary);
         margin-bottom: 0.5rem;
     }
 
     .form-subtitle {
-        color: #718096;
+        color: var(--color-text-secondary);
         font-size: 1rem;
     }
 
@@ -161,7 +175,7 @@
 
     .form-label {
         font-weight: 600;
-        color: #4a5568;
+        color: var(--color-text-secondary);
         margin-bottom: 0.5rem;
         font-size: 0.95rem;
         display: block;
@@ -170,18 +184,23 @@
     .form-control {
         width: 100%;
         padding: 0.875rem 1rem;
-        border: 2px solid #e2e8f0;
+        border: 2px solid var(--glass-border);
         border-radius: 12px;
         font-size: 1rem;
         transition: all 0.3s ease;
-        background: #f7fafc;
+        background: var(--glass-bg);
+        color: var(--color-text-primary);
+    }
+
+    .form-control::placeholder {
+        color: var(--color-text-muted);
     }
 
     .form-control:focus {
         outline: none;
-        border-color: var(--primary-color);
-        background: white;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: var(--color-electric-blue);
+        background: rgba(30, 41, 59, 0.9);
+        box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1), 0 0 20px rgba(0, 212, 255, 0.3);
     }
 
     .password-field {
@@ -195,8 +214,13 @@
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: #718096;
+        color: var(--color-text-secondary);
         cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+        color: var(--color-bright-cyan);
     }
 
     /* Remember & Forgot */
@@ -211,31 +235,34 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        color: var(--color-text-secondary);
     }
 
     .remember-me input[type="checkbox"] {
         width: 18px;
         height: 18px;
         cursor: pointer;
+        accent-color: var(--color-electric-blue);
     }
 
     .forgot-link {
-        color: var(--primary-color);
+        color: var(--color-bright-cyan);
         text-decoration: none;
         font-weight: 600;
         transition: all 0.3s ease;
     }
 
     .forgot-link:hover {
-        color: #764ba2;
+        color: var(--color-cyber-cyan);
         text-decoration: underline;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
 
     /* Submit Button */
     .btn-login {
         width: 100%;
         padding: 1rem;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         color: white;
         border: none;
         border-radius: 12px;
@@ -243,12 +270,29 @@
         font-weight: 700;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-login:hover::before {
+        left: 100%;
     }
 
     .btn-login:hover {
         transform: translateY(-2px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
     /* Divider */
@@ -263,12 +307,12 @@
         content: '';
         flex: 1;
         height: 1px;
-        background: #e2e8f0;
+        background: var(--glass-border);
     }
 
     .divider span {
         padding: 0 1rem;
-        color: #718096;
+        color: var(--color-text-secondary);
         font-size: 0.9rem;
     }
 
@@ -281,24 +325,26 @@
     .btn-social {
         flex: 1;
         padding: 0.75rem;
-        border: 2px solid #e2e8f0;
-        background: white;
+        border: 2px solid var(--glass-border);
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         font-weight: 600;
-        color: #4a5568;
+        color: var(--color-text-primary);
         transition: all 0.3s ease;
         cursor: pointer;
         text-decoration: none;
     }
 
     .btn-social:hover {
-        background: #f7fafc;
-        border-color: var(--primary-color);
+        background: var(--glass-bg-light);
+        border-color: var(--color-bright-cyan);
         transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
     }
 
     /* Sign Up Link */
@@ -306,24 +352,25 @@
         text-align: center;
         margin-top: 2rem;
         padding-top: 2rem;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid var(--glass-border);
     }
 
     .signup-link p {
-        color: #718096;
+        color: var(--color-text-secondary);
         margin-bottom: 0.5rem;
     }
 
     .signup-link a {
-        color: var(--primary-color);
+        color: var(--color-bright-cyan);
         text-decoration: none;
         font-weight: 700;
         transition: all 0.3s ease;
     }
 
     .signup-link a:hover {
-        color: #764ba2;
+        color: var(--color-cyber-cyan);
         text-decoration: underline;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
 
     /* Alert Messages */
@@ -335,9 +382,10 @@
     }
 
     .alert-danger {
-        background: #fed7d7;
-        color: #c53030;
-        border-left: 4px solid #c53030;
+        background: rgba(255, 71, 87, 0.15);
+        color: var(--color-danger);
+        border-left: 4px solid var(--color-danger);
+        border: 1px solid rgba(255, 71, 87, 0.3);
     }
 
     /* Stats Section */
@@ -355,13 +403,13 @@
     .stat-number {
         font-size: 2rem;
         font-weight: 900;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     .stat-label {
-        color: #718096;
+        color: var(--color-text-secondary);
         font-size: 0.9rem;
     }
 
@@ -401,14 +449,16 @@
 
     /* Ensure navbar shows all items */
     .navbar {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        box-shadow: var(--shadow-md);
         padding: 1rem 0;
         position: sticky;
         top: 0;
         z-index: 1000;
         transition: all 0.3s ease;
+        border-bottom: 1px solid var(--glass-border);
     }
 
     /* Ensure nav items are visible */
@@ -423,15 +473,61 @@
 
     /* Nav link hover effects */
     .nav-link {
-        color: #4a5568 !important;
+        color: var(--color-text-secondary) !important;
         font-weight: 600;
         padding: 0.5rem 1rem !important;
         transition: all 0.3s ease;
     }
 
     .nav-link:hover {
-        color: #667eea !important;
+        color: var(--color-bright-cyan) !important;
         transform: translateY(-2px);
+    }
+
+    /* Navbar brand */
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Navbar buttons */
+    .navbar .btn {
+        transition: all 0.3s ease;
+    }
+
+    .navbar .btn:first-of-type {
+        border: 2px solid var(--color-electric-blue);
+        color: var(--color-bright-cyan);
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        background: transparent;
+    }
+
+    .navbar .btn:first-of-type:hover {
+        background: var(--color-electric-blue);
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+    }
+
+    .navbar .btn:last-of-type {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+    }
+
+    .navbar .btn:last-of-type:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
     /* Responsive - ensure it works on all screens */
@@ -445,9 +541,9 @@
 
 {% block content %}
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease;">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+        <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo" style="width: 70px; height: 70px; object-fit: contain;">
             Decode Data
         </a>
@@ -457,25 +553,25 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#learning-paths" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Learning Paths</a>
+                    <a class="nav-link" href="{% url 'home' %}#learning-paths">Learning Paths</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#features" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Features</a>
+                    <a class="nav-link" href="{% url 'home' %}#features">Features</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#how-it-works" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">How It Works</a>
+                    <a class="nav-link" href="{% url 'home' %}#how-it-works">How It Works</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Projects</a>
+                    <a class="nav-link" href="{% url 'projects' %}">Projects</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'blogs' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Blogs</a>
+                    <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
                 </li>
                 <li class="nav-item ms-3">
-                    <a href="{% url 'login' %}" class="btn" style="border: 2px solid #667eea; color: #667eea; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">Login</a>
+                    <a href="{% url 'login' %}" class="btn">Login</a>
                 </li>
                 <li class="nav-item ms-3">
-                    <a href="{% url 'register' %}" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; transition: all 0.3s ease;">Start Learning Free</a>
+                    <a href="{% url 'register' %}" class="btn">Start Learning Free</a>
                 </li>
             </ul>
         </div>
@@ -490,7 +586,7 @@
             <div class="login-branding">
                 <h1 class="brand-title">Welcome Back to Your Learning Journey</h1>
                 <p class="brand-subtitle">Continue mastering data engineering with hands-on dbt projects</p>
-                
+
                 <ul class="feature-list">
                     <li>
                         <i class="bi bi-check-lg"></i>
@@ -546,7 +642,7 @@
                     <!-- Login Form -->
                     <form method="post">
                         {% csrf_token %}
-                        
+
                         <div class="form-group">
                             <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
                             {{ form.username }}
@@ -619,7 +715,7 @@
     function togglePassword() {
         const passwordField = document.getElementById('{{ form.password.id_for_label }}');
         const toggleIcon = document.getElementById('toggleIcon');
-        
+
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
             toggleIcon.className = 'bi bi-eye-slash';

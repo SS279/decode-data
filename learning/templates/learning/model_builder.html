@@ -2,6 +2,315 @@
 
 {% block title %}Model Builder - {{ lesson.title }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Glassmorphic Breadcrumb */
+    .breadcrumb {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 0.6rem 1rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--glass-border);
+    }
+
+    .breadcrumb-item a {
+        color: var(--color-bright-cyan);
+        text-decoration: none;
+        transition: all var(--transition-base);
+    }
+
+    .breadcrumb-item a:hover {
+        color: var(--color-cyber-cyan);
+        text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--color-text-secondary);
+    }
+
+    /* Modern Cards */
+    .card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
+        color: var(--color-text-primary);
+    }
+
+    .card:hover {
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.2);
+        border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-header {
+        background: rgba(45, 59, 84, 0.4);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        color: var(--color-text-primary);
+        font-weight: 600;
+    }
+
+    .card-header.bg-primary {
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+    }
+
+    .card-header.bg-dark {
+        background: rgba(10, 14, 39, 0.9);
+        color: var(--color-text-primary);
+        border: none;
+    }
+
+    .card-header.bg-success {
+        background: var(--gradient-success);
+        color: white;
+        border: none;
+    }
+
+    .card-footer {
+        background: rgba(10, 14, 39, 0.5);
+        border-top: 1px solid var(--glass-border);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+        color: var(--color-text-secondary);
+    }
+
+    .card h2 {
+        color: var(--color-text-primary);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .text-muted {
+        color: var(--color-text-secondary) !important;
+    }
+
+    /* Modern Buttons */
+    .btn {
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        transition: all var(--transition-base);
+        border: none;
+        padding: 0.6rem 1.25rem;
+    }
+
+    .btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-success {
+        background: var(--gradient-success);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 245, 160, 0.4);
+    }
+
+    .btn-warning {
+        background: rgba(255, 176, 32, 0.2);
+        color: var(--color-warning);
+        border: 1px solid rgba(255, 176, 32, 0.3);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-warning:hover {
+        background: rgba(255, 176, 32, 0.3);
+        box-shadow: 0 0 20px rgba(255, 176, 32, 0.4);
+    }
+
+    .btn-outline-primary {
+        background: transparent;
+        color: var(--color-bright-cyan);
+        border: 2px solid var(--color-bright-cyan);
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: var(--shadow-neon);
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-light {
+        background: var(--glass-bg-light);
+        color: var(--color-text-primary);
+        border: 1px solid var(--glass-border);
+    }
+
+    .btn-light:hover {
+        background: var(--glass-bg);
+        box-shadow: var(--shadow-neon);
+    }
+
+    /* List Groups */
+    .list-group-item {
+        background: rgba(45, 59, 84, 0.4);
+        border: 1px solid var(--glass-border);
+        color: var(--color-text-secondary);
+        transition: all var(--transition-base);
+    }
+
+    .list-group-item-action:hover {
+        background: rgba(0, 212, 255, 0.15);
+        color: var(--color-bright-cyan);
+        border-color: rgba(0, 212, 255, 0.3);
+        transform: translateX(4px);
+    }
+
+    .list-group-item.active {
+        background: var(--gradient-primary);
+        border-color: var(--color-electric-blue);
+        color: white;
+    }
+
+    /* Alert Boxes */
+    .alert {
+        border-radius: var(--radius-lg);
+        border: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .alert-warning {
+        background: rgba(255, 176, 32, 0.15);
+        color: var(--color-warning);
+        border: 1px solid rgba(255, 176, 32, 0.3);
+    }
+
+    .alert-warning h5 {
+        color: var(--color-warning);
+    }
+
+    /* Form Controls */
+    .form-control, textarea {
+        background: rgba(10, 14, 39, 0.95);
+        border: 2px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        color: var(--color-text-primary);
+        transition: all var(--transition-base);
+        font-family: var(--font-code);
+    }
+
+    .form-control:focus, textarea:focus {
+        background: rgba(10, 14, 39, 0.98);
+        border-color: var(--color-electric-blue);
+        box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1), 0 0 20px rgba(0, 212, 255, 0.3);
+        color: var(--color-text-primary);
+    }
+
+    .form-control::placeholder {
+        color: var(--color-text-muted);
+    }
+
+    .form-check-input {
+        background-color: rgba(45, 59, 84, 0.4);
+        border: 2px solid var(--glass-border);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--color-electric-blue);
+        border-color: var(--color-electric-blue);
+    }
+
+    .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+    }
+
+    .form-check-label {
+        color: var(--color-text-secondary);
+    }
+
+    .form-label {
+        color: var(--color-text-secondary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    /* Code Editor */
+    #model-editor {
+        background: rgba(10, 14, 39, 0.95);
+        color: var(--color-text-primary);
+        border: none;
+        font-family: var(--font-code);
+        font-size: 14px;
+    }
+
+    /* Code Blocks */
+    pre {
+        background: rgba(10, 14, 39, 0.95);
+        border: 1px solid var(--glass-border);
+        border-left: 3px solid var(--color-electric-blue);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        color: var(--color-text-primary);
+    }
+
+    pre code {
+        color: var(--color-text-primary);
+        font-family: var(--font-code);
+    }
+
+    /* Status Colors */
+    .text-success {
+        color: var(--color-success) !important;
+    }
+
+    .text-danger {
+        color: var(--color-danger) !important;
+    }
+
+    .text-primary {
+        color: var(--color-electric-blue) !important;
+    }
+
+    .bg-dark {
+        background: rgba(10, 14, 39, 0.9) !important;
+    }
+
+    .bg-light {
+        background: rgba(45, 59, 84, 0.3) !important;
+    }
+
+    .text-light {
+        color: var(--color-text-primary) !important;
+    }
+
+    .text-white {
+        color: white !important;
+    }
+
+    /* Border */
+    .border-dark {
+        border-color: var(--glass-border) !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-12">
@@ -74,7 +383,7 @@
             </div>
             <div class="list-group list-group-flush">
                 {% for model in model_files %}
-                <button type="button" 
+                <button type="button"
                         class="list-group-item list-group-item-action model-file-btn"
                         data-model-name="{{ model }}"
                         onclick="loadModel('{{ model }}')">
@@ -97,13 +406,13 @@
                 <form method="post" id="execute-form">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="execute_models">
-                    
+
                     <div class="mb-3">
                         <label class="form-label small">Select Models:</label>
                         {% for model in model_files %}
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
-                                   name="selected_models" value="{{ model }}" 
+                            <input class="form-check-input" type="checkbox"
+                                   name="selected_models" value="{{ model }}"
                                    id="model_{{ forloop.counter }}">
                             <label class="form-check-label small" for="model_{{ forloop.counter }}">
                                 {{ model }}
@@ -114,14 +423,14 @@
 
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
+                            <input class="form-check-input" type="checkbox"
                                    name="include_children" id="include_children">
                             <label class="form-check-label small" for="include_children">
                                 Include child models (+)
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
+                            <input class="form-check-input" type="checkbox"
                                    name="full_refresh" id="full_refresh">
                             <label class="form-check-label small" for="full_refresh">
                                 Full refresh
@@ -153,9 +462,9 @@
                     {% csrf_token %}
                     <input type="hidden" name="action" value="save_model">
                     <input type="hidden" name="model_name" id="current-model-name">
-                    <textarea name="model_sql" id="model-editor" 
-                              class="form-control font-monospace" 
-                              rows="20" 
+                    <textarea name="model_sql" id="model-editor"
+                              class="form-control font-monospace"
+                              rows="20"
                               style="border: none; resize: vertical; font-size: 14px;"
                               placeholder="-- Select a model file from the left to start editing"></textarea>
                 </form>
@@ -171,7 +480,7 @@
                 <h6 class="mb-0"><i class="bi bi-lightbulb"></i> Tips</h6>
             </div>
             <div class="card-body">
-                <ul class="small mb-0">
+                <ul class="small mb-0" style="color: var(--color-text-secondary);">
                     <li>Select a model file from the list to edit its SQL</li>
                     <li>Save your changes before executing models</li>
                     <li>Load seed data first if your models depend on raw tables</li>
@@ -202,13 +511,13 @@
                     <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ seed_logs }}</code></pre>
                 </div>
                 {% endif %}
-                
+
                 <!-- Model Execution Logs -->
                 {% if execution_logs %}
                 {% for log in execution_logs %}
                 <div class="mb-4">
                     <h6 class="{% if log.success %}text-success{% else %}text-danger{% endif %}">
-                        <i class="bi bi-{% if log.success %}check-circle-fill{% else %}x-circle-fill{% endif %}"></i> 
+                        <i class="bi bi-{% if log.success %}check-circle-fill{% else %}x-circle-fill{% endif %}"></i>
                         Model: {{ log.model }}
                     </h6>
                     <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ log.output }}</code></pre>
@@ -232,12 +541,12 @@ function loadModel(modelName) {
     const editorTitle = document.getElementById('editor-title');
     const saveBtn = document.getElementById('save-model-btn');
     const currentModelName = document.getElementById('current-model-name');
-    
+
     // Update UI
     editorTitle.innerHTML = `<i class="bi bi-pencil-square"></i> Editing: ${modelName}.sql`;
     currentModelName.value = modelName;
     saveBtn.style.display = 'block';
-    
+
     // Load model content via AJAX
     fetch('{% url "api_get_model_content" %}', {
         method: 'POST',
@@ -260,7 +569,7 @@ function loadModel(modelName) {
         console.error('Error:', error);
         alert('Failed to load model');
     });
-    
+
     // Highlight active model in list
     document.querySelectorAll('.model-file-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -281,7 +590,7 @@ document.getElementById('execute-form')?.addEventListener('submit', function(e) 
         alert('Please select at least one model to execute');
         return false;
     }
-    
+
     const modelNames = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
     if (!confirm(`Execute the following models: ${modelNames}?`)) {
         e.preventDefault();
