@@ -568,9 +568,18 @@
                     <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
                 </li>
                 <li class="nav-item ms-3">
+                    <div class="theme-toggle-label">
+                        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                            <div class="theme-toggle-slider">
+                                <span class="theme-toggle-icon">🌙</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item ms-2">
                     <a href="{% url 'login' %}" class="btn">Login</a>
                 </li>
-                <li class="nav-item ms-3">
+                <li class="nav-item ms-2">
                     <a href="{% url 'register' %}" class="btn">Start Learning Free</a>
                 </li>
             </ul>
@@ -724,5 +733,31 @@
             toggleIcon.className = 'bi bi-eye';
         }
     }
+
+    // Theme Toggle Functionality
+    function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        // Update toggle icon
+        const icon = document.querySelector('.theme-toggle-icon');
+        icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+    }
+
+    // Load saved theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Update toggle icon based on saved theme
+        const icon = document.querySelector('.theme-toggle-icon');
+        if (icon) {
+            icon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+        }
+    });
 </script>
 {% endblock %}
