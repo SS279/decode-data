@@ -25,6 +25,8 @@
         /* Modern Navigation Styles */
         .navbar {
             padding: 1rem 0;
+            z-index: var(--z-sticky);
+            position: relative;
         }
 
         .navbar-brand {
@@ -93,6 +95,8 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-xl);
             margin-top: 0.5rem;
+            z-index: var(--z-dropdown);
+            position: absolute;
         }
 
         .navbar .dropdown-item {
@@ -303,6 +307,15 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <li class="nav-item me-3">
+                        <div class="theme-toggle-label">
+                            <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                                <div class="theme-toggle-slider">
+                                    <span class="theme-toggle-icon">🌙</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             👤 {{ user.username }}
@@ -356,8 +369,34 @@
                 bsAlert.close();
             });
         }, 5000);
+
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update toggle icon
+            const icon = document.querySelector('.theme-toggle-icon');
+            icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+        }
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Update toggle icon based on saved theme
+            const icon = document.querySelector('.theme-toggle-icon');
+            if (icon) {
+                icon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+            }
+        });
     </script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>
