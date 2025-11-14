@@ -194,8 +194,16 @@ body {
   font-family: var(--font-primary);
   font-size: var(--font-size-base);
   line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  margin: 0;
+  padding: 0;
 }
 
 /* Ensure all headings use theme-aware colors */
