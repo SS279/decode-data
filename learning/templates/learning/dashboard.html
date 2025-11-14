@@ -9,12 +9,12 @@
 <style>
     /* Modern Dashboard Header */
     .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 16px;
+        background: var(--gradient-primary);
+        border-radius: var(--radius-xl);
         padding: 2rem;
         margin-bottom: 2rem;
         color: white;
-        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+        box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 102, 255, 0.3);
         position: relative;
         overflow: hidden;
     }
@@ -46,15 +46,17 @@
         z-index: 1;
     }
 
-    /* Compact Lesson Cards */
+    /* Glassmorphic Lesson Cards */
     .lesson-card {
-        background: white;
-        border-radius: 16px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: var(--radius-xl);
         padding: 1.5rem;
         height: 100%;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        border: 2px solid #f1f5f9;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--glass-border);
+        transition: all var(--transition-base);
         position: relative;
         overflow: hidden;
     }
@@ -66,15 +68,15 @@
         left: 0;
         right: 0;
         height: 3px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        background: var(--gradient-primary);
         transform: scaleX(0);
-        transition: transform 0.3s ease;
+        transition: transform var(--transition-base);
     }
 
     .lesson-card:hover {
         transform: translateY(-6px);
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
-        border-color: #667eea;
+        box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 102, 255, 0.2);
+        border-color: rgba(0, 212, 255, 0.3);
     }
 
     .lesson-card:hover::before {
@@ -96,104 +98,130 @@
     .lesson-card h5 {
         font-size: 1.1rem;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--color-text-primary);
         margin-bottom: 0.5rem;
     }
 
     .lesson-card p {
         font-size: 0.85rem;
-        color: #64748b;
+        color: var(--color-text-secondary);
         margin-bottom: 1rem;
         line-height: 1.4;
     }
 
-    /* Compact Progress Bar */
+    /* Modern Progress Bar */
     .lesson-progress {
         margin-bottom: 1rem;
     }
 
     .lesson-progress .progress {
         height: 8px;
-        border-radius: 10px;
-        background: #e2e8f0;
+        border-radius: var(--radius-full);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
     }
 
     .lesson-progress .progress-bar {
-        border-radius: 10px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: var(--radius-full);
+        background: var(--gradient-primary);
         transition: width 0.6s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lesson-progress .progress-bar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
     }
 
     .progress-label {
         display: flex;
         justify-content: space-between;
         font-size: 0.75rem;
-        color: #64748b;
+        color: var(--color-text-secondary);
         margin-bottom: 0.35rem;
     }
 
     .progress-label span:last-child {
         font-weight: 700;
-        color: #667eea;
+        color: var(--color-bright-cyan);
     }
 
-    /* Compact Buttons */
+    /* Modern Buttons */
     .lesson-card .btn {
         width: 100%;
         padding: 0.6rem;
         font-size: 0.9rem;
         font-weight: 600;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+        border-radius: var(--radius-lg);
+        transition: all var(--transition-base);
+        border: none;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: var(--shadow-md);
     }
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
     .btn-success {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        border: none;
+        background: var(--gradient-success);
+        color: white;
+        box-shadow: var(--shadow-md);
     }
 
     .btn-success:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 245, 160, 0.4);
     }
 
     /* Stats Section */
     .stats-card {
-        background: white;
-        border-radius: 16px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: var(--radius-xl);
         padding: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        border: 2px solid #f1f5f9;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--glass-border);
     }
 
     .stats-card h5 {
         font-size: 1.1rem;
         font-weight: 700;
         margin-bottom: 1.25rem;
-        color: #1e293b;
+        color: var(--color-text-primary);
     }
 
     .stat-box {
         text-align: center;
         padding: 1rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 12px;
-        transition: all 0.3s ease;
+        background: rgba(45, 59, 84, 0.4);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        transition: all var(--transition-base);
     }
 
     .stat-box:hover {
         transform: scale(1.05);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--gradient-primary);
+        box-shadow: var(--shadow-neon);
     }
 
     .stat-box:hover h3,
@@ -205,44 +233,54 @@
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 0.25rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        transition: all 0.3s ease;
+        background-clip: text;
+        transition: all var(--transition-base);
     }
 
     .stat-box p {
         font-size: 0.85rem;
-        color: #64748b;
+        color: var(--color-text-secondary);
         margin: 0;
-        transition: all 0.3s ease;
+        transition: all var(--transition-base);
     }
 
-    /* Badge for lesson status */
+    /* Modern Status Badges */
     .status-badge {
         position: absolute;
         top: 1rem;
         right: 1rem;
         padding: 0.35rem 0.75rem;
-        border-radius: 50px;
+        border-radius: var(--radius-full);
         font-size: 0.7rem;
         font-weight: 700;
         z-index: 1;
     }
 
     .badge-new {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--gradient-accent);
         color: white;
+        box-shadow: var(--shadow-glow);
+        animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% { box-shadow: 0 0 5px rgba(178, 75, 243, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(178, 75, 243, 0.8); }
     }
 
     .badge-progress {
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        color: white;
+        background: rgba(255, 176, 32, 0.15);
+        color: var(--color-warning);
+        border: 1px solid rgba(255, 176, 32, 0.3);
     }
 
     .badge-complete {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
+        background: rgba(0, 245, 160, 0.15);
+        color: var(--color-success);
+        border: 1px solid rgba(0, 245, 160, 0.3);
     }
 </style>
 {% endblock %}
@@ -276,7 +314,7 @@
             <div class="lesson-emoji">{{ lesson.title|slice:":2" }}</div>
             <h5>{{ lesson.title|slice:"2:" }}</h5>
             <p>{{ lesson.description }}</p>
-            
+
             <!-- Progress -->
             <div class="lesson-progress">
                 <div class="progress-label">

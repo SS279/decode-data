@@ -10,19 +10,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 <style>
-    :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        --dark-bg: #1a202c;
-        --light-bg: #f7fafc;
-        --text-dark: #2d3748;
-        --primary-color: #667eea;
-    }
-
     /* Hero Section */
     .blog-hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--color-deep-space) 0%, var(--color-dark-navy) 100%);
         padding: 120px 0 80px;
         position: relative;
         overflow: hidden;
@@ -35,7 +25,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.133 7-7s-3.134-7-7-7-7 3.133-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.133 7-7s-3.134-7-7-7-7 3.133-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.133 7-7s-3.134-7-7-7-7 3.133-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.133 7-7s-3.134-7-7-7-7 3.133-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         opacity: 0.1;
     }
 
@@ -48,14 +38,14 @@
     .hero-title {
         font-size: 3.5rem;
         font-weight: 900;
-        color: white;
+        color: var(--color-text-primary);
         margin-bottom: 1.5rem;
         animation: fadeInUp 0.8s ease-out;
     }
 
     .hero-subtitle {
         font-size: 1.3rem;
-        color: rgba(255, 255, 255, 0.95);
+        color: var(--color-text-secondary);
         line-height: 1.7;
         max-width: 700px;
         margin: 0 auto 2rem;
@@ -72,24 +62,31 @@
     }
 
     .stat-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
         padding: 1.5rem 2rem;
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--glass-border);
         animation: fadeInUp 0.8s ease-out 0.4s;
         animation-fill-mode: both;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-neon);
+        border-color: var(--color-cyber-cyan);
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 900;
-        color: white;
+        color: var(--color-text-primary);
         display: block;
     }
 
     .stat-label {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--color-text-secondary);
         font-size: 0.95rem;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -98,12 +95,12 @@
     /* Featured Article */
     .featured-section {
         padding: 80px 0;
-        background: white;
+        background: var(--color-dark-navy);
     }
 
     .featured-badge {
-        background: var(--secondary-gradient);
-        color: white;
+        background: var(--gradient-accent);
+        color: var(--color-text-primary);
         padding: 0.4rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
@@ -112,19 +109,23 @@
         margin-bottom: 1rem;
         text-transform: uppercase;
         letter-spacing: 1px;
+        box-shadow: 0 0 20px rgba(178, 75, 243, 0.4);
     }
 
     .featured-card {
-        background: var(--light-bg);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
         border-radius: 30px;
         overflow: hidden;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--glass-border);
         transition: all 0.4s ease;
     }
 
     .featured-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 30px 80px rgba(102, 126, 234, 0.2);
+        box-shadow: var(--shadow-xl), var(--shadow-neon);
+        border-color: var(--color-cyber-cyan);
     }
 
     .featured-content {
@@ -134,14 +135,14 @@
     .featured-title {
         font-size: 2.5rem;
         font-weight: 900;
-        color: var(--text-dark);
+        color: var(--color-text-primary);
         margin-bottom: 1.5rem;
         line-height: 1.2;
     }
 
     .featured-excerpt {
         font-size: 1.2rem;
-        color: #718096;
+        color: var(--color-text-secondary);
         line-height: 1.8;
         margin-bottom: 2rem;
     }
@@ -158,18 +159,18 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: #718096;
+        color: var(--color-text-secondary);
         font-size: 0.95rem;
     }
 
     .meta-item i {
-        color: var(--primary-color);
+        color: var(--color-bright-cyan);
     }
 
     /* Blog Categories */
     .categories-section {
         padding: 60px 0;
-        background: var(--light-bg);
+        background: var(--color-deep-space);
     }
 
     .category-pills {
@@ -183,9 +184,10 @@
     .category-pill {
         padding: 0.75rem 1.5rem;
         border-radius: 30px;
-        background: white;
-        border: 2px solid #e2e8f0;
-        color: #4a5568;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 2px solid var(--glass-border);
+        color: var(--color-text-secondary);
         font-weight: 600;
         transition: all 0.3s ease;
         cursor: pointer;
@@ -194,17 +196,17 @@
 
     .category-pill:hover,
     .category-pill.active {
-        background: var(--primary-gradient);
-        color: white;
+        background: var(--gradient-primary);
+        color: var(--color-text-primary);
         border-color: transparent;
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
     /* Blogs Grid */
     .blogs-section {
         padding: 80px 0 100px;
-        background: var(--light-bg);
+        background: var(--color-deep-space);
     }
 
     .section-header {
@@ -216,45 +218,73 @@
         font-size: 2.8rem;
         font-weight: 900;
         margin-bottom: 1rem;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
     .section-subtitle {
         font-size: 1.2rem;
-        color: #718096;
+        color: var(--color-text-secondary);
         max-width: 700px;
         margin: 0 auto;
         line-height: 1.7;
     }
 
     .blog-card {
-        background: white;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
         border-radius: 24px;
         overflow: hidden;
         height: 100%;
         transition: all 0.4s ease;
-        border: 3px solid transparent;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--glass-border);
+        box-shadow: var(--shadow-md);
         display: flex;
         flex-direction: column;
+        position: relative;
+    }
+
+    .blog-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .blog-card:hover::before {
+        opacity: 1;
     }
 
     .blog-card:hover {
-        border-color: #667eea;
+        border-color: var(--color-cyber-cyan);
         transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+        box-shadow: var(--shadow-xl), var(--shadow-neon);
     }
 
     .blog-image {
         height: 200px;
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 3rem;
-        color: white;
+        color: var(--color-text-primary);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .blog-image::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: pulse 3s ease-in-out infinite;
     }
 
     .blog-content {
@@ -265,8 +295,8 @@
     }
 
     .category-tag {
-        background: var(--primary-gradient);
-        color: white;
+        background: var(--gradient-primary);
+        color: var(--color-text-primary);
         padding: 0.3rem 0.8rem;
         border-radius: 10px;
         font-size: 0.8rem;
@@ -275,29 +305,31 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 1rem;
+        box-shadow: 0 0 15px rgba(0, 102, 255, 0.3);
     }
 
     .blog-title {
         font-size: 1.4rem;
         font-weight: 800;
-        color: var(--text-dark);
+        color: var(--color-text-primary);
         margin-bottom: 1rem;
         line-height: 1.3;
         flex-grow: 1;
     }
 
     .blog-title a {
-        color: var(--text-dark);
+        color: var(--color-text-primary);
         text-decoration: none;
         transition: color 0.3s ease;
     }
 
     .blog-title a:hover {
-        color: var(--primary-color);
+        color: var(--color-bright-cyan);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
 
     .blog-excerpt {
-        color: #718096;
+        color: var(--color-text-secondary);
         line-height: 1.7;
         margin-bottom: 1.5rem;
     }
@@ -307,7 +339,7 @@
         justify-content: space-between;
         align-items: center;
         padding-top: 1.5rem;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid var(--glass-border);
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -316,7 +348,7 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        color: #718096;
+        color: var(--color-text-secondary);
         font-size: 0.9rem;
     }
 
@@ -326,29 +358,35 @@
         gap: 0.3rem;
     }
 
+    .meta-info i {
+        color: var(--color-bright-cyan);
+    }
+
     .read-more-btn {
-        color: var(--primary-color);
+        color: var(--color-bright-cyan);
         text-decoration: none;
         font-weight: 700;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         transition: all 0.3s ease;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     }
 
     .read-more-btn:hover {
-        color: #764ba2;
+        color: var(--color-cyber-cyan);
         gap: 0.8rem;
+        text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
     }
 
     /* Newsletter Section */
     .newsletter-section {
         padding: 80px 0;
-        background: white;
+        background: var(--color-dark-navy);
     }
 
     .newsletter-card {
-        background: var(--primary-gradient);
+        background: var(--gradient-primary);
         border-radius: 30px;
         padding: 4rem;
         text-align: center;
@@ -380,13 +418,13 @@
     .newsletter-title {
         font-size: 2.5rem;
         font-weight: 900;
-        color: white;
+        color: var(--color-text-primary);
         margin-bottom: 1rem;
     }
 
     .newsletter-text {
         font-size: 1.2rem;
-        color: rgba(255, 255, 255, 0.95);
+        color: var(--color-text-secondary);
         margin-bottom: 2rem;
     }
 
@@ -406,9 +444,10 @@
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 12px;
         background: rgba(255, 255, 255, 0.1);
-        color: white;
+        color: var(--color-text-primary);
         font-size: 1rem;
         transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
     }
 
     .newsletter-input::placeholder {
@@ -418,13 +457,14 @@
     .newsletter-input:focus {
         outline: none;
         background: rgba(255, 255, 255, 0.2);
-        border-color: white;
+        border-color: var(--color-text-primary);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
     .newsletter-btn {
         padding: 1rem 2rem;
-        background: white;
-        color: var(--primary-color);
+        background: var(--color-text-primary);
+        color: var(--color-electric-blue);
         border: none;
         border-radius: 12px;
         font-weight: 700;
@@ -435,7 +475,7 @@
 
     .newsletter-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shadow-xl);
     }
 
     /* Load More Button */
@@ -445,8 +485,8 @@
     }
 
     .btn-load-more {
-        background: var(--primary-gradient);
-        color: white;
+        background: var(--gradient-primary);
+        color: var(--color-text-primary);
         padding: 1rem 3rem;
         border: none;
         border-radius: 12px;
@@ -454,12 +494,12 @@
         font-size: 1.1rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
     .btn-load-more:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 102, 255, 0.6);
     }
 
     /* Animations */
@@ -472,6 +512,11 @@
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.8; }
     }
 
     .animate-fade-in {
@@ -503,37 +548,34 @@
         .newsletter-input {
             width: 100%;
         }
-    /* Responsive adjustment for Back to Home button */
-    @media (max-width: 768px) {
-        .blog-hero div[style*="position: absolute"] {
-            right: 20px !important;
-            top: 10px !important;
-        }
-    }
     }
 
     /* Footer */
     .footer {
-        background: var(--dark-bg);
-        color: white;
+        background: var(--color-deep-space);
+        color: var(--color-text-primary);
         padding: 60px 0 30px;
+        border-top: 1px solid var(--glass-border);
     }
 
     .footer-brand {
         font-size: 1.5rem;
         font-weight: 800;
         margin-bottom: 1rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .footer-description {
-        color: #a0aec0;
+        color: var(--color-text-secondary);
         margin-bottom: 1.5rem;
     }
 
     .footer-title {
         font-weight: 800;
         margin-bottom: 1.5rem;
-        color: white;
+        color: var(--color-text-primary);
     }
 
     .footer-links {
@@ -546,30 +588,191 @@
     }
 
     .footer-links a {
-        color: #a0aec0;
+        color: var(--color-text-secondary);
         text-decoration: none;
         transition: all 0.3s ease;
     }
 
     .footer-links a:hover {
-        color: #667eea;
+        color: var(--color-bright-cyan);
         padding-left: 5px;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
 
     .footer-bottom {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid var(--glass-border);
         margin-top: 3rem;
         padding-top: 2rem;
         text-align: center;
-        color: #a0aec0;
+        color: var(--color-text-secondary);
+    }
+
+    /* Navigation Styling */
+    .navbar {
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(24px);
+        box-shadow: var(--shadow-md);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .nav-link {
+        color: var(--color-text-secondary) !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-link.active {
+        color: var(--color-bright-cyan) !important;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-primary);
+        transform: translateX(-50%);
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--color-bright-cyan) !important;
+        transform: translateY(-2px);
+    }
+
+    .nav-link:hover::after {
+        width: 60%;
+    }
+
+    .navbar .btn {
+        border: 2px solid var(--color-electric-blue);
+        color: var(--color-bright-cyan);
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: transparent;
+    }
+
+    .navbar .btn:hover {
+        background: var(--glass-bg-light);
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+    }
+
+    .navbar .btn:last-child {
+        background: var(--gradient-primary);
+        color: var(--color-text-primary);
+        border: none;
+    }
+
+    .navbar .btn:last-child:hover {
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
+    }
+
+    /* View All on LinkedIn Section */
+    .linkedin-section {
+        padding: 60px 0;
+        background: var(--color-dark-navy);
+        text-align: center;
+    }
+
+    .linkedin-section h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: var(--color-text-primary);
+    }
+
+    .linkedin-section p {
+        font-size: 1.2rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+    }
+
+    .linkedin-section .btn {
+        background: var(--gradient-primary);
+        color: var(--color-text-primary);
+        padding: 1rem 3rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.3);
+    }
+
+    .linkedin-section .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 102, 255, 0.5);
+    }
+
+    /* Featured article button */
+    .btn-primary {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 0.8rem 2rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
+        color: var(--color-text-primary);
+    }
+
+    /* Featured image gradient */
+    .featured-image-gradient {
+        background: var(--gradient-primary);
+        border-radius: 20px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: var(--color-text-primary);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .featured-image-gradient::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Navigation (Same as Home Page) -->
-<nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; transition: all 0.3s ease;">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+        <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo" style="width: 70px; height: 70px; object-fit: contain;">
             Decode Data
         </a>
@@ -579,25 +782,25 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#learning-paths" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Learning Paths</a>
+                    <a class="nav-link" href="{% url 'home' %}#learning-paths">Learning Paths</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#features" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Features</a>
+                    <a class="nav-link" href="{% url 'home' %}#features">Features</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}#how-it-works" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">How It Works</a>
+                    <a class="nav-link" href="{% url 'home' %}#how-it-works">How It Works</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'projects' %}" style="color: #4a5568 !important; font-weight: 600; padding: 0.5rem 1rem !important; transition: all 0.3s ease;">Projects</a>
+                    <a class="nav-link" href="{% url 'projects' %}">Projects</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'blogs' %}" style="color: #667eea !important; font-weight: 600; padding: 0.5rem 1rem !important;">Blogs</a>
+                    <a class="nav-link active" href="{% url 'blogs' %}">Blogs</a>
                 </li>
                 <li class="nav-item ms-3">
-                    <a href="{% url 'login' %}" class="btn" style="border: 2px solid #667eea; color: #667eea; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">Login</a>
+                    <a href="{% url 'login' %}" class="btn">Login</a>
                 </li>
                 <li class="nav-item ms-2">
-                    <a href="{% url 'register' %}" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; transition: all 0.3s ease;">Start Learning Free</a>
+                    <a href="{% url 'register' %}" class="btn">Start Learning Free</a>
                 </li>
             </ul>
         </div>
@@ -610,7 +813,7 @@
         <div class="hero-content">
             <h1 class="hero-title">Data Engineering Insights</h1>
             <p class="hero-subtitle">
-                Sharing my decade-long journey, practical learnings, and cutting-edge insights 
+                Sharing my decade-long journey, practical learnings, and cutting-edge insights
                 from the evolving world of data engineering
             </p>
             <div class="hero-stats">
@@ -643,8 +846,8 @@
                             A Decade in Data: My Journey from Traditional ETL to Modern Data Stacks
                         </h2>
                         <p class="featured-excerpt">
-                            From stored procedures to dbt, from on-premise to cloud, from batch to streaming - 
-                            explore how the data engineering landscape has transformed over the past decade 
+                            From stored procedures to dbt, from on-premise to cloud, from batch to streaming -
+                            explore how the data engineering landscape has transformed over the past decade
                             through my personal journey.
                         </p>
                         <div class="featured-meta">
@@ -661,24 +864,16 @@
                                 <span>1.2k views</span>
                             </div>
                         </div>
-                        <a href="https://www.linkedin.com/pulse/decade-data-my-journey-from-traditional-etl-modern-stacks-sunder-oc6ze/" 
-                           target="_blank" 
-                           class="btn btn-primary"
-                           style="background: var(--primary-gradient); border: none; padding: 0.8rem 2rem; font-weight: 700;">
+                        <a href="https://www.linkedin.com/pulse/decade-data-my-journey-from-traditional-etl-modern-stacks-sunder-oc6ze/"
+                           target="_blank"
+                           class="btn btn-primary">
                             Read Full Article <i class="fas fa-arrow-right ms-2"></i>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div style="padding: 3rem; text-align: center;">
-                        <div style="background: var(--primary-gradient); 
-                                    border-radius: 20px; 
-                                    height: 300px; 
-                                    display: flex; 
-                                    align-items: center; 
-                                    justify-content: center;
-                                    font-size: 5rem;
-                                    color: white;">
+                        <div class="featured-image-gradient">
                             📊
                         </div>
                     </div>
@@ -722,13 +917,13 @@
                     <div class="blog-content">
                         <span class="category-tag">Data Pipeline</span>
                         <h3 class="blog-title">
-                            <a href="https://www.linkedin.com/pulse/etl-vs-elt-more-than-just-letter-swap-shyam-sunder-naeve/" 
+                            <a href="https://www.linkedin.com/pulse/etl-vs-elt-more-than-just-letter-swap-shyam-sunder-naeve/"
                                target="_blank">
                                 ETL vs ELT: More Than Just a Letter Swap
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            Understanding the fundamental differences between ETL and ELT patterns, 
+                            Understanding the fundamental differences between ETL and ELT patterns,
                             and when to use each approach in modern data architectures.
                         </p>
                         <div class="blog-meta">
@@ -736,8 +931,8 @@
                                 <span><i class="fas fa-calendar"></i> July 2025</span>
                                 <span><i class="fas fa-eye"></i> 2.3k</span>
                             </div>
-                            <a href="https://www.linkedin.com/pulse/etl-vs-elt-more-than-just-letter-swap-shyam-sunder-naeve/" 
-                               target="_blank" 
+                            <a href="https://www.linkedin.com/pulse/etl-vs-elt-more-than-just-letter-swap-shyam-sunder-naeve/"
+                               target="_blank"
                                class="read-more-btn">
                                 Read More <i class="fas fa-arrow-right"></i>
                             </a>
@@ -755,13 +950,13 @@
                     <div class="blog-content">
                         <span class="category-tag">Data Architecture</span>
                         <h3 class="blog-title">
-                            <a href="https://www.linkedin.com/pulse/data-lake-vs-warehouse-lakehouse-same-different-addresses-sunder-xpyte/" 
+                            <a href="https://www.linkedin.com/pulse/data-lake-vs-warehouse-lakehouse-same-different-addresses-sunder-xpyte/"
                                target="_blank">
                                 Data Lake vs Warehouse vs Lakehouse: The Complete Guide
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            A comprehensive comparison of modern data storage architectures and how 
+                            A comprehensive comparison of modern data storage architectures and how
                             to choose the right approach for your organization.
                         </p>
                         <div class="blog-meta">
@@ -769,8 +964,8 @@
                                 <span><i class="fas fa-calendar"></i> Aug 2025</span>
                                 <span><i class="fas fa-eye"></i> 3k</span>
                             </div>
-                            <a href="https://www.linkedin.com/pulse/data-lake-vs-warehouse-lakehouse-same-different-addresses-sunder-xpyte/" 
-                               target="_blank" 
+                            <a href="https://www.linkedin.com/pulse/data-lake-vs-warehouse-lakehouse-same-different-addresses-sunder-xpyte/"
+                               target="_blank"
                                class="read-more-btn">
                                 Read More <i class="fas fa-arrow-right"></i>
                             </a>
@@ -793,7 +988,7 @@
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            Learn how to design, build, and maintain production-ready data transformation 
+                            Learn how to design, build, and maintain production-ready data transformation
                             pipelines using dbt best practices.
                         </p>
                         <div class="blog-meta">
@@ -823,14 +1018,10 @@
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            A step-by-step guide to successfully migrating your data infrastructure 
+                            A step-by-step guide to successfully migrating your data infrastructure
                             to the cloud while minimizing risks.
                         </p>
                         <div class="blog-meta">
-                            <!-- <div class="meta-info">
-                                <span><i class="fas fa-calendar"></i> Oct 2025</span>
-                                <span><i class="fas fa-eye"></i> Coming</span>
-                            </div> -->
                             <a href="#" class="read-more-btn">
                                 Coming Soon <i class="fas fa-clock"></i>
                             </a>
@@ -853,14 +1044,10 @@
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            Advanced techniques for optimizing SQL queries and improving performance 
+                            Advanced techniques for optimizing SQL queries and improving performance
                             in Snowflake, BigQuery, and Redshift.
                         </p>
                         <div class="blog-meta">
-                            <!-- <div class="meta-info">
-                                <span><i class="fas fa-calendar"></i> Nov 2025</span>
-                                <span><i class="fas fa-eye"></i> Coming</span>
-                            </div> -->
                             <a href="#" class="read-more-btn">
                                 Coming Soon <i class="fas fa-clock"></i>
                             </a>
@@ -883,14 +1070,10 @@
                             </a>
                         </h3>
                         <p class="blog-excerpt">
-                            Introduction to stream processing concepts and tools for building 
+                            Introduction to stream processing concepts and tools for building
                             real-time analytics pipelines.
                         </p>
                         <div class="blog-meta">
-                            <!-- <div class="meta-info">
-                                <span><i class="fas fa-calendar"></i> Dec 2025</span>
-                                <span><i class="fas fa-eye"></i> Coming</span>
-                            </div> -->
                             <a href="#" class="read-more-btn">
                                 Coming Soon <i class="fas fa-clock"></i>
                             </a>
@@ -928,27 +1111,13 @@
 </section> -->
 
 <!-- View All on LinkedIn -->
-<section style="padding: 60px 0; background: var(--light-bg); text-align: center;">
+<section class="linkedin-section">
     <div class="container">
-        <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-dark);">
-            Want to Read More?
-        </h3>
-        <p style="font-size: 1.2rem; color: #718096; margin-bottom: 2rem;">
-            Follow me on LinkedIn for regular updates and insights
-        </p>
-        <a href="https://www.linkedin.com/in/shyam279/recent-activity/articles/" 
-           target="_blank" 
-           class="btn"
-           style="background: var(--primary-gradient); 
-                  color: white; 
-                  padding: 1rem 3rem; 
-                  border: none; 
-                  border-radius: 12px;
-                  font-weight: 700;
-                  font-size: 1.1rem;
-                  text-decoration: none;
-                  display: inline-block;
-                  transition: all 0.3s ease;">
+        <h3>Want to Read More?</h3>
+        <p>Follow me on LinkedIn for regular updates and insights</p>
+        <a href="https://www.linkedin.com/in/shyam279/recent-activity/articles/"
+           target="_blank"
+           class="btn">
             <i class="fab fa-linkedin me-2"></i> View All Articles on LinkedIn
         </a>
     </div>
@@ -964,7 +1133,7 @@
                     Decode Data
                 </div>
                 <p class="footer-description">
-                    Your platform for mastering data & analytics engineering. Learn dbt, Python, 
+                    Your platform for mastering data & analytics engineering. Learn dbt, Python,
                     SQL, and modern data tools through hands-on practice.
                 </p>
             </div>

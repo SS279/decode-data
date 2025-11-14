@@ -5,24 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decode Data - Master Data & Analytics Engineering</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
-    <!-- Custom CSS -->
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --python-gradient: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
-            --dark-bg: #1a202c;
-            --light-bg: #f7fafc;
-        }
 
+    <!-- Modern Theme CSS -->
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+
+    <!-- Page-Specific CSS -->
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -31,15 +25,16 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #2d3748;
             overflow-x: hidden;
         }
 
         /* Navbar */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: var(--shadow-md);
+            border-bottom: 1px solid var(--glass-border);
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -50,7 +45,7 @@
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
@@ -65,51 +60,71 @@
         }
 
         .nav-link {
-            color: #4a5568 !important;
+            color: var(--color-text-secondary) !important;
             font-weight: 600;
             padding: 0.5rem 1rem !important;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
         }
 
         .nav-link:hover {
-            color: #667eea !important;
+            color: var(--color-bright-cyan) !important;
             transform: translateY(-2px);
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
         }
 
         .btn-login {
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid var(--color-electric-blue);
+            color: var(--color-electric-blue);
             font-weight: 600;
             padding: 0.5rem 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             transition: all 0.3s ease;
+            background: transparent;
         }
 
         .btn-login:hover {
-            background: #667eea;
+            background: var(--gradient-primary);
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+            border-color: var(--color-bright-cyan);
         }
 
         .btn-signup {
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
             color: white;
             font-weight: 600;
             padding: 0.5rem 1.5rem;
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             border: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-signup:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.5);
         }
 
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--color-deep-space) 0%, var(--color-dark-navy) 100%);
             padding: 120px 0 80px;
             position: relative;
             overflow: hidden;
@@ -118,12 +133,28 @@
         .hero-section::before {
             content: '';
             position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.3;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300D4FF' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
 
         .hero-content {
@@ -137,12 +168,12 @@
             color: white;
             margin-bottom: 1.5rem;
             line-height: 1.2;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
         }
 
         .hero-subtitle {
             font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.95);
+            color: var(--color-text-secondary);
             margin-bottom: 2.5rem;
             line-height: 1.6;
         }
@@ -154,37 +185,56 @@
         }
 
         .btn-hero-primary {
-            background: white;
-            color: #667eea;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 1rem 2.5rem;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .btn-hero-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-hero-secondary {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--gradient-primary);
             color: white;
             font-weight: 700;
             font-size: 1.1rem;
             padding: 1rem 2.5rem;
-            border-radius: 12px;
-            border: 2px solid white;
+            border-radius: var(--radius-xl);
+            border: none;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-hero-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-hero-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 102, 255, 0.6);
+        }
+
+        .btn-hero-secondary {
+            background: var(--glass-bg);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--glass-border);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
         .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--glass-bg-light);
+            border-color: var(--color-bright-cyan);
             transform: translateY(-4px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
         }
 
         .hero-stats {
@@ -202,11 +252,14 @@
             font-size: 2.5rem;
             font-weight: 900;
             display: block;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .stat-label {
             font-size: 1rem;
-            opacity: 0.9;
+            color: var(--color-text-secondary);
         }
 
         /* Tech Stack Badge */
@@ -219,24 +272,26 @@
         }
 
         .tech-badge {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--glass-bg);
             color: white;
             padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            border-radius: var(--radius-full);
             font-weight: 700;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid var(--glass-border);
             transition: all 0.3s ease;
         }
 
         .tech-badge:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--glass-bg-light);
             transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         .tech-badge.available {
-            background: white;
-            color: #667eea;
+            background: var(--gradient-primary);
+            border-color: var(--color-bright-cyan);
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.4);
         }
 
         .tech-badge.coming-soon {
@@ -249,18 +304,31 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #10b981;
-            color: white;
+            background: var(--color-matrix-green);
+            color: var(--color-deep-space);
             font-size: 0.7rem;
             padding: 0.2rem 0.5rem;
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             font-weight: 700;
+            box-shadow: 0 0 10px rgba(0, 245, 160, 0.5);
         }
 
         /* Learning Paths Section */
         .paths-section {
             padding: 100px 0;
-            background: var(--light-bg);
+            background: var(--color-dark-navy);
+            position: relative;
+        }
+
+        .paths-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-overlay);
+            opacity: 0.5;
         }
 
         .section-title {
@@ -268,47 +336,68 @@
             font-weight: 900;
             text-align: center;
             margin-bottom: 1rem;
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
         .section-subtitle {
             text-align: center;
             font-size: 1.2rem;
-            color: #718096;
+            color: var(--color-text-secondary);
             margin-bottom: 4rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
 
         .path-card {
-            background: white;
-            border-radius: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
             overflow: hidden;
             height: 100%;
             transition: all 0.4s ease;
-            border: 3px solid transparent;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--glass-border);
+            box-shadow: var(--shadow-lg);
             position: relative;
+        }
+
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .path-card:hover::before {
+            opacity: 1;
         }
 
         .path-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 102, 255, 0.3);
         }
 
         .path-card.available {
-            border-color: #667eea;
+            border-color: var(--color-electric-blue);
         }
 
         .path-card.available:hover {
-            border-color: #764ba2;
+            border-color: var(--color-bright-cyan);
+            box-shadow: var(--shadow-xl), 0 0 50px rgba(0, 212, 255, 0.5);
         }
 
         .path-card.coming-soon {
-            opacity: 0.85;
+            opacity: 0.75;
         }
 
         .path-header {
@@ -321,39 +410,40 @@
             top: 1.5rem;
             right: 1.5rem;
             padding: 0.5rem 1rem;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-size: 0.85rem;
             font-weight: 700;
         }
 
         .path-badge.available-badge {
-            background: #10b981;
-            color: white;
+            background: var(--color-matrix-green);
+            color: var(--color-deep-space);
+            box-shadow: 0 0 15px rgba(0, 245, 160, 0.5);
         }
 
         .path-badge.coming-badge {
-            background: #f59e0b;
-            color: white;
+            background: var(--color-warning);
+            color: var(--color-deep-space);
         }
 
         .path-icon {
             width: 90px;
             height: 90px;
-            border-radius: 22px;
+            border-radius: var(--radius-2xl);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-lg);
         }
 
         .path-icon.dbt-icon {
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
         }
 
         .path-icon.python-icon {
-            background: var(--python-gradient);
+            background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
         }
 
         .path-icon.sql-icon {
@@ -361,18 +451,18 @@
         }
 
         .path-icon.dataeng-icon {
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            background: var(--gradient-accent);
         }
 
         .path-title {
             font-size: 2rem;
             font-weight: 900;
             margin-bottom: 1rem;
-            color: #2d3748;
+            color: white;
         }
 
         .path-description {
-            color: #718096;
+            color: var(--color-text-secondary);
             line-height: 1.7;
             margin-bottom: 2rem;
         }
@@ -385,14 +475,14 @@
 
         .path-features li {
             padding: 0.75rem 0;
-            color: #4a5568;
+            color: var(--color-text-secondary);
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
         .path-features i {
-            color: #10b981;
+            color: var(--color-matrix-green);
             font-size: 1.2rem;
         }
 
@@ -405,98 +495,144 @@
             padding: 1rem;
             font-weight: 700;
             font-size: 1.05rem;
-            border-radius: 12px;
+            border-radius: var(--radius-xl);
             border: none;
             transition: all 0.3s ease;
         }
 
         .btn-path-available {
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
             color: white;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-path-available:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.6);
         }
 
         .btn-path-coming {
-            background: #e2e8f0;
-            color: #718096;
+            background: var(--glass-bg-light);
+            color: var(--color-text-muted);
             cursor: not-allowed;
+            border: 1px solid var(--glass-border);
         }
 
         /* Features Grid */
         .features-section {
             padding: 100px 0;
-            background: white;
+            background: var(--color-deep-space);
+            position: relative;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(178, 75, 243, 0.05) 0%, transparent 50%);
         }
 
         .feature-card {
-            background: var(--light-bg);
-            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
             padding: 2.5rem;
             height: 100%;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card:hover {
-            background: white;
-            border-color: #667eea;
+            background: var(--glass-bg-light);
+            border-color: var(--color-neon-purple);
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(178, 75, 243, 0.3);
         }
 
         .feature-icon {
             width: 70px;
             height: 70px;
-            background: var(--primary-gradient);
-            border-radius: 18px;
+            background: var(--gradient-accent);
+            border-radius: var(--radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             color: white;
             margin-bottom: 1.5rem;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 20px rgba(178, 75, 243, 0.4);
         }
 
         .feature-title {
             font-size: 1.4rem;
             font-weight: 800;
             margin-bottom: 1rem;
-            color: #2d3748;
+            color: white;
         }
 
         .feature-description {
-            color: #718096;
+            color: var(--color-text-secondary);
             line-height: 1.7;
         }
 
         /* How It Works */
         .how-it-works-section {
             padding: 100px 0;
-            background: var(--dark-bg);
+            background: var(--color-dark-navy);
             color: white;
+            position: relative;
+        }
+
+        .how-it-works-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-overlay);
+            opacity: 0.3;
         }
 
         .step-card {
             position: relative;
             padding: 2.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-xl);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
         }
 
         .step-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #667eea;
+            background: var(--glass-bg-light);
+            border-color: var(--color-electric-blue);
             transform: translateX(10px);
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
         }
 
         .step-number {
@@ -505,7 +641,7 @@
             left: 2.5rem;
             width: 60px;
             height: 60px;
-            background: var(--primary-gradient);
+            background: var(--gradient-primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -513,7 +649,7 @@
             font-size: 1.5rem;
             font-weight: 900;
             color: white;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 25px rgba(0, 102, 255, 0.6);
         }
 
         .step-content {
@@ -527,14 +663,14 @@
         }
 
         .step-description {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--color-text-secondary);
             line-height: 1.7;
         }
 
         /* CTA Section */
         .cta-section {
             padding: 100px 0;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--color-electric-blue) 0%, var(--color-bright-cyan) 100%);
             position: relative;
             overflow: hidden;
         }
@@ -549,6 +685,17 @@
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
         .cta-content {
             position: relative;
             z-index: 1;
@@ -560,6 +707,7 @@
             font-size: 3rem;
             font-weight: 900;
             margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
         }
 
         .cta-subtitle {
@@ -570,19 +718,23 @@
 
         /* Footer */
         .footer {
-            background: var(--dark-bg);
+            background: var(--color-deep-space);
             color: white;
             padding: 60px 0 30px;
+            border-top: 1px solid var(--glass-border);
         }
 
         .footer-brand {
             font-size: 1.5rem;
             font-weight: 800;
             margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .footer-description {
-            color: #a0aec0;
+            color: var(--color-text-secondary);
             margin-bottom: 1.5rem;
         }
 
@@ -602,22 +754,63 @@
         }
 
         .footer-links a {
-            color: #a0aec0;
+            color: var(--color-text-secondary);
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: #667eea;
+            color: var(--color-bright-cyan);
             padding-left: 5px;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--glass-border);
             margin-top: 3rem;
             padding-top: 2rem;
             text-align: center;
-            color: #a0aec0;
+            color: var(--color-text-secondary);
+        }
+
+        /* Hero Visual Elements */
+        .hero-visual {
+            background: var(--glass-bg);
+            border-radius: var(--radius-2xl);
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .hero-visual-inner {
+            background: var(--color-slate);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-example {
+            background: rgba(10, 14, 39, 0.95);
+            color: var(--color-matrix-green);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--color-electric-blue);
+        }
+
+        .code-comment {
+            color: var(--color-text-muted);
+        }
+
+        .code-success {
+            color: var(--color-matrix-green);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
 
         /* Responsive */
@@ -670,14 +863,14 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo">
                 Decode Data
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background-color: var(--glass-bg); border: 1px solid var(--glass-border);">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
@@ -714,8 +907,8 @@
                 <div class="col-lg-7 hero-content animate-fade-in">
                     <h1 class="hero-title">Master Data & Analytics Engineering</h1>
                     <p class="hero-subtitle">
-                        Learn dbt, Python, SQL, and modern data tools through hands-on practice. 
-                        Build real-world skills with interactive lessons, live coding environments, 
+                        Learn dbt, Python, SQL, and modern data tools through hands-on practice.
+                        Build real-world skills with interactive lessons, live coding environments,
                         and AI-powered guidance.
                     </p>
                     <div class="hero-cta">
@@ -728,33 +921,27 @@
                             Explore Learning Paths
                         </a>
                     </div>
-                    
+
                     <!-- Tech Stack Badges -->
                     <div class="tech-stack">
                         <span style="color: white; font-weight: 700; opacity: 0.9;">Learn:</span>
                         <div class="tech-badge available">
-                            <img src="{% static 'images/dbt_logo.svg' %}" 
-                                alt="dbt Logo" 
+                            <img src="{% static 'images/dbt_logo.svg' %}"
+                                alt="dbt Logo"
                                 style="width: 20px; height: 20px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
                             dbt
                         </div>
                         <div class="tech-badge coming-soon">
-                            <img src="{% static 'images/python_logo.svg' %}" 
-                                alt="Python Logo" 
+                            <img src="{% static 'images/python_logo.svg' %}"
+                                alt="Python Logo"
                                 style="width: 20px; height: 20px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
                             Python
                         </div>
                         <div class="tech-badge coming-soon">
                             📊 SQL
                         </div>
-                        <!-- <div class="tech-badge coming-soon">
-                            ⚡ Spark
-                        </div>
-                        <div class="tech-badge coming-soon">
-                            ☁️ Airflow
-                        </div> -->
                     </div>
-                    
+
                     <div class="hero-stats">
                         <div class="stat-item">
                             <span class="stat-number">100%</span>
@@ -772,11 +959,11 @@
                 </div>
                 <div class="col-lg-5 mt-5 mt-lg-0">
                     <!-- Hero Visual -->
-                    <div style="background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px);">
-                        <div style="background: white; border-radius: 18px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                    <div class="hero-visual">
+                        <div class="hero-visual-inner">
                             <!-- dbt Code Example -->
-                            <div style="background: #1a202c; color: #10b981; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem; margin-bottom: 1rem;">
-                                <div style="color: #a0aec0;">-- dbt Model</div>
+                            <div class="code-example">
+                                <div class="code-comment">-- dbt Model</div>
                                 <div>&#123;&#123; config(materialized='table') &#125;&#125;</div>
                                 <div style="margin-top: 0.5rem;">SELECT</div>
                                 <div style="margin-left: 1rem;">customer_id,</div>
@@ -784,12 +971,12 @@
                                 <div>FROM &#123;&#123; ref('orders') &#125;&#125;</div>
                             </div>
                             <!-- Python Code Example -->
-                            <div style="background: #1a202c; color: #3776ab; padding: 1.5rem; border-radius: 12px; font-family: monospace; font-size: 0.9rem;">
-                                <div style="color: #a0aec0;"># Python ETL</div>
+                            <div class="code-example" style="color: #3776ab;">
+                                <div class="code-comment"># Python ETL</div>
                                 <div style="margin-top: 0.5rem; color: #ffd43b;">import pandas as pd</div>
-                                <div style="margin-top: 0.5rem;">df = pd.read_csv(<span style="color: #10b981;">'data.csv'</span>)</div>
+                                <div style="margin-top: 0.5rem;">df = pd.read_csv(<span style="color: var(--color-matrix-green);">'data.csv'</span>)</div>
                             </div>
-                            <div style="margin-top: 1rem; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="code-success">
                                 <i class="bi bi-check-circle-fill"></i>
                                 <span>Interactive Learning Environment</span>
                             </div>
@@ -805,10 +992,10 @@
         <div class="container">
             <h2 class="section-title">Choose Your Learning Path</h2>
             <p class="section-subtitle">
-                Master the essential skills for modern data & analytics engineering. 
+                Master the essential skills for modern data & analytics engineering.
                 Start with dbt today, with Python and more tools coming soon.
             </p>
-            
+
             <div class="row g-4">
                 <!-- dbt Path - AVAILABLE -->
                 <div class="col-lg-6">
@@ -819,13 +1006,13 @@
                                 Available Now
                             </span>
                             <div class="path-icon dbt-icon">
-                                <img src="{% static 'images/dbt_logo.svg' %}" 
-                                    alt="dbt Logo" 
+                                <img src="{% static 'images/dbt_logo.svg' %}"
+                                    alt="dbt Logo"
                                     style="width: 32px; height: 32px; object-fit: contain;">
                             </div>
                             <h3 class="path-title">dbt</h3>
                             <p class="path-description">
-                                Master data transformation and analytics engineering with dbt. 
+                                Master data transformation and analytics engineering with dbt.
                                 Learn to build reliable, tested data pipelines with SQL and Jinja.
                             </p>
                         </div>
@@ -871,13 +1058,13 @@
                                 Coming Soon
                             </span>
                             <div class="path-icon python-icon">
-                                <img src="{% static 'images/python_logo.svg' %}" 
-                                    alt="Python Logo" 
+                                <img src="{% static 'images/python_logo.svg' %}"
+                                    alt="Python Logo"
                                     style="width: 40px; height: 40px; object-fit: contain;">
                             </div>
                             <h3 class="path-title">Python for Data Engineering</h3>
                             <p class="path-description">
-                                Build ETL pipelines, work with APIs, process data at scale, and automate 
+                                Build ETL pipelines, work with APIs, process data at scale, and automate
                                 workflows with Python.
                             </p>
                         </div>
@@ -927,7 +1114,7 @@
                             </div>
                             <h3 class="path-title">Advanced SQL & Analytics</h3>
                             <p class="path-description">
-                                Master SQL from basics to advanced analytics. Learn window functions, 
+                                Master SQL from basics to advanced analytics. Learn window functions,
                                 CTEs, query optimization, and analytical SQL techniques.
                             </p>
                         </div>
@@ -963,65 +1150,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Data Engineering Ecosystem - COMING SOON -->
-                <!-- <div class="col-lg-6">
-                    <div class="path-card coming-soon">
-                        <div class="path-header">
-                            <span class="path-badge coming-badge">
-                                <i class="bi bi-clock-fill me-1"></i>
-                                Coming Soon
-                            </span>
-                            <div class="path-icon dataeng-icon">
-                                ⚡
-                            </div>
-                            <h3 class="path-title">Data Engineering Tools</h3>
-                            <p class="path-description">
-                                Learn the modern data stack: Airflow, Spark, Kafka, Docker, and cloud 
-                                platforms. Build production-ready data infrastructure.
-                            </p>
-                        </div>
-                        <div style="padding: 0 2.5rem;">
-                            <ul class="path-features">
-                                <li>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Apache Airflow orchestration</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Apache Spark for big data</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Stream processing with Kafka</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Docker and containerization</span>
-                                </li>
-                                <li>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Cloud platforms (AWS, GCP, Azure)</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="path-footer">
-                            <button class="btn btn-path btn-path-coming" disabled>
-                                <i class="bi bi-hourglass-split me-2"></i>
-                                Coming 2025
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- Notification -->
-            <!-- <div class="text-center mt-5">
-                <div class="alert alert-info d-inline-block" style="background: rgba(102, 126, 234, 0.1); border: 2px solid #667eea; border-radius: 15px;">
-                    <i class="bi bi-bell-fill me-2"></i>
-                    <strong>Want early access?</strong> Sign up now and be the first to know when new learning paths launch!
-                </div>
-            </div> -->
+            </div>
         </div>
     </section>
 
@@ -1040,7 +1169,7 @@
                         </div>
                         <h3 class="feature-title">Interactive Code Editor</h3>
                         <p class="feature-description">
-                            Write and execute code directly in your browser. No setup required, 
+                            Write and execute code directly in your browser. No setup required,
                             just start coding and see results instantly.
                         </p>
                     </div>
@@ -1052,7 +1181,7 @@
                         </div>
                         <h3 class="feature-title">AI-Powered Assistant</h3>
                         <p class="feature-description">
-                            Get instant help with an AI assistant that understands your code, 
+                            Get instant help with an AI assistant that understands your code,
                             explains concepts, and guides you through challenges.
                         </p>
                     </div>
@@ -1064,7 +1193,7 @@
                         </div>
                         <h3 class="feature-title">Real Database Practice</h3>
                         <p class="feature-description">
-                            Work with actual databases, not simulations. Practice on real 
+                            Work with actual databases, not simulations. Practice on real
                             data infrastructure to build practical skills.
                         </p>
                     </div>
@@ -1076,7 +1205,7 @@
                         </div>
                         <h3 class="feature-title">Progress Tracking</h3>
                         <p class="feature-description">
-                            Monitor your learning journey with detailed metrics, completed 
+                            Monitor your learning journey with detailed metrics, completed
                             lessons, and skill assessments.
                         </p>
                     </div>
@@ -1088,7 +1217,7 @@
                         </div>
                         <h3 class="feature-title">Isolated Sandboxes</h3>
                         <p class="feature-description">
-                            Each learner gets their own isolated environment. Practice safely 
+                            Each learner gets their own isolated environment. Practice safely
                             without affecting others or worrying about mistakes.
                         </p>
                     </div>
@@ -1100,7 +1229,7 @@
                         </div>
                         <h3 class="feature-title">Instant Feedback</h3>
                         <p class="feature-description">
-                            Execute code and queries with immediate results. Learn from 
+                            Execute code and queries with immediate results. Learn from
                             mistakes and iterate quickly with real-time feedback.
                         </p>
                     </div>
@@ -1113,7 +1242,7 @@
     <section id="how-it-works" class="how-it-works-section">
         <div class="container">
             <h2 class="section-title" style="color: white;">How It Works</h2>
-            <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">
+            <p class="section-subtitle" style="color: var(--color-text-secondary);">
                 Start your data engineering journey in just 4 simple steps
             </p>
             <div class="row">
@@ -1123,7 +1252,7 @@
                         <div class="step-content">
                             <h3 class="step-title">Create Your Free Account</h3>
                             <p class="step-description">
-                                Sign up in seconds - no credit card required. Get instant access to 
+                                Sign up in seconds - no credit card required. Get instant access to
                                 all available lessons and platform features.
                             </p>
                         </div>
@@ -1133,7 +1262,7 @@
                         <div class="step-content">
                             <h3 class="step-title">Choose Your Learning Path</h3>
                             <p class="step-description">
-                                Select from our curated learning paths. Start with dbt today, 
+                                Select from our curated learning paths. Start with dbt today,
                                 with Python and more tools coming soon.
                             </p>
                         </div>
@@ -1143,7 +1272,7 @@
                         <div class="step-content">
                             <h3 class="step-title">Learn by Doing</h3>
                             <p class="step-description">
-                                Write code, execute models, and work with real databases. 
+                                Write code, execute models, and work with real databases.
                                 100% hands-on practice with immediate feedback.
                             </p>
                         </div>
@@ -1153,7 +1282,7 @@
                         <div class="step-content">
                             <h3 class="step-title">Get AI Guidance Anytime</h3>
                             <p class="step-description">
-                                Stuck on something? Ask our AI assistant for help. Get explanations, 
+                                Stuck on something? Ask our AI assistant for help. Get explanations,
                                 code reviews, and debugging assistance 24/7.
                             </p>
                         </div>
@@ -1169,7 +1298,7 @@
             <div class="cta-content">
                 <h2 class="cta-title">Ready to Level Up Your Skills?</h2>
                 <p class="cta-subtitle">
-                    Join the next generation of data and analytics engineers. 
+                    Join the next generation of data and analytics engineers.
                     Start with dbt today, completely free!
                 </p>
                 <a href="{% url 'register' %}" class="btn btn-hero-primary">
@@ -1190,7 +1319,7 @@
                         Decode Data
                     </div>
                     <p class="footer-description">
-                        Your platform for mastering data & analytics engineering. Learn dbt, Python, 
+                        Your platform for mastering data & analytics engineering. Learn dbt, Python,
                         SQL, and modern data tools through hands-on practice.
                     </p>
                 </div>
@@ -1199,8 +1328,6 @@
                     <ul class="footer-links">
                         <li><a href="#learning-paths">Learning Paths</a></li>
                         <li><a href="#features">Features</a></li>
-                        <!-- <li><a href="{% url 'login' %}">Login</a></li>
-                        <li><a href="{% url 'register' %}">Sign Up</a></li> -->
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
@@ -1239,7 +1366,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Smooth Scroll & Navbar Effects -->
     <script>
         // Smooth scroll
@@ -1260,9 +1387,9 @@
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
-                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.15)';
+                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.5)';
             } else {
-                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+                navbar.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2)';
             }
         });
     </script>

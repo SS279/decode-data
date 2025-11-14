@@ -8,92 +8,275 @@
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Custom CSS -->
+
+    <!-- Modern Theme CSS -->
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+
+    <!-- Base Template Overrides -->
     <style>
-        :root {
-            --primary-color: #3b82f6;
-            --secondary-color: #8b5cf6;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
-            --warning-color: #f59e0b;
-            --info-color: #06b6d4;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
+            position: relative;
         }
 
+        /* Modern Navigation Styles */
         .navbar {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-text-primary) !important;
+            transition: all var(--transition-base);
+        }
+
+        .navbar-brand:hover {
+            color: var(--color-bright-cyan) !important;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
         .navbar-brand img {
             width: 45px;
             height: 45px;
             object-fit: contain;
-            margin-right: 0.5rem;
+            margin-right: 0.75rem;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+            transition: all var(--transition-base);
         }
 
+        .navbar-brand:hover img {
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
+            transform: scale(1.05);
+        }
+
+        .navbar-dark .nav-link {
+            color: var(--color-text-secondary) !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .navbar-dark .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: translateX(-50%);
+            transition: width var(--transition-base);
+        }
+
+        .navbar-dark .nav-link:hover {
+            color: var(--color-bright-cyan) !important;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .navbar-dark .nav-link:hover::after {
+            width: 70%;
+        }
+
+        .navbar .dropdown-menu {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            margin-top: 0.5rem;
+        }
+
+        .navbar .dropdown-item {
+            color: var(--color-text-primary);
+            padding: 0.75rem 1.5rem;
+            transition: all var(--transition-base);
+            border-radius: var(--radius-md);
+            margin: 0.25rem;
+        }
+
+        .navbar .dropdown-item:hover {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--color-bright-cyan);
+        }
+
+        .navbar .dropdown-item-text {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
+
+        .navbar .dropdown-divider {
+            border-color: var(--glass-border);
+        }
+
+        /* Alert Messages */
+        .alert {
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .alert-success {
+            background: rgba(0, 245, 160, 0.15);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+        }
+
+        .alert-danger {
+            background: rgba(255, 71, 87, 0.15);
+            color: var(--color-danger);
+            border-left: 3px solid var(--color-danger);
+        }
+
+        .alert-warning {
+            background: rgba(255, 176, 32, 0.15);
+            color: var(--color-warning);
+            border-left: 3px solid var(--color-warning);
+        }
+
+        .alert-info {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--color-info);
+            border-left: 3px solid var(--color-info);
+        }
+
+        /* Modern Footer */
+        footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            opacity: 0.5;
+        }
+
+        footer p {
+            margin-bottom: 0.25rem;
+        }
+
+        footer .text-muted {
+            color: var(--color-text-secondary) !important;
+        }
+
+        footer .footer-brand {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Bootstrap Override for Dark Theme */
         .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
         }
 
-        .card:hover.hover-shadow {
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-            transform: translateY(-2px);
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl), 0 0 30px rgba(0, 102, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.3);
         }
 
-        .btn {
-            border-radius: 8px;
-            font-weight: 600;
-            padding: 0.6rem 1.5rem;
-            transition: all 0.3s ease;
+        .card-title {
+            color: var(--color-text-primary);
         }
 
+        .card-text {
+            color: var(--color-text-secondary);
+        }
+
+        /* Bootstrap Button Overrides */
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: var(--gradient-primary);
             border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
         }
 
+        .btn-success {
+            background: var(--gradient-success);
+            border: none;
+            color: var(--color-text-inverse);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF4757 0%, #E84A5F 100%);
+            border: none;
+        }
+
+        /* Form Controls */
         .form-control, .form-select {
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 0.75rem;
-            transition: all 0.2s ease;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 0.75rem 1rem;
+            color: var(--color-text-primary);
+            transition: all var(--transition-base);
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: rgba(30, 41, 59, 0.9);
+            border-color: var(--color-electric-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1), 0 0 20px rgba(0, 212, 255, 0.3);
+            color: var(--color-text-primary);
         }
 
+        .form-control::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .form-label {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Progress Bars */
         .progress {
-            border-radius: 10px;
-            background-color: #e2e8f0;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
+            height: 10px;
         }
 
         .progress-bar {
-            border-radius: 10px;
-        }
-
-        footer {
-            background: #ffffff;
-            border-top: 1px solid #e2e8f0;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
         }
     </style>
     
@@ -102,7 +285,7 @@
 <body>
     <!-- Navigation -->
     {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'dashboard' %}">
                 <img src="{% static 'images/dd_mascot_2.png' %}" alt="Decode Data Logo">
@@ -155,7 +338,8 @@
     
     <!-- Footer -->
     <footer class="text-center py-4 mt-5">
-        <p class="text-muted mb-0">Decode Data - Interactive Learning Platform</p>
+        <p class="footer-brand mb-2">Decode Data</p>
+        <p class="text-muted mb-1">Interactive Data Learning Platform</p>
         <p class="text-muted small">Build • Learn • Decode dbt</p>
     </footer>
     
