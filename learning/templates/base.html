@@ -25,6 +25,8 @@
         /* Modern Navigation Styles */
         .navbar {
             padding: 1rem 0;
+            z-index: var(--z-sticky);
+            position: relative;
         }
 
         .navbar-brand {
@@ -93,6 +95,8 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-xl);
             margin-top: 0.5rem;
+            z-index: var(--z-dropdown);
+            position: absolute;
         }
 
         .navbar .dropdown-item {

@@ -154,6 +154,36 @@
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
 }
 
+/* Light theme adjustments for buttons on gradients */
+[data-theme="light"] .btn-hero-primary,
+[data-theme="light"] .btn-signup,
+[data-theme="light"] .btn-primary-modern,
+[data-theme="light"] .btn-accent-modern,
+[data-theme="light"] .step-number,
+[data-theme="light"] .feature-icon {
+  color: #FFFFFF !important;
+}
+
+/* Ensure navbar dropdown is visible in both themes */
+[data-theme="light"] .navbar .dropdown-menu {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Light theme navigation adjustments */
+[data-theme="light"] .navbar,
+[data-theme="light"] .glass-nav {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure CTA section text is visible on gradient backgrounds */
+[data-theme="light"] .cta-section .cta-title,
+[data-theme="light"] .cta-section .cta-content,
+[data-theme="light"] .cta-section .btn-hero-primary {
+  color: #FFFFFF !important;
+}
+
 /* ==========================================================================
    GLOBAL STYLES
    ========================================================================== */
@@ -166,6 +196,16 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all headings use theme-aware colors */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary);
+}
+
+/* Ensure paragraphs and spans use theme-aware colors */
+p, span, div {
+  color: inherit;
 }
 
 /* Gradient Text Effect */
