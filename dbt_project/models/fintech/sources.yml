@@ -46,7 +46,7 @@ sources:
           - name: tier
             description: Account tier (standard, premium, enterprise)
       
-      - name: raw_customers
+      - name: raw_fintech_customers
         description: Customer profile and metadata
         columns:
           - name: customer_id
