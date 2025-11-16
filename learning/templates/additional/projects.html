@@ -988,7 +988,7 @@
 </nav>
 
 <!-- Hero Section -->
-<section class="projects-hero">
+<!-- <section class="projects-hero">
     <div class="container">
         <div class="hero-content">
             <h1 class="hero-title">Hands-On dbt Projects</h1>
@@ -1012,7 +1012,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Projects Grid -->
 <section class="projects-section">
@@ -1027,7 +1027,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card">
                     <div class="project-header">
-                        <span class="project-badge">Core</span>
+                        <span class="project-badge">Intro</span>
                         <div class="project-icon">
                             <i class="bi bi-box-seam"></i>
                             <h3 class="project-title" style="margin: 0; display: inline-flex;">Hello dbt</h3>
@@ -1045,13 +1045,13 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <div class="tech-tags">
+                        <!-- <div class="tech-tags">
                             <span class="tech-tag">SQL</span>
                             <span class="tech-tag">Jinja</span>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
+                        </div> -->
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
                             <button onclick="viewDataModel('hello_dbt')" class="data-model-btn" title="View Data Model">
-                                <i class="bi bi-diagram-3"></i>
+                                View Data Model
                             </button>
                             <a href="{% url 'dashboard' %}" class="start-btn">
                                 Start <i class="fas fa-arrow-right"></i>
@@ -1065,7 +1065,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card">
                     <div class="project-header">
-                        <span class="project-badge">Business</span>
+                        <span class="project-badge">Fintech</span>
                         <div class="project-icon">
                             <i class="bi bi-credit-card"></i>
                             <h3 class="project-title" style="margin: 0; display: inline-flex;">PayFlow Analytics</h3>
@@ -1083,13 +1083,13 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <div class="tech-tags">
+                        <!-- <div class="tech-tags">
                             <span class="tech-tag">Fintech</span>
                             <span class="tech-tag">Metrics</span>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
+                        </div> -->
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
                             <button onclick="viewDataModel('fintech')" class="data-model-btn" title="View Data Model">
-                                <i class="bi bi-diagram-3"></i>
+                                View Data Model
                             </button>
                             <a href="{% url 'dashboard' %}" class="start-btn">
                                 Start <i class="fas fa-arrow-right"></i>
@@ -1103,7 +1103,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card">
                     <div class="project-header">
-                        <span class="project-badge">Industry</span>
+                        <span class="project-badge">Retail</span>
                         <div class="project-icon">
                             <i class="bi bi-shop"></i>
                             <h3 class="project-title" style="margin: 0; display: inline-flex;">Retail Analytics</h3>
@@ -1121,13 +1121,13 @@
                         </ul>
                     </div>
                     <div class="project-footer">
-                        <div class="tech-tags">
+                        <!-- <div class="tech-tags">
                             <span class="tech-tag">Retail</span>
                             <span class="tech-tag">KPIs</span>
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
+                        </div> -->
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
                             <button onclick="viewDataModel('cafe_chain')" class="data-model-btn" title="View Data Model">
-                                <i class="bi bi-diagram-3"></i>
+                                View Data Model
                             </button>
                             <a href="{% url 'dashboard' %}" class="start-btn">
                                 Start <i class="fas fa-arrow-right"></i>
@@ -1137,7 +1137,38 @@
                 </div>
             </div>
 
-            <!-- More projects... -->
+            <!-- Project 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-badge">Energy</span>
+                        <div class="project-icon">
+                            <i class="bi bi-lightning-fill"></i>
+                            <h3 class="project-title" style="margin: 0; display: inline-flex;">Energy Analytics</h3>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+                        <p class="project-description">
+                            Create a comprehensive energy analytics solution.
+                        </p>
+                        <ul class="project-details">
+                            <li><i class="bi bi-check-circle-fill"></i> Energy rates forecasting</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <button onclick="viewDataModel('energy_smart')" class="data-model-btn" title="View Data Model">
+                                View Data Model
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="start-btn">
+                                Start <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
