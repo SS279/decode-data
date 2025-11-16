@@ -5,13 +5,19 @@ import subprocess
 from pathlib import Path
 from django.conf import settings
 import logging
+import threading
+import queue
+import uuid
 
 logger = logging.getLogger(__name__)
 
 
 class DBTManager:
     """Manage DBT workspace and operations"""
-    
+
+    # Class-level storage for active jobs and their logs
+    active_jobs = {}
+
     def __init__(self, user, lesson):
         self.user = user
         self.lesson = lesson
@@ -228,3 +234,209 @@ decode_dbt:
         except Exception as e:
             logger.error(f"Error running seeds: {str(e)}")
             return False, str(e)
+
+    def _stream_output(self, process, log_queue, job_id):
+        """Stream output from subprocess to queue"""
+        try:
+            for line in iter(process.stdout.readline, ''):
+                if line:
+                    log_queue.put(line)
+                    logger.debug(f"Job {job_id}: {line.rstrip()}")
+
+            # Wait for process to complete
+            process.wait()
+
+            # Send completion message
+            if process.returncode == 0:
+                log_queue.put("__COMPLETE__")
+            else:
+                log_queue.put(f"__ERROR__:{process.returncode}")
+
+        except Exception as e:
+            logger.error(f"Error streaming output for job {job_id}: {str(e)}")
+            log_queue.put(f"__ERROR__:{str(e)}")
+        finally:
+            # Mark job as finished
+            if job_id in self.active_jobs:
+                self.active_jobs[job_id]['finished'] = True
+
+    def execute_models_streaming(self, model_names, include_children=False, full_refresh=False):
+        """Execute DBT models with streaming logs"""
+        if not self.is_initialized():
+            return None, 'Workspace not initialized'
+
+        try:
+            # Generate job ID
+            job_id = str(uuid.uuid4())
+
+            # Create log queue
+            log_queue = queue.Queue()
+
+            # Build the selector
+            selectors = []
+            for model_name in model_names:
+                selector = model_name
+                if include_children:
+                    selector += "+"
+                selectors.append(selector)
+
+            # Build command
+            cmd = [
+                'dbt', 'run',
+                '--select', ' '.join(selectors),
+                '--profiles-dir', str(self.workspace_path),
+                '--project-dir', str(self.workspace_path)
+            ]
+            if full_refresh:
+                cmd.append('--full-refresh')
+
+            logger.info(f"Starting streaming execution with job ID: {job_id}")
+            logger.info(f"Executing dbt command: {' '.join(cmd)}")
+
+            # Start subprocess
+            process = subprocess.Popen(
+                cmd,
+                cwd=self.workspace_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                env={
+                    **os.environ,
+                    'MOTHERDUCK_TOKEN': settings.MOTHERDUCK_TOKEN,
+                    'DBT_PROFILES_DIR': str(self.workspace_path)
+                }
+            )
+
+            # Store job info
+            self.active_jobs[job_id] = {
+                'process': process,
+                'log_queue': log_queue,
+                'model_names': model_names,
+                'finished': False
+            }
+
+            # Start thread to stream output
+            thread = threading.Thread(
+                target=self._stream_output,
+                args=(process, log_queue, job_id),
+                daemon=True
+            )
+            thread.start()
+
+            return job_id, None
+
+        except Exception as e:
+            logger.error(f"Error starting streaming execution: {str(e)}")
+            return None, str(e)
+
+    def run_seeds_streaming(self):
+        """Run DBT seeds with streaming logs"""
+        try:
+            seed_dir = self.workspace_path / 'seeds' / self.lesson['id']
+            if not seed_dir.exists():
+                return None, 'No seeds found for this lesson'
+
+            # Get all seed files for this lesson
+            seed_files = list(seed_dir.glob('*.csv'))
+            if not seed_files:
+                return None, 'No seed files found for this lesson'
+
+            logger.info(f"Found {len(seed_files)} seed files for lesson {self.lesson['id']}")
+
+            # Generate job ID
+            job_id = str(uuid.uuid4())
+
+            # Create log queue
+            log_queue = queue.Queue()
+
+            # Build command
+            cmd = [
+                'dbt', 'seed',
+                '--select', f"path:seeds/{self.lesson['id']}/*",
+                '--profiles-dir', str(self.workspace_path),
+                '--project-dir', str(self.workspace_path)
+            ]
+
+            logger.info(f"Starting streaming seed execution with job ID: {job_id}")
+            logger.info(f"Running seed command: {' '.join(cmd)}")
+
+            # Start subprocess
+            process = subprocess.Popen(
+                cmd,
+                cwd=self.workspace_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                env={
+                    **os.environ,
+                    'MOTHERDUCK_TOKEN': settings.MOTHERDUCK_TOKEN
+                }
+            )
+
+            # Store job info
+            self.active_jobs[job_id] = {
+                'process': process,
+                'log_queue': log_queue,
+                'finished': False
+            }
+
+            # Start thread to stream output
+            thread = threading.Thread(
+                target=self._stream_output,
+                args=(process, log_queue, job_id),
+                daemon=True
+            )
+            thread.start()
+
+            return job_id, None
+
+        except Exception as e:
+            logger.error(f"Error starting streaming seed execution: {str(e)}")
+            return None, str(e)
+
+    @classmethod
+    def get_job_logs(cls, job_id):
+        """Get logs for a specific job (generator for streaming)"""
+        if job_id not in cls.active_jobs:
+            yield "data: __NOTFOUND__\n\n"
+            return
+
+        job_info = cls.active_jobs[job_id]
+        log_queue = job_info['log_queue']
+
+        while True:
+            try:
+                # Get log line with timeout
+                line = log_queue.get(timeout=0.1)
+
+                # Check for completion markers
+                if line.startswith("__COMPLETE__"):
+                    yield f"data: __COMPLETE__\n\n"
+                    break
+                elif line.startswith("__ERROR__"):
+                    yield f"data: {line}\n\n"
+                    break
+                else:
+                    # Send log line to client
+                    yield f"data: {line}\n\n"
+
+            except queue.Empty:
+                # Check if job is finished
+                if job_info['finished']:
+                    # No more logs, job is done
+                    yield "data: __COMPLETE__\n\n"
+                    break
+                # Otherwise, continue waiting for logs
+                continue
+            except Exception as e:
+                logger.error(f"Error getting logs for job {job_id}: {str(e)}")
+                yield f"data: __ERROR__:{str(e)}\n\n"
+                break
+
+        # Clean up job after streaming is complete
+        try:
+            del cls.active_jobs[job_id]
+        except KeyError:
+            pass

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.http import require_http_methods
 import json
 import logging
@@ -239,48 +239,88 @@ def model_builder(request, lesson_id):
             selected_models = request.POST.getlist('selected_models')
             include_children = request.POST.get('include_children') == 'on'
             full_refresh = request.POST.get('full_refresh') == 'on'
-            
+            use_streaming = request.POST.get('stream') == 'true'
+
             if not selected_models:
                 messages.error(request, 'Please select at least one model to execute')
             else:
-                success, results = dbt_manager.execute_models(
-                    selected_models, include_children, full_refresh
-                )
-                
-                if success:
-                    # Collect all logs
-                    execution_logs = []
-                    for result in results:
-                        if result['success']:
-                            messages.success(request, f"✅ Model '{result['model']}' executed successfully")
-                        else:
-                            messages.error(request, f"❌ Model '{result['model']}' failed")
-                        
-                        # Store logs for display
-                        execution_logs.append({
-                            'model': result['model'],
-                            'output': result['output'],
-                            'success': result['success']
-                        })
-                    
-                    # Update progress
-                    progress, _ = LearnerProgress.objects.get_or_create(
-                        user=request.user, lesson_id=lesson_id
+                if use_streaming:
+                    # Start streaming execution
+                    job_id, error = dbt_manager.execute_models_streaming(
+                        selected_models, include_children, full_refresh
                     )
-                    progress.models_executed = list(set(progress.models_executed + selected_models))
-                    progress.lesson_progress = min(100, progress.lesson_progress + 20)
-                    progress.save()
+
+                    if job_id:
+                        # Return job ID for streaming
+                        return JsonResponse({
+                            'success': True,
+                            'job_id': job_id,
+                            'models': selected_models
+                        })
+                    else:
+                        return JsonResponse({
+                            'success': False,
+                            'error': error
+                        })
                 else:
-                    messages.error(request, f'Error executing models: {results}')
+                    # Non-streaming execution (original code)
+                    success, results = dbt_manager.execute_models(
+                        selected_models, include_children, full_refresh
+                    )
+
+                    if success:
+                        # Collect all logs
+                        execution_logs = []
+                        for result in results:
+                            if result['success']:
+                                messages.success(request, f"✅ Model '{result['model']}' executed successfully")
+                            else:
+                                messages.error(request, f"❌ Model '{result['model']}' failed")
+
+                            # Store logs for display
+                            execution_logs.append({
+                                'model': result['model'],
+                                'output': result['output'],
+                                'success': result['success']
+                            })
+
+                        # Update progress
+                        progress, _ = LearnerProgress.objects.get_or_create(
+                            user=request.user, lesson_id=lesson_id
+                        )
+                        progress.models_executed = list(set(progress.models_executed + selected_models))
+                        progress.lesson_progress = min(100, progress.lesson_progress + 20)
+                        progress.save()
+                    else:
+                        messages.error(request, f'Error executing models: {results}')
         
         elif action == 'run_seeds':
-            success, message = dbt_manager.run_seeds()
-            if success:
-                messages.success(request, 'Seeds loaded successfully')
-                seed_logs = message  # Store the output
+            use_streaming = request.POST.get('stream') == 'true'
+
+            if use_streaming:
+                # Start streaming seed execution
+                job_id, error = dbt_manager.run_seeds_streaming()
+
+                if job_id:
+                    # Return job ID for streaming
+                    return JsonResponse({
+                        'success': True,
+                        'job_id': job_id
+                    })
+                else:
+                    return JsonResponse({
+                        'success': False,
+                        'error': error
+                    })
             else:
-                messages.error(request, f'Error loading seeds: {message}')
-                seed_logs = message
+                # Non-streaming execution (original code)
+                success, message = dbt_manager.run_seeds()
+                if success:
+                    messages.success(request, 'Seeds loaded successfully')
+                    seed_logs = message  # Store the output
+                else:
+                    messages.error(request, f'Error loading seeds: {message}')
+                    seed_logs = message
         
         # Don't redirect if we have logs to show
         if not execution_logs and not seed_logs:
@@ -306,6 +346,23 @@ def model_builder(request, lesson_id):
         'seed_logs': seed_logs,
     }
     return render(request, 'learning/model_builder.html', context)
+
+
+@login_required
+def stream_dbt_logs(request, job_id):
+    """Stream DBT execution logs using Server-Sent Events"""
+    def event_stream():
+        """Generator for SSE events"""
+        for log_line in DBTManager.get_job_logs(job_id):
+            yield log_line
+
+    response = StreamingHttpResponse(
+        event_stream(),
+        content_type='text/event-stream'
+    )
+    response['Cache-Control'] = 'no-cache'
+    response['X-Accel-Buffering'] = 'no'
+    return response
 
 
 # ========== QUERY VISUALIZER VIEW ==========

@@ -366,10 +366,10 @@
             </div>
             <div class="card-body">
                 <p class="small text-muted">Load CSV seed data into your schema</p>
-                <form method="post">
+                <form method="post" id="seeds-form">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="run_seeds">
-                    <button type="submit" class="btn btn-sm btn-outline-primary w-100">
+                    <button type="submit" class="btn btn-sm btn-outline-primary w-100" id="run-seeds-btn">
                         <i class="bi bi-arrow-down-circle"></i> Run Seeds
                     </button>
                 </form>
@@ -438,7 +438,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-success w-100">
+                    <button type="submit" class="btn btn-success w-100" id="execute-btn">
                         <i class="bi bi-lightning-fill"></i> Execute Selected
                     </button>
                 </form>
@@ -486,6 +486,28 @@
                     <li>Load seed data first if your models depend on raw tables</li>
                     <li>Check the messages above for execution results</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Real-time dbt Execution Logs -->
+<div class="row mt-4" id="streaming-logs-container" style="display: none;">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-terminal"></i> <span id="streaming-title">dbt Running...</span>
+                </h5>
+                <div class="spinner-border spinner-border-sm text-white" role="status" id="streaming-spinner">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="card-body bg-dark p-0">
+                <pre id="streaming-logs" class="text-light p-3 m-0" style="max-height: 500px; overflow-y: auto; font-size: 0.85rem; min-height: 200px;"><code></code></pre>
+            </div>
+            <div class="card-footer" id="streaming-footer" style="display: none;">
+                <div class="alert mb-0" id="streaming-result" role="alert"></div>
             </div>
         </div>
     </div>
@@ -582,20 +604,178 @@ document.getElementById('save-model-btn')?.addEventListener('click', function() 
     document.getElementById('save-model-form').submit();
 });
 
-// Confirm before executing models
+// Streaming logs functionality
+let currentEventSource = null;
+
+function showStreamingLogs(title) {
+    const container = document.getElementById('streaming-logs-container');
+    const logsElement = document.getElementById('streaming-logs');
+    const titleElement = document.getElementById('streaming-title');
+    const spinner = document.getElementById('streaming-spinner');
+    const footer = document.getElementById('streaming-footer');
+
+    container.style.display = 'block';
+    titleElement.textContent = title;
+    logsElement.innerHTML = '';
+    spinner.style.display = 'inline-block';
+    footer.style.display = 'none';
+
+    // Scroll to logs
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function appendLog(message) {
+    const logsElement = document.getElementById('streaming-logs');
+    logsElement.textContent += message;
+    // Auto-scroll to bottom
+    logsElement.scrollTop = logsElement.scrollHeight;
+}
+
+function finishStreamingLogs(success, message) {
+    const spinner = document.getElementById('streaming-spinner');
+    const footer = document.getElementById('streaming-footer');
+    const resultElement = document.getElementById('streaming-result');
+
+    spinner.style.display = 'none';
+    footer.style.display = 'block';
+
+    if (success) {
+        resultElement.className = 'alert alert-success mb-0';
+        resultElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> ' + message;
+    } else {
+        resultElement.className = 'alert alert-danger mb-0';
+        resultElement.innerHTML = '<i class="bi bi-x-circle-fill"></i> ' + message;
+    }
+
+    // Enable buttons
+    document.getElementById('execute-btn').disabled = false;
+    document.getElementById('run-seeds-btn').disabled = false;
+}
+
+function streamLogs(jobId, jobType) {
+    if (currentEventSource) {
+        currentEventSource.close();
+    }
+
+    const url = `/api/stream-logs/${jobId}/`;
+    currentEventSource = new EventSource(url);
+
+    currentEventSource.onmessage = function(event) {
+        const data = event.data;
+
+        if (data === '__COMPLETE__') {
+            finishStreamingLogs(true, `${jobType} completed successfully!`);
+            currentEventSource.close();
+            currentEventSource = null;
+            // Reload page after a delay to show updated state
+            setTimeout(() => location.reload(), 2000);
+        } else if (data.startsWith('__ERROR__')) {
+            const errorMsg = data.substring(9);
+            finishStreamingLogs(false, `${jobType} failed: ${errorMsg}`);
+            currentEventSource.close();
+            currentEventSource = null;
+        } else if (data === '__NOTFOUND__') {
+            finishStreamingLogs(false, 'Job not found');
+            currentEventSource.close();
+            currentEventSource = null;
+        } else {
+            appendLog(data);
+        }
+    };
+
+    currentEventSource.onerror = function(error) {
+        console.error('EventSource error:', error);
+        finishStreamingLogs(false, 'Connection error occurred');
+        currentEventSource.close();
+        currentEventSource = null;
+    };
+}
+
+// Handle execute models form with streaming
 document.getElementById('execute-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
     const checkedBoxes = document.querySelectorAll('input[name="selected_models"]:checked');
     if (checkedBoxes.length === 0) {
-        e.preventDefault();
         alert('Please select at least one model to execute');
         return false;
     }
 
     const modelNames = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
     if (!confirm(`Execute the following models: ${modelNames}?`)) {
-        e.preventDefault();
         return false;
     }
+
+    // Disable button to prevent double-submission
+    document.getElementById('execute-btn').disabled = true;
+
+    // Show streaming logs
+    showStreamingLogs(`Executing models: ${modelNames}`);
+
+    // Prepare form data
+    const formData = new FormData(this);
+    formData.append('stream', 'true');
+
+    // Submit via AJAX
+    fetch(this.action || window.location.href, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.job_id) {
+            // Start streaming logs
+            streamLogs(data.job_id, 'Model execution');
+        } else {
+            finishStreamingLogs(false, data.error || 'Failed to start execution');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        finishStreamingLogs(false, 'Failed to start execution: ' + error.message);
+    });
+
+    return false;
+});
+
+// Handle run seeds form with streaming
+document.getElementById('seeds-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!confirm('Load seed data into your schema?')) {
+        return false;
+    }
+
+    // Disable button to prevent double-submission
+    document.getElementById('run-seeds-btn').disabled = true;
+
+    // Show streaming logs
+    showStreamingLogs('Running dbt seeds...');
+
+    // Prepare form data
+    const formData = new FormData(this);
+    formData.append('stream', 'true');
+
+    // Submit via AJAX
+    fetch(this.action || window.location.href, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.job_id) {
+            // Start streaming logs
+            streamLogs(data.job_id, 'Seed execution');
+        } else {
+            finishStreamingLogs(false, data.error || 'Failed to start seed execution');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        finishStreamingLogs(false, 'Failed to start seed execution: ' + error.message);
+    });
+
+    return false;
 });
 </script>
 {% endblock %}
