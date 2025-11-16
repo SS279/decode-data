@@ -504,7 +504,7 @@
                 </div>
             </div>
             <div class="card-body bg-dark p-0">
-                <pre id="streaming-logs" class="text-light p-3 m-0" style="max-height: 500px; overflow-y: auto; font-size: 0.85rem; min-height: 200px;"><code></code></pre>
+                <pre id="streaming-logs" class="text-light p-3 m-0" style="max-height: 500px; overflow-y: auto; font-size: 0.85rem; min-height: 200px; white-space: pre-wrap; word-wrap: break-word;"><code></code></pre>
             </div>
             <div class="card-footer" id="streaming-footer" style="display: none;">
                 <div class="alert mb-0" id="streaming-result" role="alert"></div>
@@ -530,7 +530,7 @@
                     <h6 class="text-primary">
                         <i class="bi bi-database"></i> Seed Execution Output
                     </h6>
-                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ seed_logs }}</code></pre>
+                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;"><code>{{ seed_logs }}</code></pre>
                 </div>
                 {% endif %}
 
@@ -542,7 +542,7 @@
                         <i class="bi bi-{% if log.success %}check-circle-fill{% else %}x-circle-fill{% endif %}"></i>
                         Model: {{ log.model }}
                     </h6>
-                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"><code>{{ log.output }}</code></pre>
+                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;"><code>{{ log.output }}</code></pre>
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -626,7 +626,7 @@ function showStreamingLogs(title) {
 
 function appendLog(message) {
     const logsElement = document.getElementById('streaming-logs');
-    logsElement.textContent += message;
+    logsElement.textContent += message + '\n';
     // Auto-scroll to bottom
     logsElement.scrollTop = logsElement.scrollHeight;
 }
