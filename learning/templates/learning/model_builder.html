@@ -717,7 +717,7 @@ document.getElementById('execute-form')?.addEventListener('submit', function(e) 
     formData.append('stream', 'true');
 
     // Submit via AJAX
-    fetch(this.action || window.location.href, {
+    fetch(window.location.href, {
         method: 'POST',
         body: formData
     })
@@ -757,7 +757,7 @@ document.getElementById('seeds-form')?.addEventListener('submit', function(e) {
     formData.append('stream', 'true');
 
     // Submit via AJAX
-    fetch(this.action || window.location.href, {
+    fetch(window.location.href, {
         method: 'POST',
         body: formData
     })
