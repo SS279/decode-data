@@ -238,10 +238,17 @@ decode_dbt:
     def _stream_output(self, process, log_queue, job_id):
         """Stream output from subprocess to queue"""
         try:
-            for line in iter(process.stdout.readline, ''):
-                if line:
-                    log_queue.put(line)
-                    logger.debug(f"Job {job_id}: {line.rstrip()}")
+            # Read output line by line
+            while True:
+                line = process.stdout.readline()
+
+                # Check if we've reached EOF
+                if not line:
+                    break
+
+                # Put line in queue for streaming
+                log_queue.put(line)
+                logger.debug(f"Job {job_id}: {line.rstrip()}")
 
             # Wait for process to complete
             process.wait()
@@ -249,8 +256,10 @@ decode_dbt:
             # Send completion message
             if process.returncode == 0:
                 log_queue.put("__COMPLETE__")
+                logger.info(f"Job {job_id} completed successfully")
             else:
                 log_queue.put(f"__ERROR__:{process.returncode}")
+                logger.error(f"Job {job_id} failed with return code {process.returncode}")
 
         except Exception as e:
             logger.error(f"Error streaming output for job {job_id}: {str(e)}")
@@ -259,6 +268,7 @@ decode_dbt:
             # Mark job as finished
             if job_id in self.active_jobs:
                 self.active_jobs[job_id]['finished'] = True
+                logger.info(f"Job {job_id} marked as finished")
 
     def execute_models_streaming(self, model_names, include_children=False, full_refresh=False):
         """Execute DBT models with streaming logs"""
@@ -285,7 +295,9 @@ decode_dbt:
                 'dbt', 'run',
                 '--select', ' '.join(selectors),
                 '--profiles-dir', str(self.workspace_path),
-                '--project-dir', str(self.workspace_path)
+                '--project-dir', str(self.workspace_path),
+                '--log-format', 'text',  # Use plain text format for better streaming
+                '--no-use-colors'  # Disable ANSI colors for cleaner logs
             ]
             if full_refresh:
                 cmd.append('--full-refresh')
@@ -293,18 +305,20 @@ decode_dbt:
             logger.info(f"Starting streaming execution with job ID: {job_id}")
             logger.info(f"Executing dbt command: {' '.join(cmd)}")
 
-            # Start subprocess
+            # Start subprocess with line buffering
             process = subprocess.Popen(
                 cmd,
                 cwd=self.workspace_path,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                bufsize=1,
+                bufsize=1,  # Line buffering (required for text mode)
                 env={
                     **os.environ,
                     'MOTHERDUCK_TOKEN': settings.MOTHERDUCK_TOKEN,
-                    'DBT_PROFILES_DIR': str(self.workspace_path)
+                    'DBT_PROFILES_DIR': str(self.workspace_path),
+                    'PYTHONUNBUFFERED': '1',  # Force Python unbuffered output
+                    'PYTHONIOENCODING': 'utf-8'  # Ensure proper encoding
                 }
             )
 
@@ -315,6 +329,11 @@ decode_dbt:
                 'model_names': model_names,
                 'finished': False
             }
+
+            # Add initial log message
+            log_queue.put(f"Starting dbt run for models: {', '.join(model_names)}\n")
+            log_queue.put(f"Command: {' '.join(cmd)}\n")
+            log_queue.put("-" * 80 + "\n")
 
             # Start thread to stream output
             thread = threading.Thread(
@@ -355,23 +374,27 @@ decode_dbt:
                 'dbt', 'seed',
                 '--select', f"path:seeds/{self.lesson['id']}/*",
                 '--profiles-dir', str(self.workspace_path),
-                '--project-dir', str(self.workspace_path)
+                '--project-dir', str(self.workspace_path),
+                '--log-format', 'text',  # Use plain text format for better streaming
+                '--no-use-colors'  # Disable ANSI colors for cleaner logs
             ]
 
             logger.info(f"Starting streaming seed execution with job ID: {job_id}")
             logger.info(f"Running seed command: {' '.join(cmd)}")
 
-            # Start subprocess
+            # Start subprocess with line buffering
             process = subprocess.Popen(
                 cmd,
                 cwd=self.workspace_path,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                bufsize=1,
+                bufsize=1,  # Line buffering (required for text mode)
                 env={
                     **os.environ,
-                    'MOTHERDUCK_TOKEN': settings.MOTHERDUCK_TOKEN
+                    'MOTHERDUCK_TOKEN': settings.MOTHERDUCK_TOKEN,
+                    'PYTHONUNBUFFERED': '1',  # Force Python unbuffered output
+                    'PYTHONIOENCODING': 'utf-8'  # Ensure proper encoding
                 }
             )
 
@@ -381,6 +404,11 @@ decode_dbt:
                 'log_queue': log_queue,
                 'finished': False
             }
+
+            # Add initial log message
+            log_queue.put(f"Starting dbt seed for lesson: {self.lesson['id']}\n")
+            log_queue.put(f"Command: {' '.join(cmd)}\n")
+            log_queue.put("-" * 80 + "\n")
 
             # Start thread to stream output
             thread = threading.Thread(
