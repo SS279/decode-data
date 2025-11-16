@@ -606,7 +606,6 @@ document.getElementById('save-model-btn')?.addEventListener('click', function() 
 
 // Streaming logs functionality
 let currentEventSource = null;
-let streamingTimeoutId = null;
 
 function showStreamingLogs(title) {
     const container = document.getElementById('streaming-logs-container');
@@ -633,66 +632,30 @@ function appendLog(message) {
 }
 
 function finishStreamingLogs(success, message) {
-    // Clear any existing timeout
-    if (streamingTimeoutId) {
-        clearTimeout(streamingTimeoutId);
-        streamingTimeoutId = null;
+    const spinner = document.getElementById('streaming-spinner');
+    const footer = document.getElementById('streaming-footer');
+    const resultElement = document.getElementById('streaming-result');
+
+    spinner.style.display = 'none';
+    footer.style.display = 'block';
+
+    if (success) {
+        resultElement.className = 'alert alert-success mb-0';
+        resultElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> ' + message;
+    } else {
+        resultElement.className = 'alert alert-danger mb-0';
+        resultElement.innerHTML = '<i class="bi bi-x-circle-fill"></i> ' + message;
     }
 
-    try {
-        const spinner = document.getElementById('streaming-spinner');
-        const footer = document.getElementById('streaming-footer');
-        const resultElement = document.getElementById('streaming-result');
-
-        if (spinner) spinner.style.display = 'none';
-        if (footer) footer.style.display = 'block';
-
-        if (resultElement) {
-            if (success) {
-                resultElement.className = 'alert alert-success mb-0';
-                resultElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> ' + message;
-            } else {
-                resultElement.className = 'alert alert-danger mb-0';
-                resultElement.innerHTML = '<i class="bi bi-x-circle-fill"></i> ' + message;
-            }
-        }
-    } catch (error) {
-        console.error('Error updating UI:', error);
-    } finally {
-        // ALWAYS re-enable buttons, even if there was an error above
-        try {
-            const executeBtn = document.getElementById('execute-btn');
-            const seedsBtn = document.getElementById('run-seeds-btn');
-
-            if (executeBtn) executeBtn.disabled = false;
-            if (seedsBtn) seedsBtn.disabled = false;
-        } catch (error) {
-            console.error('Error re-enabling buttons:', error);
-        }
-    }
+    // Enable buttons
+    document.getElementById('execute-btn').disabled = false;
+    document.getElementById('run-seeds-btn').disabled = false;
 }
 
 function streamLogs(jobId, jobType) {
-    // Close any existing event source
     if (currentEventSource) {
         currentEventSource.close();
-        currentEventSource = null;
     }
-
-    // Clear any existing timeout
-    if (streamingTimeoutId) {
-        clearTimeout(streamingTimeoutId);
-    }
-
-    // Set a safety timeout (10 minutes) to force re-enable buttons if streaming hangs
-    streamingTimeoutId = setTimeout(function() {
-        console.warn('Streaming timeout reached - forcing cleanup');
-        if (currentEventSource) {
-            currentEventSource.close();
-            currentEventSource = null;
-        }
-        finishStreamingLogs(false, 'Operation timed out. Please try again or check the logs.');
-    }, 10 * 60 * 1000); // 10 minutes
 
     const url = `/api/stream-logs/${jobId}/`;
     currentEventSource = new EventSource(url);
@@ -702,25 +665,19 @@ function streamLogs(jobId, jobType) {
 
         if (data === '__COMPLETE__') {
             finishStreamingLogs(true, `${jobType} completed successfully!`);
-            if (currentEventSource) {
-                currentEventSource.close();
-                currentEventSource = null;
-            }
+            currentEventSource.close();
+            currentEventSource = null;
             // Reload page after a delay to show updated state
             setTimeout(() => location.reload(), 2000);
         } else if (data.startsWith('__ERROR__')) {
             const errorMsg = data.substring(9);
             finishStreamingLogs(false, `${jobType} failed: ${errorMsg}`);
-            if (currentEventSource) {
-                currentEventSource.close();
-                currentEventSource = null;
-            }
+            currentEventSource.close();
+            currentEventSource = null;
         } else if (data === '__NOTFOUND__') {
             finishStreamingLogs(false, 'Job not found');
-            if (currentEventSource) {
-                currentEventSource.close();
-                currentEventSource = null;
-            }
+            currentEventSource.close();
+            currentEventSource = null;
         } else {
             appendLog(data);
         }
@@ -729,10 +686,8 @@ function streamLogs(jobId, jobType) {
     currentEventSource.onerror = function(error) {
         console.error('EventSource error:', error);
         finishStreamingLogs(false, 'Connection error occurred');
-        if (currentEventSource) {
-            currentEventSource.close();
-            currentEventSource = null;
-        }
+        currentEventSource.close();
+        currentEventSource = null;
     };
 }
 
@@ -752,12 +707,7 @@ document.getElementById('execute-form')?.addEventListener('submit', function(e) 
     }
 
     // Disable button to prevent double-submission
-    try {
-        const executeBtn = document.getElementById('execute-btn');
-        if (executeBtn) executeBtn.disabled = true;
-    } catch (error) {
-        console.error('Error disabling execute button:', error);
-    }
+    document.getElementById('execute-btn').disabled = true;
 
     // Show streaming logs
     showStreamingLogs(`Executing models: ${modelNames}`);
@@ -797,12 +747,7 @@ document.getElementById('seeds-form')?.addEventListener('submit', function(e) {
     }
 
     // Disable button to prevent double-submission
-    try {
-        const seedsBtn = document.getElementById('run-seeds-btn');
-        if (seedsBtn) seedsBtn.disabled = true;
-    } catch (error) {
-        console.error('Error disabling seeds button:', error);
-    }
+    document.getElementById('run-seeds-btn').disabled = true;
 
     // Show streaming logs
     showStreamingLogs('Running dbt seeds...');
