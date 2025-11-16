@@ -26,6 +26,7 @@ urlpatterns = [
     # API Endpoints
     path('api/get-model-content/', views.api_get_model_content, name='api_get_model_content'),
     path('api/validate-lesson/', views.api_validate_lesson, name='api_validate_lesson'),
+    path('api/project-lineage/<str:project_id>/', views.api_get_project_lineage, name='api_get_project_lineage'),
 
     # AI Assistant
     path('ai-assistant/', views.ai_assistant, name='ai_assistant'),

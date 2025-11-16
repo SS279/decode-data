@@ -621,6 +621,318 @@
     .navbar .btn:last-child:hover {
         box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
+
+    /* Data Model Button */
+    .data-model-btn {
+        background: rgba(0, 212, 255, 0.1);
+        color: var(--color-bright-cyan);
+        padding: 0.7rem 1rem;
+        border-radius: 10px;
+        border: 1px solid var(--color-bright-cyan);
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .data-model-btn:hover {
+        background: rgba(0, 212, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    /* Data Model Modal */
+    .lineage-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+    }
+
+    .lineage-modal-content {
+        background: var(--color-deep-space);
+        margin: 2% auto;
+        padding: 0;
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        width: 95%;
+        max-width: 1600px;
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-xl), 0 0 50px rgba(0, 212, 255, 0.3);
+    }
+
+    .lineage-modal-header {
+        padding: 1.5rem 2rem;
+        background: var(--gradient-primary);
+        border-radius: 20px 20px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .lineage-modal-header h2 {
+        margin: 0;
+        color: var(--color-text-primary);
+        font-weight: 900;
+    }
+
+    .lineage-close {
+        color: var(--color-text-primary);
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.1);
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .lineage-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+    }
+
+    .lineage-modal-body {
+        padding: 2rem;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .lineage-summary {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .lineage-stat {
+        background: var(--glass-bg);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .lineage-stat-value {
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--color-bright-cyan);
+        margin-bottom: 0.5rem;
+    }
+
+    .lineage-stat-label {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .lineage-container {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .lineage-graph {
+        flex: 2;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        padding: 2rem;
+        min-height: 500px;
+    }
+
+    .lineage-sidebar {
+        flex: 1;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        padding: 1.5rem;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .node-card {
+        background: var(--color-dark-navy);
+        border: 2px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .node-card:hover {
+        border-color: var(--color-bright-cyan);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        transform: translateX(5px);
+    }
+
+    .node-card.source {
+        border-left: 4px solid var(--color-matrix-green);
+    }
+
+    .node-card.staging {
+        border-left: 4px solid var(--color-bright-cyan);
+    }
+
+    .node-card.fact {
+        border-left: 4px solid var(--color-electric-blue);
+    }
+
+    .node-card.dimension {
+        border-left: 4px solid var(--color-warning);
+    }
+
+    .node-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .node-type-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    .node-type-badge.source {
+        background: rgba(0, 245, 160, 0.15);
+        color: var(--color-matrix-green);
+    }
+
+    .node-type-badge.staging {
+        background: rgba(0, 212, 255, 0.15);
+        color: var(--color-bright-cyan);
+    }
+
+    .node-type-badge.fact {
+        background: rgba(0, 102, 255, 0.15);
+        color: var(--color-electric-blue);
+    }
+
+    .node-type-badge.dimension {
+        background: rgba(255, 176, 32, 0.15);
+        color: var(--color-warning);
+    }
+
+    .node-description {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .node-columns {
+        margin-top: 0.75rem;
+    }
+
+    .node-columns-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .column-item {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        padding: 0.2rem 0;
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Lineage Flow Visualization */
+    .lineage-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .lineage-layer {
+        width: 100%;
+    }
+
+    .lineage-layer-title {
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+    }
+
+    .lineage-nodes {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .lineage-node {
+        background: var(--color-dark-navy);
+        border: 2px solid var(--glass-border);
+        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        min-width: 150px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .lineage-node:hover {
+        border-color: var(--color-bright-cyan);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        transform: translateY(-3px);
+    }
+
+    .lineage-node.source {
+        border-color: var(--color-matrix-green);
+        background: linear-gradient(135deg, rgba(0, 245, 160, 0.1) 0%, rgba(0, 245, 160, 0.05) 100%);
+    }
+
+    .lineage-node.staging {
+        border-color: var(--color-bright-cyan);
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+    }
+
+    .lineage-node.fact,
+    .lineage-node.dimension,
+    .lineage-node.model {
+        border-color: var(--color-electric-blue);
+        background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 102, 255, 0.05) 100%);
+    }
+
+    .lineage-node-name {
+        font-weight: 700;
+        color: var(--color-text-primary);
+        font-size: 0.95rem;
+    }
+
+    .lineage-arrow {
+        text-align: center;
+        color: var(--color-text-secondary);
+        font-size: 2rem;
+        opacity: 0.5;
+    }
 </style>
 {% endblock %}
 
@@ -734,9 +1046,14 @@
                             <span class="tech-tag">SQL</span>
                             <span class="tech-tag">Jinja</span>
                         </div>
-                        <a href="{% url 'dashboard' %}" class="start-btn">
-                            Start <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewDataModel('hello_dbt')" class="data-model-btn" title="View Data Model">
+                                <i class="bi bi-diagram-3"></i>
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="start-btn">
+                                Start <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -767,9 +1084,14 @@
                             <span class="tech-tag">Fintech</span>
                             <span class="tech-tag">Metrics</span>
                         </div>
-                        <a href="{% url 'dashboard' %}" class="start-btn">
-                            Start <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewDataModel('fintech')" class="data-model-btn" title="View Data Model">
+                                <i class="bi bi-diagram-3"></i>
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="start-btn">
+                                Start <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -800,9 +1122,14 @@
                             <span class="tech-tag">Retail</span>
                             <span class="tech-tag">KPIs</span>
                         </div>
-                        <a href="{% url 'dashboard' %}" class="start-btn">
-                            Start <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewDataModel('cafe_chain')" class="data-model-btn" title="View Data Model">
+                                <i class="bi bi-diagram-3"></i>
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="start-btn">
+                                Start <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -924,6 +1251,23 @@
     </div>
 </footer>
 
+<!-- Data Model Lineage Modal -->
+<div id="lineageModal" class="lineage-modal">
+    <div class="lineage-modal-content">
+        <div class="lineage-modal-header">
+            <h2><i class="bi bi-diagram-3 me-2"></i><span id="modalProjectTitle">Data Model Lineage</span></h2>
+            <span class="lineage-close" onclick="closeLineageModal()">&times;</span>
+        </div>
+        <div class="lineage-modal-body">
+            <div class="lineage-summary" id="lineageSummary"></div>
+            <div class="lineage-container">
+                <div class="lineage-graph" id="lineageGraph"></div>
+                <div class="lineage-sidebar" id="lineageSidebar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // Theme Toggle Functionality
     function toggleTheme() {
@@ -950,6 +1294,221 @@
             icon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
         }
     });
+
+    // Data Model Lineage Visualization
+    const projectNames = {
+        'hello_dbt': 'Hello dbt',
+        'fintech': 'Fintech: Digital Payments',
+        'cafe_chain': 'Café Chain Analytics',
+        'energy_smart': 'Energy Smart: IoT Data'
+    };
+
+    async function viewDataModel(projectId) {
+        const modal = document.getElementById('lineageModal');
+        const modalTitle = document.getElementById('modalProjectTitle');
+
+        modalTitle.textContent = `${projectNames[projectId]} - Data Model Lineage`;
+        modal.style.display = 'block';
+
+        // Show loading state
+        document.getElementById('lineageSummary').innerHTML = '<p style="color: var(--color-text-secondary);">Loading lineage data...</p>';
+        document.getElementById('lineageGraph').innerHTML = '';
+        document.getElementById('lineageSidebar').innerHTML = '';
+
+        try {
+            const response = await fetch(`/api/project-lineage/${projectId}/`);
+            const result = await response.json();
+
+            if (result.success) {
+                renderLineage(result.data);
+            } else {
+                document.getElementById('lineageSummary').innerHTML =
+                    `<p style="color: var(--color-danger);">Error: ${result.message}</p>`;
+            }
+        } catch (error) {
+            console.error('Error fetching lineage:', error);
+            document.getElementById('lineageSummary').innerHTML =
+                `<p style="color: var(--color-danger);">Error loading lineage data: ${error.message}</p>`;
+        }
+    }
+
+    function closeLineageModal() {
+        document.getElementById('lineageModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('lineageModal');
+        if (event.target == modal) {
+            closeLineageModal();
+        }
+    }
+
+    function renderLineage(data) {
+        const { nodes, edges, summary } = data;
+
+        // Render summary
+        renderSummary(summary);
+
+        // Organize nodes by type/layer
+        const layers = organizeByLayers(nodes, edges);
+
+        // Render flow diagram
+        renderFlowDiagram(layers);
+
+        // Render sidebar with all nodes
+        renderSidebar(nodes);
+    }
+
+    function renderSummary(summary) {
+        const summaryDiv = document.getElementById('lineageSummary');
+        summaryDiv.innerHTML = `
+            <div class="lineage-stat">
+                <div class="lineage-stat-value">${summary.total_sources || 0}</div>
+                <div class="lineage-stat-label">Source Tables</div>
+            </div>
+            <div class="lineage-stat">
+                <div class="lineage-stat-value">${summary.staging_models || 0}</div>
+                <div class="lineage-stat-label">Staging Models</div>
+            </div>
+            <div class="lineage-stat">
+                <div class="lineage-stat-value">${summary.fact_models || 0}</div>
+                <div class="lineage-stat-label">Fact Models</div>
+            </div>
+            <div class="lineage-stat">
+                <div class="lineage-stat-value">${summary.dimension_models || 0}</div>
+                <div class="lineage-stat-label">Dimension Models</div>
+            </div>
+            <div class="lineage-stat">
+                <div class="lineage-stat-value">${summary.total_models || 0}</div>
+                <div class="lineage-stat-label">Total Models</div>
+            </div>
+        `;
+    }
+
+    function organizeByLayers(nodes, edges) {
+        // Create a map of node dependencies
+        const nodeDeps = {};
+        nodes.forEach(node => {
+            nodeDeps[node.id] = [];
+        });
+
+        edges.forEach(edge => {
+            if (nodeDeps[edge.to]) {
+                nodeDeps[edge.to].push(edge.from);
+            }
+        });
+
+        // Layer 1: Source tables
+        const sources = nodes.filter(n => n.type === 'source');
+
+        // Layer 2: Staging models
+        const staging = nodes.filter(n => n.type === 'staging');
+
+        // Layer 3: Fact and Dimension models
+        const analytics = nodes.filter(n => n.type === 'fact' || n.type === 'dimension' || n.type === 'model');
+
+        return { sources, staging, analytics };
+    }
+
+    function renderFlowDiagram(layers) {
+        const graphDiv = document.getElementById('lineageGraph');
+
+        let html = '<div class="lineage-flow">';
+
+        // Render sources
+        if (layers.sources.length > 0) {
+            html += '<div class="lineage-layer">';
+            html += '<div class="lineage-layer-title">📊 Source Tables</div>';
+            html += '<div class="lineage-nodes">';
+            layers.sources.forEach(node => {
+                html += `
+                    <div class="lineage-node source" onclick="showNodeDetails('${node.id}')">
+                        <div class="lineage-node-name">${node.name}</div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+            html += '<div class="lineage-arrow">↓</div>';
+        }
+
+        // Render staging
+        if (layers.staging.length > 0) {
+            html += '<div class="lineage-layer">';
+            html += '<div class="lineage-layer-title">🔄 Staging Models</div>';
+            html += '<div class="lineage-nodes">';
+            layers.staging.forEach(node => {
+                html += `
+                    <div class="lineage-node staging" onclick="showNodeDetails('${node.id}')">
+                        <div class="lineage-node-name">${node.name}</div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+            html += '<div class="lineage-arrow">↓</div>';
+        }
+
+        // Render analytics layer
+        if (layers.analytics.length > 0) {
+            html += '<div class="lineage-layer">';
+            html += '<div class="lineage-layer-title">📈 Analytics Models</div>';
+            html += '<div class="lineage-nodes">';
+            layers.analytics.forEach(node => {
+                html += `
+                    <div class="lineage-node ${node.type}" onclick="showNodeDetails('${node.id}')">
+                        <div class="lineage-node-name">${node.name}</div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+        }
+
+        html += '</div>';
+        graphDiv.innerHTML = html;
+    }
+
+    function renderSidebar(nodes) {
+        const sidebarDiv = document.getElementById('lineageSidebar');
+
+        let html = '<h3 style="color: var(--color-text-primary); margin-bottom: 1.5rem;">All Models</h3>';
+
+        nodes.forEach(node => {
+            const columns = node.columns || [];
+            const columnsList = columns.slice(0, 5).map(col =>
+                col.name || col.expression || 'unknown'
+            ).join(', ');
+            const moreColumns = columns.length > 5 ? ` +${columns.length - 5} more` : '';
+
+            html += `
+                <div class="node-card ${node.type}" id="node-${node.id}">
+                    <span class="node-type-badge ${node.type}">${node.type}</span>
+                    <div class="node-name">${node.name}</div>
+                    ${node.description ? `<div class="node-description">${node.description}</div>` : ''}
+                    ${columns.length > 0 ? `
+                        <div class="node-columns">
+                            <div class="node-columns-title">Fields (${columns.length}):</div>
+                            <div class="column-item">${columnsList}${moreColumns}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+
+        sidebarDiv.innerHTML = html;
+    }
+
+    function showNodeDetails(nodeId) {
+        // Highlight the node in sidebar
+        document.querySelectorAll('.node-card').forEach(card => {
+            card.style.borderColor = 'var(--glass-border)';
+        });
+
+        const nodeCard = document.getElementById(`node-${nodeId}`);
+        if (nodeCard) {
+            nodeCard.style.borderColor = 'var(--color-bright-cyan)';
+            nodeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
 </script>
 
 {% endblock %}
