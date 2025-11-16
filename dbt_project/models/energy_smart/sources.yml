@@ -3,6 +3,7 @@ version: 2
 sources:
   - name: energy_smart
     description: Smart meter IoT sensor data and household information
+    schema: "{{ target.schema }}"
     
     tables:
       - name: raw_meter_readings

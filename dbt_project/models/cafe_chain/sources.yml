@@ -3,6 +3,7 @@ version: 2
 sources:
   - name: cafe_chain
     description: Coffee shop sales and operations data
+    schema: "{{ target.schema }}"
     
     tables:
       - name: raw_sales

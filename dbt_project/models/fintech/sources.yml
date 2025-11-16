@@ -3,6 +3,7 @@ version: 2
 sources:
   - name: fintech
     description: Raw fintech transaction data from payment processing platform
+    schema: "{{ target.schema }}"
     
     tables:
       - name: raw_transactions
