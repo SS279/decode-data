@@ -12,6 +12,7 @@ from .forms import LoginForm, RegisterForm, SQLQueryForm
 from .dbt_manager import DBTManager
 from .storage import MotherDuckStorage
 from .ai_views import ai_assistant, ai_chat, analyze_model, generate_test
+from .dbt_lineage_parser import get_project_lineage
 
 logger = logging.getLogger(__name__)
 
@@ -425,17 +426,17 @@ def api_validate_lesson(request):
     """API: Validate lesson completion"""
     lesson_id = request.POST.get('lesson_id')
     lesson = next((l for l in LESSONS if l['id'] == lesson_id), None)
-    
+
     if not lesson:
         return JsonResponse({'success': False, 'message': 'Lesson not found'})
-    
+
     storage = MotherDuckStorage()
     try:
         result = storage.validate_output(
             request.user.schema_name,
             lesson['validation']
         )
-        
+
         if result['success']:
             progress, _ = LearnerProgress.objects.get_or_create(
                 user=request.user, lesson_id=lesson_id
@@ -445,10 +446,27 @@ def api_validate_lesson(request):
             if 'lesson_completed' not in progress.completed_steps:
                 progress.completed_steps.append('lesson_completed')
             progress.save()
-        
+
         return JsonResponse(result)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
+
+
+@require_http_methods(["GET"])
+def api_get_project_lineage(request, project_id):
+    """API: Get data model lineage for a project"""
+    try:
+        lineage_data = get_project_lineage(project_id)
+        return JsonResponse({
+            'success': True,
+            'data': lineage_data
+        })
+    except Exception as e:
+        logger.error(f"Error getting project lineage: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        })
 
 # ========== PROJECT VIEWS ==========
 
