@@ -1379,19 +1379,24 @@
     }
 
     function renderLineage(data) {
+        if (!data) {
+            console.error('No data provided to renderLineage');
+            return;
+        }
+
         const { nodes, edges, summary } = data;
 
         // Render summary
-        renderSummary(summary);
+        renderSummary(summary || {});
 
         // Organize nodes by type/layer
-        const layers = organizeByLayers(nodes, edges);
+        const layers = organizeByLayers(nodes || [], edges || []);
 
         // Render flow diagram
         renderFlowDiagram(layers);
 
         // Render sidebar with all nodes
-        renderSidebar(nodes);
+        renderSidebar(nodes || []);
     }
 
     function renderSummary(summary) {
@@ -1421,26 +1426,32 @@
     }
 
     function organizeByLayers(nodes, edges) {
+        // Filter out null/undefined nodes
+        const validNodes = (nodes || []).filter(n => n != null);
+        const validEdges = (edges || []).filter(e => e != null);
+
         // Create a map of node dependencies
         const nodeDeps = {};
-        nodes.forEach(node => {
-            nodeDeps[node.id] = [];
+        validNodes.forEach(node => {
+            if (node.id) {
+                nodeDeps[node.id] = [];
+            }
         });
 
-        edges.forEach(edge => {
-            if (nodeDeps[edge.to]) {
+        validEdges.forEach(edge => {
+            if (edge && edge.to && nodeDeps[edge.to]) {
                 nodeDeps[edge.to].push(edge.from);
             }
         });
 
         // Layer 1: Source tables
-        const sources = nodes.filter(n => n.type === 'source');
+        const sources = validNodes.filter(n => n && n.type === 'source');
 
         // Layer 2: Staging models
-        const staging = nodes.filter(n => n.type === 'staging');
+        const staging = validNodes.filter(n => n && n.type === 'staging');
 
         // Layer 3: Fact and Dimension models
-        const analytics = nodes.filter(n => n.type === 'fact' || n.type === 'dimension' || n.type === 'model');
+        const analytics = validNodes.filter(n => n && (n.type === 'fact' || n.type === 'dimension' || n.type === 'model'));
 
         return { sources, staging, analytics };
     }
@@ -1451,14 +1462,17 @@
         let html = '<div class="lineage-flow">';
 
         // Render sources
-        if (layers.sources.length > 0) {
+        if (layers.sources && layers.sources.length > 0) {
             html += '<div class="lineage-layer">';
             html += '<div class="lineage-layer-title">📊 Source Tables</div>';
             html += '<div class="lineage-nodes">';
             layers.sources.forEach(node => {
+                if (!node) return;
+                const nodeId = node.id || '';
+                const nodeName = node.name || 'Unnamed';
                 html += `
-                    <div class="lineage-node source" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
+                    <div class="lineage-node source" onclick="showNodeDetails('${nodeId}')">
+                        <div class="lineage-node-name">${nodeName}</div>
                     </div>
                 `;
             });
@@ -1467,14 +1481,17 @@
         }
 
         // Render staging
-        if (layers.staging.length > 0) {
+        if (layers.staging && layers.staging.length > 0) {
             html += '<div class="lineage-layer">';
             html += '<div class="lineage-layer-title">🔄 Staging Models</div>';
             html += '<div class="lineage-nodes">';
             layers.staging.forEach(node => {
+                if (!node) return;
+                const nodeId = node.id || '';
+                const nodeName = node.name || 'Unnamed';
                 html += `
-                    <div class="lineage-node staging" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
+                    <div class="lineage-node staging" onclick="showNodeDetails('${nodeId}')">
+                        <div class="lineage-node-name">${nodeName}</div>
                     </div>
                 `;
             });
@@ -1483,14 +1500,18 @@
         }
 
         // Render analytics layer
-        if (layers.analytics.length > 0) {
+        if (layers.analytics && layers.analytics.length > 0) {
             html += '<div class="lineage-layer">';
             html += '<div class="lineage-layer-title">📈 Analytics Models</div>';
             html += '<div class="lineage-nodes">';
             layers.analytics.forEach(node => {
+                if (!node) return;
+                const nodeType = node.type || 'model';
+                const nodeId = node.id || '';
+                const nodeName = node.name || 'Unnamed';
                 html += `
-                    <div class="lineage-node ${node.type}" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
+                    <div class="lineage-node ${nodeType}" onclick="showNodeDetails('${nodeId}')">
+                        <div class="lineage-node-name">${nodeName}</div>
                     </div>
                 `;
             });
@@ -1507,16 +1528,24 @@
         let html = '<h3 style="color: var(--color-text-primary); margin-bottom: 1.5rem;">All Models</h3>';
 
         nodes.forEach(node => {
-            const columns = node.columns || [];
-            const columnsList = columns.slice(0, 5).map(col =>
-                col.name || col.expression || 'unknown'
-            ).join(', ');
+            // Safely handle null/undefined values
+            if (!node) return;
+
+            const nodeType = node.type || 'model';
+            const nodeId = node.id || '';
+            const nodeName = node.name || 'Unnamed';
+            const columns = (node.columns || []).filter(col => col != null);
+
+            const columnsList = columns.slice(0, 5).map(col => {
+                if (!col) return 'unknown';
+                return col.name || col.expression || 'unknown';
+            }).join(', ');
             const moreColumns = columns.length > 5 ? ` +${columns.length - 5} more` : '';
 
             html += `
-                <div class="node-card ${node.type}" id="node-${node.id}">
-                    <span class="node-type-badge ${node.type}">${node.type}</span>
-                    <div class="node-name">${node.name}</div>
+                <div class="node-card ${nodeType}" id="node-${nodeId}">
+                    <span class="node-type-badge ${nodeType}">${nodeType}</span>
+                    <div class="node-name">${nodeName}</div>
                     ${node.description ? `<div class="node-description">${node.description}</div>` : ''}
                     ${columns.length > 0 ? `
                         <div class="node-columns">
