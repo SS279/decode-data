@@ -8,6 +8,7 @@ import logging
 import threading
 import queue
 import uuid
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,8 @@ class DBTManager:
 
     # Class-level storage for active jobs and their logs
     active_jobs = {}
+    # Maximum number of concurrent jobs to prevent resource exhaustion
+    MAX_CONCURRENT_JOBS = 3
 
     def __init__(self, user, lesson):
         self.user = user
@@ -76,7 +79,7 @@ decode_dbt:
       type: duckdb
       path: "md:{settings.MOTHERDUCK_SHARE}"
       schema: {self.user.schema_name}
-      threads: 4
+      threads: 1
       motherduck_token: {settings.MOTHERDUCK_TOKEN}
 """
             profiles_path = self.workspace_path / 'profiles.yml'
@@ -141,7 +144,8 @@ decode_dbt:
                     'dbt', 'run',
                     '--select', selector,
                     '--profiles-dir', str(self.workspace_path),
-                    '--project-dir', str(self.workspace_path)
+                    '--project-dir', str(self.workspace_path),
+                    '--fail-fast'
                 ]
                 if full_refresh:
                     cmd.append('--full-refresh')
@@ -205,7 +209,8 @@ decode_dbt:
                 'dbt', 'seed',
                 '--select', f"path:seeds/{self.lesson['id']}/*",
                 '--profiles-dir', str(self.workspace_path),
-                '--project-dir', str(self.workspace_path)
+                '--project-dir', str(self.workspace_path),
+                '--fail-fast'
             ]
             
             logger.info(f"Running seed command: {' '.join(cmd)}")
@@ -235,16 +240,34 @@ decode_dbt:
             logger.error(f"Error running seeds: {str(e)}")
             return False, str(e)
 
-    def _stream_output(self, process, log_queue, job_id):
-        """Stream output from subprocess to queue"""
+    def _stream_output(self, process, log_queue, job_id, timeout=300):
+        """Stream output from subprocess to queue with timeout"""
+        start_time = time.time()
         try:
-            for line in iter(process.stdout.readline, ''):
+            while True:
+                # Check timeout
+                if time.time() - start_time > timeout:
+                    logger.error(f"Job {job_id} timed out after {timeout} seconds")
+                    process.kill()
+                    log_queue.put(f"__ERROR__:Execution timed out after {timeout} seconds")
+                    break
+
+                # Try to read line with small timeout
+                line = process.stdout.readline()
                 if line:
                     log_queue.put(line)
                     logger.debug(f"Job {job_id}: {line.rstrip()}")
 
-            # Wait for process to complete
-            process.wait()
+                # Check if process has finished
+                if process.poll() is not None:
+                    # Process has finished, read any remaining output
+                    for line in process.stdout:
+                        if line:
+                            log_queue.put(line)
+                    break
+
+                # Small sleep to prevent busy waiting
+                time.sleep(0.1)
 
             # Send completion message
             if process.returncode == 0:
@@ -255,6 +278,10 @@ decode_dbt:
         except Exception as e:
             logger.error(f"Error streaming output for job {job_id}: {str(e)}")
             log_queue.put(f"__ERROR__:{str(e)}")
+            try:
+                process.kill()
+            except:
+                pass
         finally:
             # Mark job as finished
             if job_id in self.active_jobs:
@@ -264,6 +291,10 @@ decode_dbt:
         """Execute DBT models with streaming logs"""
         if not self.is_initialized():
             return None, 'Workspace not initialized'
+
+        # Check concurrent job limit
+        if len(self.active_jobs) >= self.MAX_CONCURRENT_JOBS:
+            return None, f'Maximum concurrent jobs ({self.MAX_CONCURRENT_JOBS}) reached. Please wait for existing jobs to complete.'
 
         try:
             # Generate job ID
@@ -285,7 +316,8 @@ decode_dbt:
                 'dbt', 'run',
                 '--select', ' '.join(selectors),
                 '--profiles-dir', str(self.workspace_path),
-                '--project-dir', str(self.workspace_path)
+                '--project-dir', str(self.workspace_path),
+                '--fail-fast'
             ]
             if full_refresh:
                 cmd.append('--full-refresh')
@@ -332,6 +364,10 @@ decode_dbt:
 
     def run_seeds_streaming(self):
         """Run DBT seeds with streaming logs"""
+        # Check concurrent job limit
+        if len(self.active_jobs) >= self.MAX_CONCURRENT_JOBS:
+            return None, f'Maximum concurrent jobs ({self.MAX_CONCURRENT_JOBS}) reached. Please wait for existing jobs to complete.'
+
         try:
             seed_dir = self.workspace_path / 'seeds' / self.lesson['id']
             if not seed_dir.exists():
@@ -355,7 +391,8 @@ decode_dbt:
                 'dbt', 'seed',
                 '--select', f"path:seeds/{self.lesson['id']}/*",
                 '--profiles-dir', str(self.workspace_path),
-                '--project-dir', str(self.workspace_path)
+                '--project-dir', str(self.workspace_path),
+                '--fail-fast'
             ]
 
             logger.info(f"Starting streaming seed execution with job ID: {job_id}")
