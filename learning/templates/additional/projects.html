@@ -1346,7 +1346,13 @@
 
         // Show loading state
         document.getElementById('lineageSummary').innerHTML = '<p style="color: var(--color-text-secondary);">Loading lineage data...</p>';
-        document.getElementById('lineageGraph').innerHTML = '';
+
+        // Clear the cy div content only, not the entire lineageGraph structure
+        const cyDiv = document.getElementById('cy');
+        if (cyDiv) {
+            cyDiv.innerHTML = '';
+        }
+
         document.getElementById('lineageSidebar').innerHTML = '';
 
         try {
@@ -1378,17 +1384,18 @@
         }
     }
 
+    let cy = null; // Global Cytoscape instance
+    let lineageData = null; // Store lineage data globally
+
     function renderLineage(data) {
         const { nodes, edges, summary } = data;
+        lineageData = data; // Store for later use
 
         // Render summary
         renderSummary(summary);
 
-        // Organize nodes by type/layer
-        const layers = organizeByLayers(nodes, edges);
-
-        // Render flow diagram
-        renderFlowDiagram(layers);
+        // Render DAG using Cytoscape.js
+        renderDAG(nodes, edges);
 
         // Render sidebar with all nodes
         renderSidebar(nodes);
@@ -1420,85 +1427,189 @@
         `;
     }
 
-    function organizeByLayers(nodes, edges) {
-        // Create a map of node dependencies
-        const nodeDeps = {};
-        nodes.forEach(node => {
-            nodeDeps[node.id] = [];
+    function getNodeColor(type) {
+        const colors = {
+            'source': {
+                bg: 'rgba(0, 245, 160, 0.3)',
+                border: '#00f5a0',
+                text: '#00f5a0'
+            },
+            'staging': {
+                bg: 'rgba(0, 212, 255, 0.3)',
+                border: '#00d4ff',
+                text: '#00d4ff'
+            },
+            'fact': {
+                bg: 'rgba(0, 102, 255, 0.3)',
+                border: '#0066ff',
+                text: '#0066ff'
+            },
+            'dimension': {
+                bg: 'rgba(255, 176, 32, 0.3)',
+                border: '#ffb020',
+                text: '#ffb020'
+            },
+            'model': {
+                bg: 'rgba(0, 102, 255, 0.3)',
+                border: '#0066ff',
+                text: '#0066ff'
+            }
+        };
+        return colors[type] || colors['model'];
+    }
+
+    function renderDAG(nodes, edges) {
+        // Destroy existing instance if it exists
+        if (cy) {
+            cy.destroy();
+        }
+
+        // Convert nodes and edges to Cytoscape format
+        const cyNodes = nodes.map(node => ({
+            data: {
+                id: node.id,
+                label: node.name,
+                type: node.type,
+                description: node.description,
+                columns: node.columns,
+                materialization: node.materialization
+            }
+        }));
+
+        const cyEdges = edges.map(edge => ({
+            data: {
+                source: edge.from,
+                target: edge.to
+            }
+        }));
+
+        // Initialize Cytoscape
+        cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: [...cyNodes, ...cyEdges],
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'label': 'data(label)',
+                        'text-valign': 'center',
+                        'text-halign': 'center',
+                        'background-color': function(ele) {
+                            return getNodeColor(ele.data('type')).bg;
+                        },
+                        'border-color': function(ele) {
+                            return getNodeColor(ele.data('type')).border;
+                        },
+                        'border-width': 3,
+                        'color': '#ffffff',
+                        'font-size': 12,
+                        'font-weight': 'bold',
+                        'text-wrap': 'wrap',
+                        'text-max-width': 100,
+                        'width': 80,
+                        'height': 80,
+                        'shape': 'roundrectangle'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 2,
+                        'line-color': '#4a5568',
+                        'target-arrow-color': '#4a5568',
+                        'target-arrow-shape': 'triangle',
+                        'curve-style': 'bezier',
+                        'arrow-scale': 1.5
+                    }
+                },
+                {
+                    selector: 'node:selected',
+                    style: {
+                        'border-width': 5,
+                        'border-color': '#00d4ff',
+                        'box-shadow': '0 0 20px rgba(0, 212, 255, 0.8)'
+                    }
+                },
+                {
+                    selector: '.highlighted',
+                    style: {
+                        'border-width': 5,
+                        'border-color': '#00d4ff',
+                        'line-color': '#00d4ff',
+                        'target-arrow-color': '#00d4ff',
+                        'width': 4
+                    }
+                },
+                {
+                    selector: '.dimmed',
+                    style: {
+                        'opacity': 0.3
+                    }
+                }
+            ],
+            layout: {
+                name: 'dagre',
+                rankDir: 'LR', // Left to right layout (like dbt docs)
+                nodeSep: 50,
+                rankSep: 100,
+                padding: 50
+            },
+            minZoom: 0.3,
+            maxZoom: 3,
+            wheelSensitivity: 0.2
         });
 
-        edges.forEach(edge => {
-            if (nodeDeps[edge.to]) {
-                nodeDeps[edge.to].push(edge.from);
+        // Add click event to nodes
+        cy.on('tap', 'node', function(evt) {
+            const node = evt.target;
+            highlightNodeLineage(node);
+            showNodeDetails(node.data('id'));
+        });
+
+        // Add tap on background to reset
+        cy.on('tap', function(evt) {
+            if (evt.target === cy) {
+                resetHighlight();
             }
         });
 
-        // Layer 1: Source tables
-        const sources = nodes.filter(n => n.type === 'source');
-
-        // Layer 2: Staging models
-        const staging = nodes.filter(n => n.type === 'staging');
-
-        // Layer 3: Fact and Dimension models
-        const analytics = nodes.filter(n => n.type === 'fact' || n.type === 'dimension' || n.type === 'model');
-
-        return { sources, staging, analytics };
+        // Fit the graph to the container
+        cy.fit();
     }
 
-    function renderFlowDiagram(layers) {
-        const graphDiv = document.getElementById('lineageGraph');
+    function highlightNodeLineage(node) {
+        // Reset all styles
+        resetHighlight();
 
-        let html = '<div class="lineage-flow">';
+        // Highlight selected node
+        node.addClass('highlighted');
 
-        // Render sources
-        if (layers.sources.length > 0) {
-            html += '<div class="lineage-layer">';
-            html += '<div class="lineage-layer-title">📊 Source Tables</div>';
-            html += '<div class="lineage-nodes">';
-            layers.sources.forEach(node => {
-                html += `
-                    <div class="lineage-node source" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
-                    </div>
-                `;
-            });
-            html += '</div></div>';
-            html += '<div class="lineage-arrow">↓</div>';
+        // Get predecessors (upstream dependencies)
+        const predecessors = node.predecessors();
+        predecessors.addClass('highlighted');
+
+        // Get successors (downstream dependencies)
+        const successors = node.successors();
+        successors.addClass('highlighted');
+
+        // Dim all other nodes
+        cy.elements().difference(node.union(predecessors).union(successors)).addClass('dimmed');
+    }
+
+    function resetHighlight() {
+        cy.elements().removeClass('highlighted dimmed');
+    }
+
+    function fitGraph() {
+        if (cy) {
+            cy.fit();
         }
+    }
 
-        // Render staging
-        if (layers.staging.length > 0) {
-            html += '<div class="lineage-layer">';
-            html += '<div class="lineage-layer-title">🔄 Staging Models</div>';
-            html += '<div class="lineage-nodes">';
-            layers.staging.forEach(node => {
-                html += `
-                    <div class="lineage-node staging" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
-                    </div>
-                `;
-            });
-            html += '</div></div>';
-            html += '<div class="lineage-arrow">↓</div>';
+    function resetGraph() {
+        if (cy && lineageData) {
+            renderDAG(lineageData.nodes, lineageData.edges);
         }
-
-        // Render analytics layer
-        if (layers.analytics.length > 0) {
-            html += '<div class="lineage-layer">';
-            html += '<div class="lineage-layer-title">📈 Analytics Models</div>';
-            html += '<div class="lineage-nodes">';
-            layers.analytics.forEach(node => {
-                html += `
-                    <div class="lineage-node ${node.type}" onclick="showNodeDetails('${node.id}')">
-                        <div class="lineage-node-name">${node.name}</div>
-                    </div>
-                `;
-            });
-            html += '</div></div>';
-        }
-
-        html += '</div>';
-        graphDiv.innerHTML = html;
     }
 
     function renderSidebar(nodes) {
