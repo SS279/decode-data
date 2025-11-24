@@ -39,6 +39,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'learning.middleware.SimpleRateLimitMiddleware',  # Rate limiting
+    'learning.middleware.ConcurrentRequestLimitMiddleware',  # Concurrent request limiting
 ]
 
 ROOT_URLCONF = 'decode_data.urls'
@@ -69,7 +71,12 @@ if DATABASE_URL:
     # Parse PostgreSQL URL for production
     import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)  # 10 min connection pooling
+    }
+    # Add additional connection pooling settings for PostgreSQL
+    DATABASES['default']['OPTIONS'] = {
+        'connect_timeout': 10,
+        'options': '-c statement_timeout=30000'  # 30 second query timeout
     }
 else:
     # Use SQLite for local development
@@ -77,6 +84,9 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
+            'OPTIONS': {
+                'timeout': 20,  # 20 second timeout for SQLite
+            }
         }
     }
 

@@ -37,15 +37,16 @@ def ai_chat(request):
                 'error': 'Message cannot be empty'
             }, status=400)
         
-        # Initialize Groq client
+        # Initialize Groq client with timeout
         groq_api_key = settings.GROQ_API_KEY
         if not groq_api_key:
             return JsonResponse({
                 'success': False,
                 'error': 'Groq API key not configured'
             }, status=500)
-        
-        client = Groq(api_key=groq_api_key)
+
+        # Set timeout to 30 seconds to prevent hanging requests
+        client = Groq(api_key=groq_api_key, timeout=30.0)
         
         # Build conversation messages
         messages = [
@@ -118,6 +119,12 @@ When analyzing SQL code, provide:
             'success': False,
             'error': 'Invalid JSON data'
         }, status=400)
+    except TimeoutError:
+        logger.error("Groq API request timed out")
+        return JsonResponse({
+            'success': False,
+            'error': 'Request timed out. Please try again.'
+        }, status=504)
     except Exception as e:
         logger.error(f"AI chat error: {str(e)}")
         return JsonResponse({
@@ -141,15 +148,16 @@ def analyze_model(request):
                 'error': 'SQL code cannot be empty'
             }, status=400)
         
-        # Initialize Groq client
+        # Initialize Groq client with timeout
         groq_api_key = settings.GROQ_API_KEY
         if not groq_api_key:
             return JsonResponse({
                 'success': False,
                 'error': 'Groq API key not configured'
             }, status=500)
-        
-        client = Groq(api_key=groq_api_key)
+
+        # Set timeout to 30 seconds to prevent hanging requests
+        client = Groq(api_key=groq_api_key, timeout=30.0)
         
         # Create analysis prompt
         prompt = f"""Analyze this dbt model and provide insights:
@@ -203,6 +211,12 @@ Be specific and educational in your feedback."""
             'success': False,
             'error': 'Invalid JSON data'
         }, status=400)
+    except TimeoutError:
+        logger.error("Groq API request timed out during model analysis")
+        return JsonResponse({
+            'success': False,
+            'error': 'Analysis request timed out. Please try again.'
+        }, status=504)
     except Exception as e:
         logger.error(f"Model analysis error: {str(e)}")
         return JsonResponse({
@@ -226,15 +240,16 @@ def generate_test(request):
                 'error': 'SQL code cannot be empty'
             }, status=400)
         
-        # Initialize Groq client
+        # Initialize Groq client with timeout
         groq_api_key = settings.GROQ_API_KEY
         if not groq_api_key:
             return JsonResponse({
                 'success': False,
                 'error': 'Groq API key not configured'
             }, status=500)
-        
-        client = Groq(api_key=groq_api_key)
+
+        # Set timeout to 30 seconds to prevent hanging requests
+        client = Groq(api_key=groq_api_key, timeout=30.0)
         
         # Create test generation prompt
         prompt = f"""Based on this dbt model, suggest appropriate dbt tests:
@@ -288,6 +303,12 @@ Provide the YAML in proper dbt schema.yml format."""
             'success': False,
             'error': 'Invalid JSON data'
         }, status=400)
+    except TimeoutError:
+        logger.error("Groq API request timed out during test generation")
+        return JsonResponse({
+            'success': False,
+            'error': 'Test generation request timed out. Please try again.'
+        }, status=504)
     except Exception as e:
         logger.error(f"Test generation error: {str(e)}")
         return JsonResponse({

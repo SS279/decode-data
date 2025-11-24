@@ -20,11 +20,21 @@ class DBTManager:
     active_jobs = {}
     # Maximum number of concurrent jobs to prevent resource exhaustion
     MAX_CONCURRENT_JOBS = 3
+    # Maximum job age before cleanup (30 minutes)
+    MAX_JOB_AGE = 30 * 60
+    # Workspace age threshold (7 days in seconds)
+    WORKSPACE_MAX_AGE = 7 * 24 * 60 * 60
+    # Last cleanup timestamp
+    _last_workspace_cleanup = 0
+    _cleanup_lock = threading.Lock()
+    _jobs_lock = threading.Lock()
 
     def __init__(self, user, lesson):
         self.user = user
         self.lesson = lesson
         self.workspace_path = self._get_workspace_path()
+        # Trigger cleanup check (runs at most once per hour)
+        self._maybe_cleanup_old_workspaces()
     
     def _get_workspace_path(self):
         """Get or create workspace path for user"""
@@ -33,7 +43,108 @@ class DBTManager:
         base_dir = Path(tempfile.gettempdir()) / 'dbt_workspaces'
         workspace = base_dir / f"user_{self.user.id}" / self.lesson['id']
         return workspace
-    
+
+    @classmethod
+    def _maybe_cleanup_old_workspaces(cls):
+        """Cleanup old workspaces (runs at most once per hour)"""
+        current_time = time.time()
+        # Only cleanup once per hour
+        if current_time - cls._last_workspace_cleanup < 3600:
+            return
+
+        with cls._cleanup_lock:
+            # Double-check after acquiring lock
+            if current_time - cls._last_workspace_cleanup < 3600:
+                return
+
+            try:
+                base_dir = Path(tempfile.gettempdir()) / 'dbt_workspaces'
+                if not base_dir.exists():
+                    return
+
+                deleted_count = 0
+                freed_mb = 0
+
+                # Iterate through user directories
+                for user_dir in base_dir.iterdir():
+                    if not user_dir.is_dir():
+                        continue
+
+                    # Check each lesson workspace
+                    for workspace_dir in user_dir.iterdir():
+                        if not workspace_dir.is_dir():
+                            continue
+
+                        try:
+                            # Get last modification time
+                            mtime = workspace_dir.stat().st_mtime
+                            age = current_time - mtime
+
+                            # Delete if older than threshold
+                            if age > cls.WORKSPACE_MAX_AGE:
+                                # Calculate size before deletion
+                                size_mb = sum(f.stat().st_size for f in workspace_dir.rglob('*') if f.is_file()) / (1024 * 1024)
+                                shutil.rmtree(workspace_dir)
+                                deleted_count += 1
+                                freed_mb += size_mb
+                                logger.info(f"Deleted old workspace: {workspace_dir} (age: {age/86400:.1f} days, size: {size_mb:.1f}MB)")
+                        except Exception as e:
+                            logger.warning(f"Error checking/deleting workspace {workspace_dir}: {e}")
+
+                    # Remove empty user directories
+                    try:
+                        if user_dir.is_dir() and not any(user_dir.iterdir()):
+                            user_dir.rmdir()
+                    except Exception:
+                        pass
+
+                if deleted_count > 0:
+                    logger.info(f"Workspace cleanup complete: deleted {deleted_count} workspaces, freed {freed_mb:.1f}MB")
+
+                cls._last_workspace_cleanup = current_time
+
+            except Exception as e:
+                logger.error(f"Error during workspace cleanup: {e}")
+
+    @classmethod
+    def _cleanup_stale_jobs(cls):
+        """Clean up finished or stale jobs from memory"""
+        with cls._jobs_lock:
+            current_time = time.time()
+            stale_jobs = []
+
+            for job_id, job_info in cls.active_jobs.items():
+                # Check if job is finished
+                if job_info.get('finished', False):
+                    # Check if job has been finished for more than 5 minutes
+                    finish_time = job_info.get('finish_time', current_time)
+                    if current_time - finish_time > 300:  # 5 minutes
+                        stale_jobs.append(job_id)
+                else:
+                    # Check if job is stuck (started more than 30 minutes ago)
+                    start_time = job_info.get('start_time', current_time)
+                    if current_time - start_time > cls.MAX_JOB_AGE:
+                        logger.warning(f"Killing stale job {job_id} (age: {(current_time - start_time)/60:.1f} minutes)")
+                        # Try to kill the process
+                        try:
+                            process = job_info.get('process')
+                            if process:
+                                process.kill()
+                        except Exception:
+                            pass
+                        stale_jobs.append(job_id)
+
+            # Remove stale jobs
+            for job_id in stale_jobs:
+                try:
+                    del cls.active_jobs[job_id]
+                    logger.info(f"Cleaned up stale job: {job_id}")
+                except KeyError:
+                    pass
+
+            if stale_jobs:
+                logger.info(f"Cleaned up {len(stale_jobs)} stale jobs")
+
     def is_initialized(self):
         """Check if workspace is initialized"""
         return (
@@ -59,13 +170,12 @@ class DBTManager:
             # Create schema in MotherDuck
             from learning.storage import MotherDuckStorage
             storage = MotherDuckStorage()
-            
+
             try:
-                conn = storage._get_connection()
-                conn.execute(f"USE {storage.share}")
-                conn.execute(f"CREATE SCHEMA IF NOT EXISTS {self.user.schema_name}")
-                logger.info(f"Created schema in MotherDuck: {self.user.schema_name}")
-                conn.close()
+                with storage._get_connection() as conn:
+                    conn.execute(f"USE {storage.share}")
+                    conn.execute(f"CREATE SCHEMA IF NOT EXISTS {self.user.schema_name}")
+                    logger.info(f"Created schema in MotherDuck: {self.user.schema_name}")
             except Exception as e:
                 logger.warning(f"Could not create schema in MotherDuck: {e}")
                 # Don't fail initialization if schema creation fails
@@ -286,11 +396,15 @@ decode_dbt:
             # Mark job as finished
             if job_id in self.active_jobs:
                 self.active_jobs[job_id]['finished'] = True
+                self.active_jobs[job_id]['finish_time'] = time.time()
 
     def execute_models_streaming(self, model_names, include_children=False, full_refresh=False):
         """Execute DBT models with streaming logs"""
         if not self.is_initialized():
             return None, 'Workspace not initialized'
+
+        # Clean up stale jobs first
+        self._cleanup_stale_jobs()
 
         # Check concurrent job limit
         if len(self.active_jobs) >= self.MAX_CONCURRENT_JOBS:
@@ -345,7 +459,8 @@ decode_dbt:
                 'process': process,
                 'log_queue': log_queue,
                 'model_names': model_names,
-                'finished': False
+                'finished': False,
+                'start_time': time.time()
             }
 
             # Start thread to stream output
@@ -364,6 +479,9 @@ decode_dbt:
 
     def run_seeds_streaming(self):
         """Run DBT seeds with streaming logs"""
+        # Clean up stale jobs first
+        self._cleanup_stale_jobs()
+
         # Check concurrent job limit
         if len(self.active_jobs) >= self.MAX_CONCURRENT_JOBS:
             return None, f'Maximum concurrent jobs ({self.MAX_CONCURRENT_JOBS}) reached. Please wait for existing jobs to complete.'
@@ -416,7 +534,8 @@ decode_dbt:
             self.active_jobs[job_id] = {
                 'process': process,
                 'log_queue': log_queue,
-                'finished': False
+                'finished': False,
+                'start_time': time.time()
             }
 
             # Start thread to stream output
