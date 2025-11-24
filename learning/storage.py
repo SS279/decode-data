@@ -41,8 +41,6 @@ class ConnectionPool:
                     # Create new connection if pool is empty
                     conn = self._create_connection()
 
-            # Set query timeout
-            conn.execute(f"SET statement_timeout = {self.connection_timeout * 1000}")  # milliseconds
             yield conn
 
         finally:
