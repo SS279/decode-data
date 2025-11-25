@@ -132,13 +132,13 @@ class SimpleRateLimitMiddleware:
 class ConcurrentRequestLimitMiddleware:
     """
     Limit concurrent requests per user to prevent resource exhaustion.
-    Maximum 5 concurrent requests per authenticated user.
+    Maximum 3 concurrent requests per authenticated user.
     """
 
     # Class-level storage for active requests per user
     _active_requests = {}
     _lock = threading.Lock()
-    MAX_CONCURRENT_REQUESTS = 5
+    MAX_CONCURRENT_REQUESTS = 3
 
     def __init__(self, get_response):
         self.get_response = get_response
