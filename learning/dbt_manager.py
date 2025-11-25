@@ -19,7 +19,7 @@ class DBTManager:
     # Class-level storage for active jobs and their logs
     active_jobs = {}
     # Maximum number of concurrent jobs to prevent resource exhaustion
-    MAX_CONCURRENT_JOBS = 3
+    MAX_CONCURRENT_JOBS = 1
     # Maximum job age before cleanup (30 minutes)
     MAX_JOB_AGE = 30 * 60
     # Workspace age threshold (7 days in seconds)

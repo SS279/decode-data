@@ -104,7 +104,7 @@ class MotherDuckStorage:
                     MotherDuckStorage._pool = ConnectionPool(
                         self.token,
                         self.share,
-                        max_connections=5,
+                        max_connections=2,
                         connection_timeout=30
                     )
 
