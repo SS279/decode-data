@@ -120,6 +120,11 @@ class MotherDuckStorage:
 
             df = conn.execute(query).fetchdf()
 
+            # Convert datetime/timestamp columns to strings for JSON serialization
+            for col in df.columns:
+                if pd.api.types.is_datetime64_any_dtype(df[col]):
+                    df[col] = df[col].astype(str)
+
             # Convert to dict for JSON serialization
             return {
                 'columns': df.columns.tolist(),

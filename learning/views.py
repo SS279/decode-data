@@ -13,8 +13,23 @@ from .dbt_manager import DBTManager
 from .storage import MotherDuckStorage
 from .ai_views import ai_assistant, ai_chat, analyze_model, generate_test
 from .dbt_lineage_parser import get_project_lineage
+from datetime import datetime, date
+from decimal import Decimal
+import pandas as pd
 
 logger = logging.getLogger(__name__)
+
+
+class CustomJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder to handle datetime, Timestamp, and Decimal objects"""
+    def default(self, obj):
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        elif isinstance(obj, pd.Timestamp):
+            return obj.isoformat()
+        elif isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
 
 # Lesson configuration
 LESSONS = [
@@ -391,11 +406,11 @@ def query_visualize(request, lesson_id):
                     query
                 )
                 
-                # Convert to JSON for JavaScript
+                # Convert to JSON for JavaScript with custom encoder
                 result_data_json = json.dumps({
                     'columns': result_data['columns'],
                     'data': result_data['data']
-                })
+                }, cls=CustomJSONEncoder)
                 
                 messages.success(request, 'Query executed successfully')
                 
