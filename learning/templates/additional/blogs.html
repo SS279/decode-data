@@ -664,28 +664,34 @@
         width: 60%;
     }
 
-    .navbar .btn {
+    .btn-login {
         border: 2px solid var(--color-electric-blue);
-        color: var(--color-bright-cyan);
+        color: var(--color-electric-blue);
         padding: 0.5rem 1.5rem;
-        border-radius: 8px;
+        border-radius: var(--radius-lg);
         font-weight: 600;
         transition: all 0.3s ease;
         background: transparent;
     }
 
-    .navbar .btn:hover {
-        background: var(--glass-bg-light);
-        box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+    .btn-login:hover {
+        background: var(--gradient-primary);
+        border-color: var(--color-bright-cyan);
+        color: var(--color-text-primary);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
     }
 
-    .navbar .btn:last-child {
+    .btn-signup {
         background: var(--gradient-primary);
         color: var(--color-text-primary);
+        padding: 0.5rem 1.5rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        transition: all 0.3s ease;
         border: none;
     }
 
-    .navbar .btn:last-child:hover {
+    .btn-signup:hover {
         box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 102, 255, 0.4);
     }
 
@@ -806,10 +812,10 @@
                     </div>
                 </li>
                 <li class="nav-item ms-2">
-                    <a href="{% url 'login' %}" class="btn">Login</a>
+                    <a href="{% url 'login' %}" class="btn btn-login">Login</a>
                 </li>
                 <li class="nav-item ms-2">
-                    <a href="{% url 'register' %}" class="btn">Start Learning Free</a>
+                    <a href="{% url 'register' %}" class="btn btn-signup">Start Learning Free</a>
                 </li>
             </ul>
         </div>
